@@ -105,6 +105,23 @@ the year the owner took over are both absent.
   fields and hands it over. **When a domain exists, wire a real endpoint and
   delete `js/landing.js`'s fallback.**
 
+## Deployment
+
+**Live:** https://mfahadishtiaq.github.io/az-printing-landing/ — repo
+`mfahadishtiaq/az-printing-landing`, Pages from `main` at root. A window for
+the client only; a real domain comes later.
+
+**EVERY LOCAL ASSET PATH IS RELATIVE, and must stay that way.** GitHub serves a
+project site under a **subpath**, so `/css/site.css` resolves to the domain
+ROOT and 404s — the first push went live with no stylesheet and no images.
+`verify()` now refuses any absolute local path. Relative paths work under the
+subpath AND at the root of a real domain later, so they are correct either way.
+
+**The check that missed it is the lesson.** The assets were confirmed by asking
+whether the FILE EXISTS on the server, with the subpath typed in by hand. The
+question that mattered was whether the URL THE BROWSER WILL REQUEST resolves.
+Fetch the page's own references, not paths you construct.
+
 ## Open
 
 - **Hosting:** GitHub Pages, as a window for the client only. A real domain

@@ -124,20 +124,20 @@ BANNED = ["—", "AZ Printing and Signs", "416-731-9229", "(416)", "PrimePress",
 def page():
     cats = "".join(
         f'<div class="cat-card"><span class="cat-face">'
-        f'<img src="/images/tiles/{img}" alt="{html.escape(name)}, sample image" loading="lazy"></span>'
+        f'<img src="images/tiles/{img}" alt="{html.escape(name)}, sample image" loading="lazy"></span>'
         f'<span class="cat-name">{name}</span><span class="cat-blurb">{blurb}</span></div>'
         for name, blurb, img in CATEGORIES)
     reasons = "".join(
         f'<div class="why-col">{svg}<h3>{h}</h3><p>{p}</p></div>' for h, p, svg in REASONS)
     inds = "".join(
         f'<div class="ind-tile">'
-        f'<img src="/images/tiles/{img}" alt="{html.escape(name)}, sample image" loading="lazy" width="900" height="1200">'
+        f'<img src="images/tiles/{img}" alt="{html.escape(name)}, sample image" loading="lazy" width="900" height="1200">'
         f'<span class="ind-cap"><span class="ind-name">{name}</span>'
         f'<span class="ind-more"><span class="ind-line">{line}</span></span></span></div>'
         for name, line, img in INDUSTRY_TILES)
     doors = "".join(
         f'<a class="door {cls}" href="#contact">'
-        f'<img class="door-bg" src="/images/tiles/{img}" alt="" aria-hidden="true" loading="lazy" width="1600" height="1000">'
+        f'<img class="door-bg" src="images/tiles/{img}" alt="" aria-hidden="true" loading="lazy" width="1600" height="1000">'
         f'<small>{eyebrow}</small><h3>{head}</h3><p>{body}</p>'
         f'<span class="door-go">{cta}</span></a>'
         for cls, img, eyebrow, head, body, cta in DOORS)
@@ -155,17 +155,17 @@ def page():
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,700;0,800;0,900;1,400&display=swap">
-<link rel="stylesheet" href="/css/site.css">
-<link rel="stylesheet" href="/css/landing.css">
-<link rel="icon" href="/images/favicon-32.png" sizes="32x32">
-<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/landing.css">
+<link rel="icon" href="images/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 </head>
 <body data-page="/">
 <a class="skip" href="#print">Skip to what we print</a>
 
 <header class="lp-head">
   <div class="lp-head-in">
-    <a class="brand" href="#top"><img src="/images/az-logo.png" alt="AZ" width="152" height="144"><span class="brand-word">Printing &amp; Signs</span></a>
+    <a class="brand" href="#top"><img src="images/az-logo.png" alt="AZ" width="152" height="144"><span class="brand-word">Printing &amp; Signs</span></a>
     <nav class="lp-nav" aria-label="Sections of this page">
       <a href="#print">What we print</a>
       <a href="#story">The shop</a>
@@ -180,7 +180,7 @@ def page():
 <main id="top">
 
 <section class="hero">
-  <img class="hero-bg" src="/images/hero-press-1920.jpg" alt="" aria-hidden="true" width="1920" height="1080">
+  <img class="hero-bg" src="images/hero-press-1920.jpg" alt="" aria-hidden="true" width="1920" height="1080">
   <div class="hero-in">
     <h1>Put it in print.</h1>
     <p class="hero-sub">Business cards, signs, apparel and invitations, printed at our Brampton shop. Explain your order in English, Punjabi, Urdu or Hindi.</p>
@@ -211,7 +211,7 @@ def page():
       <p class="cta-row"><a class="btn btn-line" href="#contact">Come and see the shop</a></p>
     </div>
     <figure class="welcome-photo">
-      <img src="/images/shop-storefront.jpg" alt="The {SITE['name']} storefront on Ray Lawson Blvd in Brampton" loading="lazy">
+      <img src="images/shop-storefront.jpg" alt="The {SITE['name']} storefront on Ray Lawson Blvd in Brampton" loading="lazy">
     </figure>
   </div>
 </section>
@@ -273,7 +273,7 @@ def page():
   <a href="{wa}">WhatsApp</a>
   <a class="pb-quote" href="#contact">Get a quote</a>
 </div>
-<script src="/js/landing.js" defer></script>
+<script src="js/landing.js" defer></script>
 </body>
 </html>
 """
@@ -332,9 +332,21 @@ def verify(h):
         if not m or not m.group(1).strip():
             fail(f"img without alt: {img[:70]}")
 
-    # every local asset must exist, or the page ships with holes
-    for src in re.findall(r'(?:src|href)="(/[^"]+)"', h):
-        if not os.path.exists(os.path.join(HERE, src.lstrip("/"))):
+    # EVERY LOCAL ASSET PATH MUST BE RELATIVE, and this guard is here because an
+    # absolute one shipped. GitHub Pages serves a project site under a SUBPATH
+    # (/az-printing-landing/), so "/css/site.css" resolves to the domain ROOT and
+    # 404s: the live page came up with no stylesheet and no images. It passed a
+    # check beforehand because that check asked whether the FILE EXISTS on the
+    # server, typing the subpath in by hand, rather than whether the URL THE
+    # BROWSER WILL REQUEST resolves. Relative paths work under a subpath AND at
+    # the root of a real domain later, so they are right either way.
+    for src in re.findall(r'(?:src|href)="([^"#]+)"', h):
+        if src.startswith(("http://", "https://", "tel:", "mailto:", "#")):
+            continue
+        if src.startswith("/"):
+            fail(f"absolute asset path {src!r} — a GitHub project site serves "
+                 f"under a subpath, so this resolves to the domain root and 404s")
+        if not os.path.exists(os.path.join(HERE, src)):
             fail(f"asset missing on disk: {src}")
 
     # every in-page anchor must land somewhere
