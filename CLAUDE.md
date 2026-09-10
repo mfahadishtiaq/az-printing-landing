@@ -111,6 +111,23 @@ the year the owner took over are both absent.
 `mfahadishtiaq/az-printing-landing`, Pages from `main` at root. A window for
 the client only; a real domain comes later.
 
+**The real domain is decided: `azprintingandsigns.ca`** (2026-09-10, free at
+CIRA that day; the short `azprinting.ca` was rejected because the domain must
+match the store name, the cards and the Google listing). Plan, in order:
+Cloudflare account on the CLIENT'S email (rule 120) -> register the domain
+there in the business's name (CIRA legal type = the corporation if
+incorporated, else the owner; auto-renew on) -> add Vela's email as a member
+-> Workers & Pages, connect this repo, branch `main`, **no build command,
+output `/`** -> custom domains apex + www (Cloudflare writes the DNS itself
+because the zone is in the same account) -> Claude adds the www-to-root
+redirect, verifies from outside (DoH, every asset, certificate) and makes the
+old `github.io` link 301 to the domain. Why Cloudflare and not Squarespace:
+no nameserver move, so no Squarespace-default DNSSEC/DS trap (ZEF lost a day
+to it). A later move to Shopify is DNS only: A @ 23.227.38.65, CNAME www
+shops.myshopify.com, both DNS-only (grey cloud) because Shopify issues its
+own certificate. Fahad buys it himself; Claude never creates the account or
+enters payment.
+
 **EVERY LOCAL ASSET PATH IS RELATIVE, and must stay that way.** GitHub serves a
 project site under a **subpath**, so `/css/site.css` resolves to the domain
 ROOT and 404s — the first push went live with no stylesheet and no images.
@@ -124,8 +141,10 @@ Fetch the page's own references, not paths you construct.
 
 ## Open
 
-- **Hosting:** GitHub Pages, as a window for the client only. A real domain
-  comes later. `azprintingandsigns.com` was on clientHold at last check.
+- **Hosting:** GitHub Pages until the owner sends his email address; then the
+  Cloudflare plan under Deployment. `azprintingandsigns.com` (not .ca) is
+  held by someone since 2023-03-02 with no site; the owner is being asked
+  whether it is his (brief follow-up 19).
 - **Still noindexed?** No — this build sets no robots tag, because it is meant
   to be found. The shop build's placeholder-image coupling does not apply here.
   Before it goes public, confirm every image on it is one AZ may use.
