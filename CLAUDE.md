@@ -44,9 +44,26 @@ the year the owner took over are both absent.
 - **The header is a slim anchor bar**, not the shop's two-tier mega-nav. Four
   anchors do not earn a burger, so below 860px the nav hides entirely and the
   phone bar at the foot carries the actions.
-- **Industries are a plain chip list**, not the home page's expanding photo
-  accordion: that needs five portrait photographs, none exist, and an accordion
-  of empty panels says less than a list of names.
+- **Industries are the shop's PHOTO TILES**, imported with their pictures
+  (Fahad 2026-09-09). An earlier note here said the photographs did not exist;
+  that was wrong — they were wired into the shop build the same day.
+  **The tiles are `<div>`s and every line stays permanently open.** On the shop
+  site the line is revealed by `:hover` AND `:focus-visible` together, so
+  keyboard users get it; a `<div>` cannot take focus, so that pairing would
+  leave the copy reachable by mouse and invisible to everyone else. Do not
+  restore the collapse without making the tiles focusable again.
+  **THE SCRIM HAD TO BE REDRAWN FOR THAT, and it is the reason the collapse
+  exists on the shop site.** There the resting caption is just the name, ~68px,
+  and the scrim is tuned for it: `.90` opaque for the bottom 82px, gone by 214.
+  Opening every line makes the caption reach 61-67% UP the tile, so its top rows
+  landed in the faded tail over bright photograph. Measured, not guessed: **all
+  five failed, worst 1.47:1**. The landing scrim holds `.90` to 42% and measures
+  **7.61 to 10.31:1**. Percentages, not pixels, so it keeps covering the caption
+  if the tile height changes. If the line copy grows, measure again.
+- **The two doors are imported whole**, photographs and scrim, with only the
+  destination changed: on the shop they open `/occasions/` and `/industries/`,
+  and here there is one page, so both point at `#contact` with a label that
+  says what they will do.
 - **THE FORM HAS NO BACKEND AND DOES NOT PRETEND TO.** There is no domain, so
   FormSubmit cannot be activated, and a form that silently swallows a customer's
   details is worse than no form. Submitting builds a WhatsApp message from the

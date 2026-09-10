@@ -67,10 +67,33 @@ REASONS = [
      "English, Punjabi, Urdu or Hindi, whichever is easier to be precise in."),
 ]
 
-INDUSTRIES = ["Real estate", "Restaurants", "Trucking & logistics", "Construction & trades",
-              "Community & religious organizations", "Retail & storefront",
-              "Salons, barbers & clinics", "Sports teams & schools",
-              "Auto shops & dealerships", "Professional services"]
+# The five home tiles from the shop build, with their photographs. Labels and
+# lines are the shop's own, copied exactly: the line is the first sentence of
+# each industry's approved intro, which is how the shop derives it too.
+# THE TILES DO NOT LINK here, for the same reason the category tiles do not:
+# there is nowhere on a one-page site for them to go. They are <div>s, and
+# because a <div> cannot take keyboard focus, landing.css keeps every line
+# PERMANENTLY VISIBLE rather than revealing it on hover — otherwise the copy
+# would be reachable with a mouse and invisible to everyone else.
+INDUSTRY_TILES = [
+    ("Real estate", "The listing goes live Thursday and the sign has to be on the lawn first.", "ind-real-estate.jpg"),
+    ("Restaurants", "A menu gets handled more than anything else we print.", "ind-restaurants.jpg"),
+    ("Professional services", "The folder that leaves the meeting, the letterhead under the agreement.", "ind-offices.jpg"),
+    ("Construction & trades", "The site sign, the truck door, the invoice book.", "ind-construction.jpg"),
+    ("Community & religious organizations", "Banner up Friday, programs ready Sunday.", "ind-community.jpg"),
+]
+
+# The two doors, photographs and all. Their CTAs change: on the shop site they
+# open /occasions/ and /industries/, and here there is only one page, so each
+# points at the contact block with a label that says what it will do.
+DOORS = [
+    ("d-event", "door-event.jpg", "The day you're planning", "For your event",
+     "Choose invitations, welcome signs and banners for weddings, birthdays and community events. Visit the shop to compare materials and samples in person.",
+     "Ask about event printing"),
+    ("d-biz", "door-business.jpg", "The name you're building", "For your business",
+     "Order business cards, flyers, apparel and signs from the same counter as your business grows.",
+     "Ask about business printing"),
+]
 
 FAQ = [
     ("How long does it take?",
@@ -97,7 +120,18 @@ def page():
         for name, blurb, img in CATEGORIES)
     reasons = "".join(
         f'<div class="why-col"><h3>{h}</h3><p>{p}</p></div>' for h, p in REASONS)
-    inds = "".join(f'<li>{i}</li>' for i in INDUSTRIES)
+    inds = "".join(
+        f'<div class="ind-tile">'
+        f'<img src="/images/tiles/{img}" alt="{html.escape(name)}, sample image" loading="lazy" width="900" height="1200">'
+        f'<span class="ind-cap"><span class="ind-name">{name}</span>'
+        f'<span class="ind-more"><span class="ind-line">{line}</span></span></span></div>'
+        for name, line, img in INDUSTRY_TILES)
+    doors = "".join(
+        f'<a class="door {cls}" href="#contact">'
+        f'<img class="door-bg" src="/images/tiles/{img}" alt="" aria-hidden="true" loading="lazy" width="1600" height="1000">'
+        f'<small>{eyebrow}</small><h3>{head}</h3><p>{body}</p>'
+        f'<span class="door-go">{cta}</span></a>'
+        for cls, img, eyebrow, head, body, cta in DOORS)
     faq = "".join(
         f'<details class="qa-item"><summary>{q}</summary><div class="qa-a"><p>{a}</p></div></details>'
         for q, a in FAQ)
@@ -177,9 +211,14 @@ def page():
   </div>
 </section>
 
-<section class="lp-inds" aria-labelledby="h-inds">
+<section class="doors" aria-labelledby="h-doors">
+  <h2 id="h-doors" class="sr-only">Business or personal</h2>
+  <div class="doors-in">{doors}</div>
+</section>
+
+<section class="ind-home" aria-labelledby="h-inds">
   <h2 id="h-inds">Who we print for</h2>
-  <ul class="lp-ind-row">{inds}</ul>
+  <div class="ind-row">{inds}</div>
   <p class="lp-ind-note">These are the trades that come through the door most often, not the only ones we print for. Tell us what you need and we will tell you how we would make it.</p>
 </section>
 
@@ -304,8 +343,8 @@ def verify(h):
     if n_faq != len(FAQ) or h.count('class="qa-a"') != n_faq:
         fail("FAQ rows and answers disagree")
 
-    print(f"verify OK: 1 page, {len(CATEGORIES)} categories, {len(INDUSTRIES)} industries, "
-          f"{len(FAQ)} questions, no bracketed unknowns")
+    print(f"verify OK: 1 page, {len(CATEGORIES)} categories, {len(INDUSTRY_TILES)} industry tiles, "
+          f"{len(FAQ)} questions, {len(DOORS)} doors, no bracketed unknowns")
 
 
 if __name__ == "__main__":

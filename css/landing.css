@@ -48,15 +48,36 @@
 .lp-rush .btn-line{border-color:var(--color-on-brand);color:var(--color-on-brand)}
 .lp-rush .btn-line:hover{background:var(--color-on-brand);color:var(--color-primary-deep)}
 
-/* Industries are a plain wrapped list, not the home page's expanding photo
-   accordion: that row needs five portrait photographs and none exist yet, and
-   an accordion of empty panels says less than a list of names. */
-.lp-inds{background:var(--color-surface-alt)}
-.lp-ind-row{list-style:none;display:flex;flex-wrap:wrap;gap:var(--space-2);
-  margin:var(--space-5) 0 0;padding:0}
-.lp-ind-row li{background:var(--color-surface);border:1px solid var(--color-border);
-  border-radius:999px;padding:9px 16px;font-weight:600;font-size:15px}
+/* INDUSTRY TILES: the shop's photo accordion, with one change that matters.
+   Here the tiles are <div>s, because a one-page site gives them nowhere to
+   link, and a <div> cannot take keyboard focus. On the shop site the line is
+   revealed by :hover and :focus-visible together, so keyboard users get it too;
+   with no focus to give, that pairing would leave the copy reachable by mouse
+   and invisible to everyone else. So the line is ALWAYS OPEN here and the
+   hover-grow stays as nothing more than a flourish. Do not "restore" the
+   collapse without making the tiles focusable again. */
+.ind-home{background:var(--color-surface-alt)}
+.ind-home .ind-tile{cursor:default}
+.ind-home .ind-more{grid-template-rows:1fr}
+.ind-home .ind-line{opacity:1;padding-top:8px}
+/* THE SCRIM HAD TO BE REDRAWN, and this is the reason the collapse existed on
+   the shop site. There the caption at rest is just the name, about 68px, and
+   the scrim is tuned for it: .90 opaque for the bottom 82px, then falling away
+   to nothing by 214px. Opening every line permanently makes the caption reach
+   61-67% UP the tile, so its top rows landed in the faded tail over bright
+   photograph. MEASURED, not guessed: all five tiles failed at 4.5:1, worst
+   1.47:1, which is white text on a sunlit sky.
+   Percentages rather than pixels, so it keeps covering the caption when the
+   tile changes height. Re-measured after the change: worst 7.61:1. If the line
+   copy grows, measure again. */
+.ind-home .ind-tile::after{
+  background:linear-gradient(to top,rgba(8,5,4,.94) 0%,rgba(8,5,4,.90) 42%,
+    rgba(8,5,4,.55) 60%,rgba(8,5,4,.15) 80%,rgba(8,5,4,0) 100%)}
 .lp-ind-note{max-width:66ch;margin-top:var(--space-5);color:var(--color-text-muted)}
+
+/* The doors keep their photographs and their scrim from the shop build; only
+   the destination changes, since there is one page to point at. */
+.doors .door{cursor:pointer}
 
 .skip{position:absolute;left:-9999px}
 .skip:focus{left:var(--space-4);top:var(--space-4);z-index:99;background:var(--color-surface);
