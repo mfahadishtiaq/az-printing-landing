@@ -35,7 +35,11 @@ SITE = {
     "phone_tel": "9057961515",
     "whatsapp": "https://wa.me/19057961515",
     "address": "499 Ray Lawson Blvd, Unit 24, Brampton, ON L6Y 4E6",
-    "maps": "https://maps.google.com/?q=499+Ray+Lawson+Blvd+Unit+24+Brampton+ON+L6Y+4E6",
+    # Google's documented Maps URL API, carrying the BUSINESS NAME as well as the
+    # address. An address-only query can land on the plaza rather than the unit;
+    # the name is how it resolves to the listing itself. Taken from the Google
+    # Business Profile Fahad supplied 2026-09-09.
+    "maps": "https://www.google.com/maps/search/?api=1&query=AZ+Printing+and+Signs%2C+499+Ray+Lawson+Blvd+%2324%2C+Brampton%2C+ON+L6Y+4E6",
     "hours": "Mon to Fri 10:30 to 7 · Sat 12 to 4 · Sun closed",
     "area_line": "A family-run print and sign shop serving Brampton, Mississauga and the GTA.",
 }
@@ -167,6 +171,7 @@ def page():
       <a href="#story">The shop</a>
       <a href="#faq">Questions</a>
       <a href="#contact">Find us</a>
+      <a href="{SITE['maps']}" class="lp-map">Location</a>
     </nav>
     <a class="btn btn-primary lp-call" href="tel:{tel}">Call {SITE['phone_display']}</a>
   </div>
@@ -238,7 +243,7 @@ def page():
     <div class="close-visit">
       <h3>Visit the shop in Brampton</h3>
       <p>Come in to compare materials and samples at the counter, or send your artwork ahead on WhatsApp.</p>
-      <p class="visit-nap">{SITE['address']}<br>{SITE['hours']}</p>
+      <p class="visit-nap"><a class="text-link" href="{SITE['maps']}">{SITE['address']}</a><br>{SITE['hours']}</p>
       <p class="cta-row"><a class="btn btn-line" href="{SITE['maps']}">Get directions</a><a class="btn btn-line" href="{wa}">Message us on WhatsApp</a><a class="btn btn-line" href="tel:{tel}">Call {SITE['phone_display']}</a></p>
     </div>
     <div class="close-quote">
@@ -341,6 +346,9 @@ def verify(h):
         if num != SITE["phone_display"]:
             fail(f"unexpected phone number {num}")
 
+    if "AZ+Printing" not in h:
+        fail("the maps link lost the business name — an address-only query can "
+             "land on the plaza rather than the unit")
     if "prod-modal" in h or "add-quote" in h or "q-badge" in h:
         fail("ordering surface on the presence site")
 

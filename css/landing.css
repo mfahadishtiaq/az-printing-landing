@@ -12,8 +12,13 @@
    sense with its own seven labels in it. */
 .lp-head{position:sticky;top:0;z-index:60;background:var(--color-surface);
   border-bottom:1px solid var(--color-border)}
-.lp-head-in{max-width:calc(var(--wrap) + 2*var(--space-4));margin:0 auto;
-  display:flex;align-items:center;gap:var(--space-5);padding:10px var(--space-4);min-height:62px}
+/* THE BAR SPANS THE FULL WIDTH, brand flush left (Fahad 2026-09-09: "move AZ
+   to the top left"). It used to be constrained to the centred content width
+   like every section below it, which put the logo 220px from the left edge at
+   1600 and 380px at 1920 — marooned rather than anchored. The SECTIONS stay
+   centred; a header bar is furniture, not content, and belongs to the window. */
+.lp-head-in{width:100%;display:flex;align-items:center;gap:var(--space-5);
+  padding:10px clamp(var(--space-4), 3vw, var(--space-7));min-height:62px}
 /* The brand block is the SHOP'S, markup and all: monogram plus the wordmark
    "Printing & Signs" (Fahad 2026-09-09: the top looked empty). The word is
    spelled with an AMPERSAND, not "and", because that is the canonical name by

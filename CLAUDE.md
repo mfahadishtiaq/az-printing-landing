@@ -67,6 +67,15 @@ the year the owner took over are both absent.
   carries a search field, three links, an account link, a cart and a phone
   number, and the name is the first thing that has to go there. **This bar has
   room**, so `landing.css` puts the word back down to 520px.
+- **The header bar spans the FULL WIDTH, brand flush left** (Fahad 2026-09-09:
+  "move AZ to the top left"). It used to be constrained to the centred content
+  width like the sections below it, which left the logo 220px from the left edge
+  at 1600 and 380px at 1920. The sections stay centred; a header bar is
+  furniture, not content, and belongs to the window.
+- **The maps link carries the BUSINESS NAME, not just the address.** An
+  address-only query can land on the plaza rather than the unit. `verify()`
+  refuses a build where the name has fallen out of it. Source: the Google
+  Business Profile Fahad supplied 2026-09-09.
 - **The header is a slim anchor bar**, not the shop's two-tier mega-nav. Four
   anchors do not earn a burger, so below 860px the nav hides entirely and the
   phone bar at the foot carries the actions.
