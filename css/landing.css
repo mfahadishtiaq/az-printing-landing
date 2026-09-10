@@ -76,7 +76,18 @@
 .lp-ind-note{max-width:66ch;margin-top:var(--space-5);color:var(--color-text-muted)}
 
 /* The doors keep their photographs and their scrim from the shop build; only
-   the destination changes, since there is one page to point at. */
+   the destination changes, since there is one page to point at.
+   THE BAND BEHIND THEM IS WHITE HERE. On the shop home the doors sit on grey,
+   but this page alternates white and grey down its whole length (Fahad
+   2026-09-09), and the doors fall on a white beat between two greys: what to
+   expect above, who we print for below. The section still spans full width, so
+   nothing about the split that band needed on the shop site changes. */
+.doors{background:var(--color-surface)}
+/* The shop's home page bands .welcome grey (Fahad, earlier the same day). Here
+   the story falls on a WHITE beat, between the red same-day block and the grey
+   what-to-expect, so the inherited band is overridden rather than the pattern
+   bent around it. */
+.welcome{background:var(--color-surface)}
 .doors .door{cursor:pointer}
 
 .skip{position:absolute;left:-9999px}

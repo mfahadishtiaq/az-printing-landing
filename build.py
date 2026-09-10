@@ -54,27 +54,32 @@ CATEGORIES = [
     ("Wedding cards", "Invitations, signs and banners for the occasion.", "tile-wedding-cards.jpg"),
 ]
 
-# Four reasons, all CONFIRMED facts. The shop build's fourth reason names a
-# delivery threshold and is left out here rather than shipped with a bracket.
+# The shop build's four reasons, with ITS icons (Fahad 2026-09-09: "the same
+# symbols used on the other website"). The SVGs are copied verbatim so the two
+# sites cannot end up with subtly different drawings of the same idea.
+#
+# ONE LINE IS REWRITTEN, and the reason matters. The shop's delivery reason
+# reads "free delivery ... on orders over [$250]". That bracket is in its
+# KNOWN_BRACKETS register alongside "[$X]", so from here a real confirmed
+# threshold and an unfilled placeholder look identical. This page GOES PUBLIC,
+# and publishing a delivery threshold that turns out to be wrong costs the shop
+# money on every order under it. So the fact stays and the number goes. If Fahad
+# confirms $250 is the owner's own figure, it is one edit to put back.
 REASONS = [
-    ("Twenty-five years behind a counter",
-     "The owner ran his own print and shipping store, and printed for an agency, before this shop."),
-    ("Your artwork stays on file",
-     "Repeat orders can begin with a phone call, even years later."),
-    ("One shirt or a thousand flyers",
-     "Both are welcome at the counter. There is no run you have to reach."),
-    ("Explain it in your own language",
-     "English, Punjabi, Urdu or Hindi, whichever is easier to be precise in."),
+    ("Order again without starting over",
+     "Your approved artwork stays on file, so repeat orders can begin with a phone call, even years later.",
+     """<svg viewBox="0 0 56 56" aria-hidden="true"><rect x="16" y="6" width="24" height="18" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5"/><line x1="21" y1="12" x2="35" y2="12" stroke="#1A1A1A" stroke-width="2.5"/><line x1="21" y1="17" x2="31" y2="17" stroke="#1A1A1A" stroke-width="2.5"/><path d="M5 16h14l4 5h28v27H5z" fill="#FFA347" stroke="#1A1A1A" stroke-width="2.5" stroke-linejoin="round"/></svg>"""),
+    ("Order the quantity you need",
+     "One shirt or a thousand flyers, both are welcome at the counter.",
+     """<svg viewBox="0 0 56 56" aria-hidden="true"><rect x="8" y="8" width="26" height="34" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5"/><rect x="13" y="13" width="26" height="34" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5"/><rect x="34" y="32" width="15" height="18" fill="#A01D20" stroke="#1A1A1A" stroke-width="2.5"/></svg>"""),
+    ("Choose pickup or delivery",
+     "Pick up on Ray Lawson Blvd, or ask about delivery across Brampton and Mississauga.",
+     """<svg viewBox="0 0 56 56" aria-hidden="true"><rect x="4" y="16" width="30" height="22" fill="#8C161A" stroke="#1A1A1A" stroke-width="2.5"/><path d="M34 22h10l8 8v8H34z" fill="#8C161A" stroke="#1A1A1A" stroke-width="2.5" stroke-linejoin="round"/><rect x="37" y="25" width="7" height="6" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2"/><circle cx="14" cy="41" r="5" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5"/><circle cx="42" cy="41" r="5" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5"/></svg>"""),
+    ("Approve the proof first",
+     "We send a proof for your approval before printing begins.",
+     """<svg viewBox="0 0 56 56" aria-hidden="true"><rect x="10" y="6" width="28" height="38" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="2.5"/><line x1="16" y1="14" x2="32" y2="14" stroke="#1A1A1A" stroke-width="2.5"/><line x1="16" y1="21" x2="32" y2="21" stroke="#1A1A1A" stroke-width="2.5"/><line x1="16" y1="28" x2="26" y2="28" stroke="#1A1A1A" stroke-width="2.5"/><circle cx="40" cy="40" r="11" fill="#FFA347" stroke="#1A1A1A" stroke-width="2.5"/><path d="M35 40l4 4 7-8" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>"""),
 ]
 
-# The five home tiles from the shop build, with their photographs. Labels and
-# lines are the shop's own, copied exactly: the line is the first sentence of
-# each industry's approved intro, which is how the shop derives it too.
-# THE TILES DO NOT LINK here, for the same reason the category tiles do not:
-# there is nowhere on a one-page site for them to go. They are <div>s, and
-# because a <div> cannot take keyboard focus, landing.css keeps every line
-# PERMANENTLY VISIBLE rather than revealing it on hover — otherwise the copy
-# would be reachable with a mouse and invisible to everyone else.
 INDUSTRY_TILES = [
     ("Real estate", "The listing goes live Thursday and the sign has to be on the lawn first.", "ind-real-estate.jpg"),
     ("Restaurants", "A menu gets handled more than anything else we print.", "ind-restaurants.jpg"),
@@ -119,7 +124,7 @@ def page():
         f'<span class="cat-name">{name}</span><span class="cat-blurb">{blurb}</span></div>'
         for name, blurb, img in CATEGORIES)
     reasons = "".join(
-        f'<div class="why-col"><h3>{h}</h3><p>{p}</p></div>' for h, p in REASONS)
+        f'<div class="why-col">{svg}<h3>{h}</h3><p>{p}</p></div>' for h, p, svg in REASONS)
     inds = "".join(
         f'<div class="ind-tile">'
         f'<img src="/images/tiles/{img}" alt="{html.escape(name)}, sample image" loading="lazy" width="900" height="1200">'
@@ -179,8 +184,8 @@ def page():
 </section>
 
 <section class="cat-ads" id="print" aria-labelledby="h-print">
-  <h2 id="h-print">Printing and signs, made in Brampton</h2>
-  <p class="lp-lede">Everything below is made or finished at the counter on Ray Lawson Blvd.</p>
+  <h2 id="h-print">Products we offer</h2>
+  <p class="lp-lede">Printing and signs for Brampton, made or finished at the counter on Ray Lawson Blvd.</p>
   <div class="cat-grid">{cats}</div>
 </section>
 
@@ -190,11 +195,6 @@ def page():
     <p>Some jobs may be ready the same day. Share your file, quantity and deadline before ordering so the shop can confirm what is possible.</p>
     <p class="cta-row"><a class="btn btn-primary" href="tel:{tel}">Call the shop</a> <a class="btn btn-line" href="{wa}">Ask on WhatsApp</a></p>
   </div>
-</section>
-
-<section class="why-cols" aria-labelledby="h-why">
-  <h2 id="h-why">What to expect</h2>
-  <div class="why-grid">{reasons}</div>
 </section>
 
 <section class="welcome" id="story" aria-labelledby="h-story">
@@ -209,6 +209,11 @@ def page():
       <img src="/images/shop-storefront.jpg" alt="The {SITE['name']} storefront on Ray Lawson Blvd in Brampton" loading="lazy">
     </figure>
   </div>
+</section>
+
+<section class="why-cols" aria-labelledby="h-why">
+  <h2 id="h-why">What to expect</h2>
+  <div class="why-grid">{reasons}</div>
 </section>
 
 <section class="doors" aria-labelledby="h-doors">

@@ -34,9 +34,26 @@ the year the owner took over are both absent.
 
 ## Decisions that bind it
 
-- **Eight blocks, in this order:** hero · what we print · same day · what to
-  expect · the shop's story · who we print for · questions · find us and
-  contact. Ordered so a visitor can stop anywhere and still know enough to call.
+- **NINE BLOCKS AND A WHITE / GREY PATTERN** (Fahad 2026-09-09, exact order):
+  hero (dark) · **Products we offer** (white) · Need it today (red) · the shop's
+  story (white) · What to expect (grey) · For your event / business (white) ·
+  Who we print for (grey) · Questions (white) · Find us (grey).
+  **Two inherited bands are overridden to hold that beat**, both banded grey on
+  the shop home earlier the same day: `.welcome` and `.doors`. If either is
+  edited on the shop site, this page's pattern is unaffected — the overrides
+  live in `landing.css` — but check the beat still alternates.
+  **"Products we offer" is Fahad's wording.** It replaced a keyword-led heading;
+  the location words moved into the lede beneath it so the page keeps them
+  without overriding his choice.
+- **What to expect uses the SHOP'S ICONS**, copied verbatim so the two sites
+  cannot end up with subtly different drawings of the same idea.
+  **Its delivery line drops a number the shop shows.** The shop reads "free
+  delivery ... on orders over `[$250]`", and that bracket sits in its
+  KNOWN_BRACKETS register next to `[$X]` — so from here a confirmed threshold
+  and an unfilled placeholder are indistinguishable. This page goes public, and
+  a wrong threshold costs the shop money on every order under it, so the fact
+  stays and the number goes. **If Fahad confirms $250 is the owner's own figure,
+  it is one edit to put back.**
 - **The category tiles DO NOT LINK.** On a one-page site there is nowhere for
   them to go, and eight tiles pointing at the same anchor is noise pretending to
   be navigation. `landing.css` removes the pointer and the hover lift so they
