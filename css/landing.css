@@ -14,7 +14,24 @@
   border-bottom:1px solid var(--color-border)}
 .lp-head-in{max-width:calc(var(--wrap) + 2*var(--space-4));margin:0 auto;
   display:flex;align-items:center;gap:var(--space-5);padding:10px var(--space-4);min-height:62px}
-.lp-brand img{height:34px;width:auto;display:block}
+/* The brand block is the SHOP'S, markup and all: monogram plus the wordmark
+   "Printing & Signs" (Fahad 2026-09-09: the top looked empty). The word is
+   spelled with an AMPERSAND, not "and", because that is the canonical name by
+   Fahad's own 2026-08-27 ruling and this build's BANNED list refuses the drift
+   spelling. The monogram's alt is just "AZ", so a screen reader does not read
+   the name twice.
+   site.css sizes it at 48px, which suits the shop's 64px tier-1 and is tall for
+   this 62px bar, so it is trimmed here. The word hides below 520px, where the
+   Call button matters more than the name. */
+.lp-head .brand img{height:40px}
+/* site.css hides .brand-word below 1100px, because the SHOP'S tier-1 bar also
+   carries a search field, three links, an account link, a cart and a phone
+   number, and the name is the first thing that has to go. This bar carries four
+   anchors and one button, so it has room: the word stays down to 520px, where
+   the Call button finally matters more than the name. */
+@media (max-width:1100px){.lp-head .brand-word{display:block}}
+.lp-head .brand-word{font-size:14px}
+@media (max-width:520px){.lp-head .brand-word{display:none}}
 .lp-nav{display:flex;gap:var(--space-5);margin-left:auto}
 .lp-nav a{font-weight:600;font-size:15px;color:var(--color-text);text-decoration:none;
   padding:6px 0;border-bottom:2px solid transparent}

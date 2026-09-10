@@ -58,6 +58,15 @@ the year the owner took over are both absent.
   them to go, and eight tiles pointing at the same anchor is noise pretending to
   be navigation. `landing.css` removes the pointer and the hover lift so they
   do not look clickable.
+- **The header carries the wordmark** (Fahad 2026-09-09: the top looked empty).
+  It is the shop's own `.brand` block, markup and all: monogram plus
+  "Printing &amp; Signs". **Ampersand, never "and"** — that is the canonical
+  name by Fahad's 2026-08-27 ruling, and this build's BANNED list refuses the
+  drift spelling. The monogram's alt is just "AZ" so the name is not read twice.
+  `site.css` hides `.brand-word` below 1100px because the SHOP'S tier-1 also
+  carries a search field, three links, an account link, a cart and a phone
+  number, and the name is the first thing that has to go there. **This bar has
+  room**, so `landing.css` puts the word back down to 520px.
 - **The header is a slim anchor bar**, not the shop's two-tier mega-nav. Four
   anchors do not earn a burger, so below 860px the nav hides entirely and the
   phone bar at the foot carries the actions.
