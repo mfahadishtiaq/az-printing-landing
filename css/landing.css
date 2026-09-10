@@ -1,0 +1,63 @@
+/* ============================================================================
+   LANDING SITE ONLY (2026-09-09). Loaded AFTER site.css, which it inherits the
+   whole design system from: type, palette, buttons, hero, category tiles, FAQ
+   accordion, form fields, footer and the mobile phone bar all come from there
+   unchanged. This file is only the parts a ONE-PAGE site needs and a catalogue
+   site does not.
+   ========================================================================== */
+
+/* THE HEADER IS A SLIM ANCHOR BAR, not the shop's two-tier mega-nav. Six
+   merchandise families with drop-panels is right for 25 pages and absurd for
+   one, and the shop bar's label sizes are a measured ladder that only makes
+   sense with its own seven labels in it. */
+.lp-head{position:sticky;top:0;z-index:60;background:var(--color-surface);
+  border-bottom:1px solid var(--color-border)}
+.lp-head-in{max-width:calc(var(--wrap) + 2*var(--space-4));margin:0 auto;
+  display:flex;align-items:center;gap:var(--space-5);padding:10px var(--space-4);min-height:62px}
+.lp-brand img{height:34px;width:auto;display:block}
+.lp-nav{display:flex;gap:var(--space-5);margin-left:auto}
+.lp-nav a{font-weight:600;font-size:15px;color:var(--color-text);text-decoration:none;
+  padding:6px 0;border-bottom:2px solid transparent}
+.lp-nav a:hover{border-bottom-color:var(--color-primary)}
+.lp-call{white-space:nowrap}
+@media (max-width:860px){
+  /* The nav collapses rather than becoming a burger: four anchors do not earn
+     a menu, and the phone bar at the foot already carries the actions. */
+  .lp-nav{display:none}
+  .lp-head-in{gap:var(--space-3)}
+  .lp-call{margin-left:auto;font-size:14px;padding:10px 14px}
+}
+
+.lp-lede{max-width:60ch;margin-top:calc(-1 * var(--space-3));margin-bottom:var(--space-5);
+  color:var(--color-text-muted)}
+
+/* THE TILES DO NOT LINK on a one-page site, so they must not look like they do:
+   no pointer, no hover lift. They are information, and the actions are the
+   call buttons and the form. */
+.cat-ads .cat-card{cursor:default}
+.cat-ads .cat-card:hover{transform:none;box-shadow:none;border-color:var(--color-border)}
+
+/* Same-day gets the brand block, because it is the one section whose job is to
+   make someone call TODAY rather than bookmark the page. */
+.lp-rush{background:var(--color-surface-brand)}
+.lp-rush-in{max-width:calc(var(--wrap) + 2*var(--space-4));margin:0 auto;text-align:center}
+.lp-rush h2,.lp-rush p{color:var(--color-on-brand)}
+.lp-rush p{max-width:60ch;margin:var(--space-4) auto 0}
+.lp-rush .cta-row{justify-content:center}
+.lp-rush .btn-primary{background:var(--color-surface);color:var(--color-primary-deep)}
+.lp-rush .btn-line{border-color:var(--color-on-brand);color:var(--color-on-brand)}
+.lp-rush .btn-line:hover{background:var(--color-on-brand);color:var(--color-primary-deep)}
+
+/* Industries are a plain wrapped list, not the home page's expanding photo
+   accordion: that row needs five portrait photographs and none exist yet, and
+   an accordion of empty panels says less than a list of names. */
+.lp-inds{background:var(--color-surface-alt)}
+.lp-ind-row{list-style:none;display:flex;flex-wrap:wrap;gap:var(--space-2);
+  margin:var(--space-5) 0 0;padding:0}
+.lp-ind-row li{background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:999px;padding:9px 16px;font-weight:600;font-size:15px}
+.lp-ind-note{max-width:66ch;margin-top:var(--space-5);color:var(--color-text-muted)}
+
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:var(--space-4);top:var(--space-4);z-index:99;background:var(--color-surface);
+  padding:10px 16px;border-radius:var(--radius);border:2px solid var(--color-primary)}

@@ -1,0 +1,1439 @@
+/* ============================================================
+   AZ Printing & Signs — Build 1 tokens + components (2026-08-27)
+   Three-layer token model (design-system-reference §1):
+   primitive → semantic → component. No raw hex below the token block.
+
+   PROVISIONAL (gates open, Fahad iterates on the render):
+   - Type: RULED 2026-08-28, gate CLOSED. Libre Caslon Display + Libre Caslon
+     Text heads, Faustina body, Yellowtail accent (R1C fifty-face boards, R1D
+     demos). The Libre Franklin + Work Sans provisional is retired. See the
+     WEIGHT CONTRACT in the token block before changing any heading weight.
+   - Palette deployment: light ground. The HEXES are the client's fixed
+     brand colours (04 - Brand/AZ Brand Colours.pdf); their deployment
+     (ground choice, where the pop lives) has not had its design round.
+   Contrast (computed, not eyeballed):
+   - red #A01D20 on white 7.8:1  → body-size text OK
+   - deep red #8C161A on white 9.4:1 → text OK; white on it 9.4:1
+   - ink #1A1A1A on white 15.9:1 · muted #4A4A4A on white 9.0:1
+   - bronze #B37B33 on white 3.6:1 → display ≥24px ONLY, never body
+   - amber #FFA347 on white 1.9:1 → NEVER text; fills and marks only
+   ============================================================ */
+:root{
+  /* primitives — every colour sourced from AZ Brand Colours.pdf */
+  --az-black:#000000;
+  --az-white:#ffffff;
+  --az-red-deep:#8C161A;
+  --az-red:#A01D20;
+  --az-amber:#FFA347;
+  --az-bronze:#B37B33;
+  --az-ink:#1A1A1A;        /* near-black for text (never pure #000) */
+  --az-ink-soft:#4A4A4A;
+  --az-paper:#F7F5F2;      /* warm paper ground */
+  --az-line:#E5E1DA;
+
+  /* semantic */
+  --color-surface:var(--az-white);
+  --color-surface-alt:var(--az-paper);
+  --color-surface-brand:var(--az-red-deep);
+  --color-text:var(--az-ink);
+  --color-text-muted:var(--az-ink-soft);
+  --color-on-brand:var(--az-white);
+  --color-primary:var(--az-red);
+  --color-primary-deep:var(--az-red-deep);
+  --color-accent-fill:var(--az-amber);   /* never text */
+  --color-accent-display:var(--az-bronze); /* display ≥24px only */
+  --color-border:var(--az-line);
+  --color-ring:var(--az-red);
+
+  /* type — scale ratio 1.25 (major third), body anchored 17px */
+  /* Type RULED by Fahad 2026-08-28 off the R1C fifty-face boards and the R1D
+     demos. SUPERSEDED 2026-09-08 by R1E option A: the whole system is now
+     Libre Franklin, taken from the shop's own fascia (rule 116 source (a), the
+     client's own artifacts). Libre Franklin is Pablo Impallari's revival of
+     Franklin Gothic, drawn by Morris Fuller Benton for ATF in 1902 for
+     newspaper display and jobbing-printer work, which is this client's trade.
+     WEIGHT CONTRACT, load-bearing, REWRITTEN: the old contract said
+     --font-display ships ONE weight (400) because Libre Caslon Display did.
+     Libre Franklin is variable 100-900, so that supply constraint is gone and
+     the contract is now about ROLE:
+       900  h1 and h2 — this is the weight that matches the sign
+       800  every other use of --font-display (door heads, CTA panel lead,
+            FAQ terms, close-quote heads) and h3
+       700  --font-display-sm labels: card names, nav rows, step numbers
+       400  body text
+     A --font-display use left at 400 renders LIGHT and reads as a mistake
+     against the sign, which is the opposite of the brief. Four rules were
+     found sitting at 400 when this landed; if you add a fifth, weight it.
+     Both display tokens are the same family now, kept separate so the roles
+     stay nameable and a future change has somewhere to land. */
+  --font-display:"Libre Franklin",Arial,Helvetica,sans-serif;
+  --font-display-sm:"Libre Franklin",Arial,Helvetica,sans-serif;
+  --font-body:"Libre Franklin",Arial,Helvetica,sans-serif;
+  /* Brush accent, picked 2026-08-28. Fahad has NOT ruled where it goes, so it is
+     deliberately applied to nothing. A decorative face scattered by a developer
+     is how a print site starts looking like a party shop. */
+  --font-accent:"Yellowtail",cursive;
+  --text-sm:14px; --text-base:17px; --text-md:21px; --text-lg:27px;
+  --text-xl:34px; --text-2xl:clamp(38px,5.5vw,56px); --text-hero:clamp(42px,8.5vw,92px);
+
+  /* spacing (phone value first in section rules) */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px; --space-9:96px;
+  --sec-pad:clamp(48px,9vw,96px);
+  --wrap:1160px;
+
+  /* radii: near-sharp — a print shop cuts clean edges */
+  --radius:4px; --radius-lg:10px;
+
+  /* component */
+  --btn-bg:var(--color-primary);
+  --btn-text:var(--color-on-brand);
+  --nav-height:125px;  /* tier1 64 + tier2 60 + border; 64px on phones (media below) */
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;color:var(--color-text);background:var(--color-surface)}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--color-primary);text-underline-offset:3px}
+h1,h2{font-family:var(--font-display);font-weight:900;letter-spacing:-.02em;line-height:1.1;color:var(--color-text)}
+/* h3 defaults to the Text cut because most h3s on this site sit under 20px,
+   where Display's hairlines thin out. The two LARGE h3s override back below. */
+h3{font-family:var(--font-display-sm);font-weight:800;line-height:1.2;color:var(--color-text)}
+h1{font-size:var(--text-2xl);letter-spacing:-.015em}
+h2{font-size:var(--text-xl);letter-spacing:-.01em;margin-bottom:var(--space-5)}
+h3{font-size:var(--text-md);margin-bottom:var(--space-2)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--color-ring);outline-offset:2px}
+
+.btn{display:inline-block;font-family:var(--font-body);font-weight:600;font-size:15px;padding:13px 22px;border-radius:var(--radius);text-decoration:none;border:0;cursor:pointer}
+.btn-primary{background:var(--btn-bg);color:var(--btn-text)}
+.btn-primary:hover{background:var(--color-primary-deep)}
+.btn-line{border:1.5px solid var(--color-text);color:var(--color-text);background:none}
+.btn-line:hover{background:var(--color-text);color:var(--color-surface)}
+.text-link{font-weight:600;color:var(--color-primary)}
+.cta-row{display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-4)}
+
+/* ---------- two-tier header (Fahad 2026-08-27, Print2Go pattern) ---------- */
+@media (max-width:1023px){:root{--nav-height:64px}}
+.site-head{position:sticky;top:0;z-index:60;background:var(--color-surface)}
+/* header tiers are FULL-BLEED (Fahad 2026-08-27: logo pinned to the true
+   top-left at any window width); page content below stays wrapped */
+.tier1-in,.tier2-in{display:flex;align-items:center;gap:var(--space-5);padding:0 var(--space-5)}
+.tier1{border-bottom:1px solid var(--color-border)}
+.tier1-in{height:64px}
+.brand{display:flex;align-items:center;text-decoration:none;flex:none;gap:10px}
+/* Wordmark beside the mark (2026-08-28, Fahad). --font-display-sm at 700, NOT
+   --font-display: that face ships a single 400 weight and asking for more
+   makes the browser synthesise a fake bold. Hidden below 1100 where tier 1 has
+   no slack; the monogram carries the brand there and the burger takes over at
+   1023 anyway. */
+.brand-word{font-family:var(--font-display-sm);font-weight:700;font-size:15px;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--color-text);white-space:nowrap;line-height:1}
+@media (max-width:1100px){.brand-word{display:none}}
+/* Owner's own logo file (04 - Brand/AI Logo.png), landed 2026-08-28 — no longer
+   a studio redraw. The mark is near-square (940x892, 1.054); height-driven with
+   width:auto so the render's aspect can never be squashed by a stale pair. */
+.brand img{display:block;height:48px;width:auto}
+/* THE SEARCH FIELD ABSORBS THE SLACK (Fahad 2026-08-28, two rounds).
+   Original: flex-grow 0 plus margin-left:auto, so the field could not take up
+   spare width and the auto margin piled ALL of it on one side. logo->search
+   measured 24px at 1280 but 165px at 1440 and 325px at 1600, against a
+   constant 24px on the other. Below 1440 there is no slack to misplace, which
+   is why it read fine on a laptop and wrong on a wide monitor.
+   Removing the auto margin equalised the two gaps but only MOVED the slack: it
+   reappeared as 301px of dead space to the right of the cart at 1600, and the
+   cart stopped sitting hard right. Equal gaps were never the goal, an even bar
+   was.
+   flex-grow 1 with no cap is what actually closes it: the field takes the spare
+   width itself, so both gaps stay 24px AND the right-hand utilities stay pinned
+   to the edge at every width. Zero dead space. Capping the field at 620 or 720
+   just re-opens the same hole at 161px or 61px, so there is deliberately no
+   max-width. Field measures 480px at 1280, 621 at 1440, 781 at 1600.
+   test/nav-panel-fit.js asserts the two gaps agree; the space right of the cart
+   is the other half and is checked in the same sweep. */
+.search{position:relative;flex:1 1 480px}
+.search input{width:100%;font:inherit;font-size:15px;padding:10px 46px 10px 40px;border:1.5px solid var(--color-border);border-radius:999px;background:var(--color-surface-alt)}
+/* Ported from the supplied HeroUI SearchField (2026-08-28): leading icon
+   and a clear button that appears once there is text. type="search"
+   already draws a NATIVE clear in WebKit, so it is suppressed below or
+   the field shows two clear buttons side by side. */
+#site-search::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.search-ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--color-text-muted);pointer-events:none}
+/* 44px tap target with only the glyph visible until hover, so the control
+   clears the touch floor without weighing down a 46px pill. */
+.search-clear{position:absolute;right:2px;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;padding:0;background:none;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--color-text-muted)}
+.search-clear:hover{color:var(--color-text)}
+.search-clear:hover svg{transform:scale(1.1)}
+/* LOAD-BEARING, same reason as .q-badge[hidden]: the author display:grid
+   above outspecifies the UA rule for [hidden], so without this the clear
+   button is permanently visible even with an empty field. */
+.search-clear[hidden]{display:none}
+.search input:focus{outline:none;border-color:var(--color-ring);background:var(--color-surface)}
+.search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:0 24px 48px rgba(0,0,0,.14);overflow:hidden;z-index:80}
+.search-results a{display:block;padding:11px 16px;font-size:14.5px;color:var(--color-text);text-decoration:none}
+.search-results a:hover,.search-results a.sel{background:var(--color-surface-alt);color:var(--color-primary-deep)}
+.search-results .no-hit{padding:11px 16px;font-size:14px;color:var(--color-text-muted)}
+.tier1-links{display:flex;gap:var(--space-2);flex:none;align-items:center}
+.tier1-links a{font-size:14.5px;font-weight:600;color:var(--color-text);text-decoration:none;padding:8px 10px;border-radius:var(--radius)}
+.tier1-links a:hover{background:var(--color-surface-alt)}
+/* NAV v3 (Fahad 2026-08-28): visible phone in tier 1 (the reference's Help
+   Desk pattern — right for a call-first shop; joins the Q31 set) and the
+   quote-list icon. The icon sits OUTSIDE .tier1-links so its badge survives
+   the mobile collapse next to the burger. */
+.t1-account{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.t1-account svg{flex:none}
+.t1-phone{white-space:nowrap;font-weight:700 !important;color:var(--color-primary-deep) !important}
+.t1-quote{position:relative;flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:var(--radius);color:var(--color-text);text-decoration:none}
+.t1-quote:hover{background:var(--color-surface-alt)}
+.q-badge{position:absolute;top:1px;right:1px;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:var(--color-accent-fill);color:var(--az-ink);font-size:11px;font-weight:700;display:grid;place-items:center}
+/* display:grid outspecifies the [hidden] UA rule — restate it or an empty
+   list shows a zero badge */
+.q-badge[hidden]{display:none}
+/* Home-layout tier-1 respec (Fahad 2026-08-28, chat-2 round): a SECOND
+   .tier1-links nav after the quote icon carries Account + phone, inheriting
+   the link styles and the ≤1023 collapse. Only the first nav may own the
+   auto margin, or the free space splits and the quote icon drifts to the
+   middle. .t1-account is Fahad's VISUAL PLACEHOLDER (href-less by his
+   ruling; no backend exists) — see nav_html() in generate.py. */
+.t1-end{margin-left:0}
+.nav-toggle{display:none}
+
+/* tier 2: the doors bar, deep red like the reference. PROVISIONAL palette
+   deployment (design round pending); white on #8C161A computes 9.4:1 */
+.tier2{background:var(--color-surface-brand)}
+.tier2-in{height:60px;gap:var(--space-4)}
+/* Door labels: CENTERED between the logo edge and Same Day (Fahad,
+   2026-08-28 — restored after the far-left overshoot; the "in between"
+   placement is the ruling). Rejected states: spread-apart, far-left. */
+.main-nav{margin-left:auto;margin-right:auto}
+.main-nav ul{list-style:none;display:flex;gap:0}
+.main-nav li{position:relative}
+/* "All products" is a bar label with no panel (Fahad 2026-08-28). It keeps the
+   family type but takes the amber keyline so the bar reads as: everything,
+   then the families. */
+.nav-hub a{border-bottom:2px solid var(--color-accent-fill)}
+/* nowrap is load-bearing: the bar must hold one line at 1024px */
+/* SIZE LADDER (Fahad 2026-09-08, "make this nav bar slightly bigger").
+   Seven long category labels plus the Same Day pill mean this bar is width-bound,
+   so the label size is set by MEASURED fit, not by taste. Franklin content widths
+   measured on this exact label set: 12.5px needs ~1030 of viewport, 13.5px ~1190,
+   14.5px ~1325, 15.5px ~1388. Each band below sits above its own requirement with
+   room to spare. Re-measure before changing any of these numbers: at 14.5px the
+   bar was overflowing every viewport from 1241 to about 1325, which is where a
+   1280 laptop sits. */
+/* THE FAMILY LABELS ARE BUTTONS, NOT LINKS (Fahad 2026-09-09: none of the bar
+   options are clickable except All products; hovering still drops the panel).
+   A <button> is the right element for something that opens a disclosure and
+   navigates nowhere — a <span> would fall out of the tab order and lock every
+   keyboard user out of the menus.
+   EVERY RULE BELOW THAT MENTIONS .main-nav a MUST ALSO NAME .main-nav button.
+   That selector carries the MEASURED FONT LADDER (15.5 / 14.5 / 13.5 / 12.5px
+   across four width bands), and a button silently dropping out of it would take
+   the bar's entire width contract with it. The reset exists because a button
+   inherits neither font-family nor text-align. */
+.main-nav a,.main-nav button{display:block;padding:16px 13px;text-decoration:none;color:var(--color-on-brand);font-size:15.5px;font-weight:600;white-space:nowrap}
+.main-nav button{font-family:inherit;line-height:inherit;text-align:left;border:0;background:none;cursor:pointer}
+@media (max-width:1419px){.main-nav a,.main-nav button{font-size:14.5px}}
+@media (max-width:1359px){.main-nav a,.main-nav button{font-size:13.5px;padding:16px 11px}}
+/* 13.5px measures 1186px of content, so it needs ~1234 of viewport; the bottom
+   rung therefore runs to 1259, not 1219. Measured, not guessed. */
+.main-nav a:hover,.main-nav button:hover{background:rgba(255,255,255,.14)}
+.main-nav a.active,.main-nav button.active{box-shadow:inset 0 -3px 0 var(--color-on-brand)}
+/* Same-Day as a PILL (Fahad 2026-08-28, reference 2): amber ground, ink
+   text (amber is never text but always allowed as a fill; ink on amber
+   computes 8.4:1). Upgrades the standing amber-far-right ruling. */
+.same-day-link{margin-left:auto;flex:none;align-self:center;font-weight:800;font-size:14px;color:var(--az-ink);background:var(--color-accent-fill);text-decoration:none;padding:9px 18px;border-radius:999px;white-space:nowrap}
+.same-day-link:hover{background:var(--color-surface);color:var(--color-primary-deep)}
+@media (max-width:1023px){.same-day-link{display:none}}
+/* NAV v3 mega-panels: multi-column dropdowns. Single-column families reuse
+   the plain .dropdown; .mega widens. The last two families clamp RIGHT so a
+   wide panel cannot push past the viewport (overflow-x is the phone gate). */
+/* ---------- mega-panel rows (2026-08-28, Fahad's new menu bar) ----------
+   Ported from a supplied React/Tailwind/framer-motion component. Structure
+   taken (icon tile, label, description, grouped columns); skin refused per
+   rule 99, so this is the site's own light panel, brand inks, radius and the
+   ruled Caslon/Faustina type, not the reference's dark #0A0A0A and white/50.
+   The tile border deliberately matches .add-quote so the panel reads as part
+   of this site rather than a transplant. */
+.menu-links a{display:flex;align-items:flex-start;gap:10px;padding:7px 10px}
+.mi{flex:none;display:grid;place-items:center;width:31px;height:31px;
+  border:1px solid var(--color-border);border-radius:var(--radius);
+  color:var(--color-primary-deep);background:var(--color-surface);
+  transition:background .18s ease,color .18s ease,border-color .18s ease}
+.mi svg{width:17px;height:17px;display:block}
+.menu-links a:hover .mi,.menu-links a:focus-visible .mi{
+  background:var(--color-primary-deep);border-color:var(--color-primary-deep);
+  color:var(--color-on-brand)}
+.mi-t{min-width:0}
+.mi-l{display:block;font-family:var(--font-display-sm);font-weight:700;
+  font-size:13.5px;line-height:1.3;color:var(--color-text)}
+.mi-d{display:block;font-size:12.5px;line-height:1.35;color:var(--color-text-muted);
+  margin-top:2px}
+@media(prefers-reduced-motion:reduce){.mi{transition:none}}
+.menu-head{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-muted);padding:6px 10px 4px}
+.mega-cols{display:flex;gap:var(--space-5);align-items:flex-start}
+.dropdown.mega{min-width:0;width:max-content;max-width:min(760px,calc(100vw - 32px))}
+/* nth-CHILD not nth-last-child: the UL also holds the hidden .mobile-only
+   rows at the end, which nth-last-child would count. Families are 1-6. */
+/* NO-JS FALLBACK ONLY (2026-08-28). With JS the panels are placed by
+   MEASUREMENT in js/site.js, which aligns each panel under its own label and
+   shifts it only by its real overflow. This index-based rule stays because
+   without JS the last families would run off the viewport with no way to
+   reach them (rule 31). Do not reason about nav positions from it: the .js
+   branch overrides it on every open. */
+.main-nav li:nth-child(n+5) .dropdown{left:auto;right:0}
+.js .main-nav li .dropdown{right:auto}
+/* NAV v3: six long family labels need ~1200px at full size, so the bar
+   COMPRESSES from 1024-1240 and the burger takes over below 1024 (the nav
+   breakpoints moved 900 -> 1023 for this). One line at 1024 is the proven,
+   load-bearing floor — re-prove with the CDP width sweep if labels change. */
+@media (min-width:1024px) and (max-width:1259px){
+  .tier2-in{gap:var(--space-2);padding:0 var(--space-3)}
+  /* Tightened 2026-09-08 with the R1E type change. Libre Franklin is wider than
+     Libre Caslon Text at the same size, and at exactly 1024 the bar overflowed
+     by 53px — measured by rendering the same page twice, once in each face, so
+     the font was provably the cause. The 1024 one-line floor is Fahad's ruling
+     (2026-08-27) and is kept; the compression absorbs the difference instead. */
+  .main-nav a,.main-nav button{font-size:12.5px;padding:16px 6px;letter-spacing:-.01em}
+  .same-day-link{font-size:12.5px;padding:8px 12px}
+}
+.mobile-only{display:none}
+
+/* dropdowns: white panel under the red bar; Industries runs two columns */
+.dropdown{position:absolute;top:100%;left:0;min-width:270px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:0 0 var(--radius-lg) var(--radius-lg);box-shadow:0 24px 48px rgba(0,0,0,.12);display:none;padding:var(--space-3)}
+.has-dropdown:hover .dropdown,.has-dropdown:focus-within .dropdown,.has-dropdown.open .dropdown{display:block}
+.menu-links{display:flex;flex-direction:column}
+.menu-two-col{min-width:540px}
+.menu-two-col .menu-links{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--space-4)}
+.menu-links a{padding:8px 10px !important;font-size:14px;color:var(--color-text) !important;white-space:nowrap;border-radius:var(--radius)}
+.menu-links a:hover{background:var(--color-surface-alt);color:var(--color-primary-deep) !important}
+/* The rule above carries white-space:nowrap from when these rows were single
+   text links. With a description line that nowrap pushes the text straight out
+   through the panel's max-width and over the page behind it, so the two-line
+   row re-enables wrapping and caps its own measure. Load-bearing: remove the
+   max-width and long descriptions widen the panel until it clips. */
+.menu-links a{white-space:normal}
+/* Labels WRAP. They must not be nowrap: each row now carries a 34px icon tile
+   plus a 10px gap, so three nowrap columns overrun .dropdown.mega's 760px cap
+   and the panel clips its own text (Fahad reported it on Design help,
+   2026-08-28: content wanted 770px inside a 758px box). Wrapping is the fix
+   that survives any future label length; widening the cap instead would move
+   Apparel's right-anchored left edge, which is the clamp described at
+   NAV_ROW_DESC in generate.py. .mi-t keeps min-width:0 so the flex item can
+   actually shrink, without which wrapping does nothing. */
+.mi-l{overflow-wrap:break-word}
+/* SUBCOPY PARKED 2026-08-28 by Fahad's ruling ("far too big"). The .mi-d rules
+   stay so that flipping NAV_ROW_DESC back on in generate.py restores the design
+   without re-deriving it. Nothing emits .mi-d while that flag is False. */
+.mi-d{max-width:34ch}
+/* 1024-1240 is the band where the bar compresses and the mid-bar families sit
+   far enough right that a full-measure panel runs off the screen (Apparel was
+   reaching 1122px at a 1024 viewport). The nth-child right-clamp cannot save
+   family 4: anchored right it would run off the LEFT instead. Tightening the
+   measure keeps both columns and fits the panel. Re-prove with the width
+   sweep if you touch it. */
+@media(max-width:1240px){.mi-d{max-width:22ch}}
+.menu-all{display:block;font-weight:700;color:var(--color-primary) !important;padding:10px 10px 4px !important;margin-top:6px;border-top:1px solid var(--color-border);background:none !important}
+
+/* mobile: tier1 = logo + search + burger; the doors bar folds into the burger */
+@media (max-width:1023px){
+  .tier1-in{gap:var(--space-3)}
+  .brand img{height:38px;width:auto}
+  .tier1-links{display:none}
+  .search-ico{display:none}
+  .search input{padding-left:16px}
+  .nav-toggle{display:block;background:none;border:0;padding:10px;cursor:pointer;flex:none;margin-left:auto}
+  .nav-toggle span{display:block;width:20px;height:2px;background:var(--color-text);margin:4px 0}
+  .tier2{background:transparent}
+  .tier2-in{height:0;padding:0;overflow:visible}
+  .main-nav ul{display:none;position:fixed;top:var(--nav-height);left:0;right:0;bottom:0;background:var(--color-surface);flex-direction:column;gap:0;padding:var(--space-4);overflow-y:auto;z-index:65}
+  .main-nav.open ul{display:flex}
+  .main-nav a,.main-nav button{padding:14px 8px;font-size:17px;color:var(--color-text);border-bottom:1px solid var(--color-border);width:100%}
+  .main-nav a.active,.main-nav button.active{box-shadow:none;color:var(--color-primary-deep);font-weight:700}
+  .dropdown{position:static;display:none;box-shadow:none;border:0;min-width:0;padding:0 0 var(--space-4) var(--space-4)}
+  .dropdown.mega{width:auto;max-width:none}
+  .mega-cols{flex-direction:column;gap:var(--space-2)}
+  .menu-two-col .menu-links{grid-template-columns:1fr}
+  .has-dropdown.open .dropdown{display:block}
+  .has-dropdown:hover .dropdown{display:none}
+  .has-dropdown.open:hover .dropdown{display:block}
+  .mobile-only{display:block}
+}
+
+/* phone persistent contact bar (the brief's "contact always clickable") */
+.phone-bar{display:none}
+@media (max-width:768px){
+  .phone-bar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:70;background:var(--color-surface);border-top:1px solid var(--color-border)}
+  .phone-bar a{flex:1;text-align:center;padding:14px 4px;font-weight:700;font-size:15px;text-decoration:none;color:var(--color-text)}
+  .phone-bar .pb-quote{background:var(--btn-bg);color:var(--btn-text)}
+  body{padding-bottom:52px}
+}
+
+/* mobile nav: accordion */
+@media (max-width:1023px){
+  .head-in{gap:var(--space-3)}
+  .head-actions .head-wa{display:none}
+  .head-actions .btn{display:none}
+  .nav-toggle{display:block;background:none;border:0;padding:10px;cursor:pointer;margin-left:auto}
+  .nav-toggle span{display:block;width:20px;height:2px;background:var(--color-text);margin:4px 0}
+  .main-nav{margin-left:0}
+  .main-nav ul{display:none;position:fixed;top:var(--nav-height);left:0;right:0;bottom:0;background:var(--color-surface);flex-direction:column;gap:0;padding:var(--space-4);overflow-y:auto;z-index:65}
+  .main-nav.open ul{display:flex}
+  .main-nav a,.main-nav button{padding:14px 8px;font-size:17px;border-bottom:1px solid var(--color-border);width:100%}
+  .dropdown{position:static;display:none;box-shadow:none;border:0;grid-template-columns:1fr;padding:0 0 var(--space-4) var(--space-4)}
+  .has-dropdown.open .dropdown{display:grid}
+  .has-dropdown:hover .dropdown{display:none}
+  .has-dropdown.open:hover .dropdown{display:grid}
+}
+
+/* ---------- shared sections ---------- */
+/* Section layout: one centered content column via grid, so a narrow text
+   block (a lede capped at 56ch) aligns to the column's LEFT edge instead of
+   block-centering against the viewport. Sections that declare their own grid
+   (.doors, .closing, .contact-grid) override this by specificity. */
+main>section{padding:var(--sec-pad) var(--space-4);display:grid;grid-template-columns:minmax(0,var(--wrap));justify-content:center}
+.page-head{background:var(--color-surface-alt)}
+.page-head h1{margin-bottom:var(--space-3)}
+.page-lede{font-size:var(--text-md);color:var(--color-text-muted);max-width:56ch}
+.timing-line{margin-top:var(--space-3);font-weight:600}
+.show-more{margin-top:var(--space-5)}
+/* HOME VERTICAL RHYTHM (2026-08-28, Fahad: "Remove the white space"). The
+   token gave 96px top AND bottom per section at desktop, so 192px between
+   every pair. Halved on home only (rule 73); the inner pages keep the old
+   rhythm until he says otherwise. --sec-pad is consumed directly by
+   main>section, so redefining it on <body data-page="/"> inherits cleanly. */
+[data-page="/"]{--sec-pad:clamp(36px,5vw,56px)}
+.cta-panel{background:var(--color-surface-brand);color:var(--color-on-brand);text-align:center}
+.cta-panel p:first-child{font-family:var(--font-display);font-weight:800;font-size:var(--text-lg);color:var(--color-on-brand)}
+.cta-panel .cta-row{justify-content:center}
+.cta-panel .btn-primary{background:var(--color-surface);color:var(--color-primary-deep)}
+.cta-panel .btn-line{border-color:var(--color-on-brand);color:var(--color-on-brand)}
+.cta-panel .btn-line:hover{background:var(--color-on-brand);color:var(--color-primary-deep)}
+
+/* ---------- home: hero ---------- */
+/* FULL-BLEED HERO BANNER (Fahad 2026-08-28, hero round 2: the framed split
+   read as "still empty" — ruling is a true banner, image edge-to-edge, ink
+   scrim, white text; urgentprint.ca reference). Layer order: .hero-bg image
+   z0 · ::after scrim z1 · .hero-in text z2. The SCRIM IS CONTRAST
+   LOAD-BEARING and its numbers are computed for the worst case (pure white
+   image pixels): flat rgba(ink,.9) through 65% puts white sub-text at
+   5.6:1; the h1 caps at 12ch so its tail never passes ~71% viewport, where
+   the fade still holds >=4.8:1. Phone: flat .85 everywhere = 5.0:1. Do not
+   lighten these stops without recomputing. Ink ground behind everything so
+   text is safe before the image paints. */
+.hero{position:relative;overflow:hidden;background:var(--az-ink);border-bottom:1px solid var(--color-border)}
+/* THE HERO OWNS ITS OWN HEIGHT, so the section's vertical padding comes off.
+   .hero is a `main>section` like every other, which pads it top and bottom;
+   that padding sat OUTSIDE .hero-in's full-screen calc and pushed the banner
+   112px past the fold at desktop. Matching the general rule's SHAPE
+   (main>section.hero) rather than trusting order: `main>section` scores (0,0,2)
+   and a bare `.hero` only (0,1,0) — which wins here, but the homepage also
+   redefines --sec-pad on [data-page="/"], and that is the rule this has to beat.
+   Horizontal padding stays: it is the page gutter, not the banner's height. */
+main>section.hero{padding-top:0;padding-bottom:0}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(26,26,26,.9) 0%,rgba(26,26,26,.9) 65%,rgba(26,26,26,.3) 100%)}
+/* THE HERO IS A FULL SCREEN (Fahad 2026-09-09: "make the hero banner one
+   complete page, Top categories should not be showing"). It fills the viewport
+   MINUS the sticky header, because the header is in normal flow and already
+   takes its 125px (64px on phones) off the first screen. Using a bare 100vh
+   would push the hero's own last 125px below the fold instead.
+   The -1px is the .hero border-bottom; without it the next section shows a 1px
+   sliver, which is exactly the kind of thing that looks like a rendering bug.
+   TWO DECLARATIONS ON PURPOSE: svh (small viewport height) is the one that does
+   not change when mobile browser chrome retracts, so the hero cannot grow past
+   the screen mid-scroll. A browser that does not know svh ignores the second
+   line and keeps the vh fallback.
+   max(420px, ...) keeps the old floor for very short windows; min-height never
+   clips, so tall content still pushes the section down rather than being cut. */
+.hero-in{position:relative;z-index:2;padding:var(--space-8) 0;display:flex;flex-direction:column;justify-content:center;
+  min-height:max(420px, calc(100vh - var(--nav-height) - 1px));
+  min-height:max(420px, calc(100svh - var(--nav-height) - 1px))}
+.hero h1{font-size:var(--text-hero);font-weight:900;max-width:12ch;color:var(--color-on-brand)}
+.hero-sub{font-size:var(--text-md);color:rgba(255,255,255,.92);max-width:46ch;margin-top:var(--space-5)}
+.hero-ctas{display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-6)}
+/* the line button inverts to white on the dark banner */
+.hero .btn-line{border-color:var(--color-on-brand);color:var(--color-on-brand)}
+.hero .btn-line:hover{background:var(--color-on-brand);color:var(--az-ink)}
+@media (max-width:1023px){
+  .hero::after{background:rgba(26,26,26,.85)}
+  .hero-in{padding:var(--space-7) 0}
+}
+
+/* ---------- home: showcase at TRUE TRIM RATIOS (rule 29) ---------- */
+.show-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--space-4);align-items:end}
+.piece{text-decoration:none;color:var(--color-text);display:flex;flex-direction:column;gap:var(--space-2)}
+.piece-face{display:block;width:100%;background:var(--color-surface-alt);border:1px solid var(--color-border);border-radius:2px}
+.piece:hover .piece-face{border-color:var(--color-primary);box-shadow:0 10px 24px rgba(140,22,26,.14)}
+.piece-label{font-weight:600;font-size:var(--text-sm)}
+/* true trim ratios: card 3.5x2 · shaadi 5x7 · lawn sign 24x18 · flyer 8.5x11
+   · sticker die-cut · shirt · design sheet */
+.pc-card{grid-column:span 2}.pc-card .piece-face{aspect-ratio:3.5/2;background:var(--color-surface);border-left:6px solid var(--color-accent-fill)}
+.pc-shaadi{grid-column:span 1}.pc-shaadi .piece-face{aspect-ratio:5/7;background:var(--color-surface-brand)}
+.pc-sign{grid-column:span 3}.pc-sign .piece-face{aspect-ratio:24/12;background:var(--color-surface);border:3px solid var(--color-text)}
+.pc-flyer{grid-column:span 1}.pc-flyer .piece-face{aspect-ratio:8.5/11}
+.pc-sticker{grid-column:span 1}.pc-sticker .piece-face{aspect-ratio:1;border-radius:50%;background:var(--color-accent-fill);border:0}
+.pc-shirt{grid-column:span 2}.pc-shirt .piece-face{aspect-ratio:4/3;clip-path:polygon(20% 0,80% 0,100% 22%,88% 34%,88% 100%,12% 100%,12% 34%,0 22%);background:var(--az-ink)}
+.pc-design{grid-column:span 2}.pc-design .piece-face{aspect-ratio:16/9;background:repeating-linear-gradient(45deg,var(--color-surface-alt) 0 14px,var(--color-surface) 14px 28px);border-style:dashed}
+@media (max-width:768px){
+  .show-grid{grid-template-columns:repeat(3,1fr)}
+  .pc-card{grid-column:span 2}.pc-sign{grid-column:span 3}.pc-shirt{grid-column:span 2}.pc-design{grid-column:span 3}
+}
+
+
+/* ---------- category grid: D2 "The Counter" treatment (R2 ruling,
+   Fahad 2026-08-28 by screenshot). Uniform 4-across cards, colored brand
+   faces where no real photo exists yet, weddings rides as the 8th card.
+   D1/D4 directions REJECTED — do not re-propose. ---------- */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4)}
+.cat-card{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--color-text);border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface)}
+.cat-card:hover{border-color:var(--color-primary);box-shadow:0 12px 28px rgba(140,22,26,.12)}
+.cat-face{display:block;aspect-ratio:16/10;background:var(--color-surface-alt);position:relative;overflow:hidden}
+.cat-face img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease-out}
+.cat-card:hover .cat-face img{transform:scale(1.03)}
+.cat-name{font-family:var(--font-display-sm);font-weight:700;font-size:17px;padding:10px 16px 0}
+.cat-blurb{font-size:14px;color:var(--color-text-muted);padding:0 16px 14px}
+.face-amber{background:var(--color-accent-fill)}
+.face-ink{background:var(--az-ink)}
+.face-deep{background:var(--color-surface-brand)}
+.motif-circle{position:absolute;inset:0;margin:auto;width:38%;aspect-ratio:1;border-radius:50%;background:var(--color-surface)}
+.motif-frame{position:absolute;inset:0;margin:auto;width:30%;aspect-ratio:4/5;background:var(--color-surface);border:5px solid var(--color-accent-display)}
+.motif-mug{position:absolute;inset:0;margin:auto;width:22%;aspect-ratio:1;border-radius:7px 7px 12px 12px;background:var(--color-surface)}
+.motif-mug::after{content:"";position:absolute;right:-24%;top:18%;width:34%;height:52%;border:4px solid var(--color-surface);border-left:0;border-radius:0 10px 10px 0}
+.face-lattice{background:
+  repeating-linear-gradient(45deg,rgba(255,163,71,.22) 0 2px,transparent 2px 22px),
+  repeating-linear-gradient(-45deg,rgba(255,255,255,.12) 0 2px,transparent 2px 22px),
+  var(--color-surface-brand)}
+/* staggered rise when the section reveals */
+.js .cat-ads.reveal .cat-card{opacity:0;transform:translateY(14px);transition:opacity .4s ease-out,transform .4s ease-out}
+.js .cat-ads.revealed .cat-card{opacity:1;transform:none}
+.js .cat-ads.revealed .cat-card:nth-child(2){transition-delay:.06s}
+.js .cat-ads.revealed .cat-card:nth-child(3){transition-delay:.12s}
+.js .cat-ads.revealed .cat-card:nth-child(4){transition-delay:.18s}
+.js .cat-ads.revealed .cat-card:nth-child(5){transition-delay:.24s}
+.js .cat-ads.revealed .cat-card:nth-child(6){transition-delay:.30s}
+.js .cat-ads.revealed .cat-card:nth-child(7){transition-delay:.36s}
+.js .cat-ads.revealed .cat-card:nth-child(8){transition-delay:.42s}
+@media (max-width:900px){.cat-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.cat-grid{grid-template-columns:1fr}}
+
+/* ---------- featured products row + rush band (Fahad 2026-08-27) ---------- */
+/* .feat-row retired 2026-08-28: featured products is a .rush-scroller
+   carousel now, same idiom as same-day (Fahad: "Add a carousel like same
+   day printing"). Tile geometry lives on .feat beside .rush-card. */
+.feat{flex:0 0 calc((100% - 3*var(--space-4))/4);scroll-snap-align:start;display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--color-text);border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface)}
+.feat:hover{border-color:var(--color-primary);box-shadow:0 10px 22px rgba(140,22,26,.10)}
+.feat b{font-family:var(--font-display-sm);font-weight:700;font-size:15.5px;padding:10px 14px 0}
+/* Featured price slot (2026-08-28). Every value here is a REGISTERED
+   BRACKET, not a number: these are placeholders standing in the layout
+   until the owner's price list arrives, and the build refuses any bracket
+   that is not on the KNOWN_BRACKETS whitelist. Set in the display cut so a
+   price scans before the description, which is the order a shopper reads.
+   Card heights were ALREADY unequal across the three tile families
+   (featured 269, same-day 252, categories 274 at 1280), so this line does
+   not break a match that existed. */
+.feat-price{font-family:var(--font-display-sm);font-weight:700;font-size:14px;
+  color:var(--color-primary-deep);padding:2px 14px 0}
+.feat-note{font-size:13px;color:var(--color-text-muted);padding:0 14px 14px}
+/* .feat-chip and the .fc-* colour bars RETIRED 2026-08-28 (Fahad: featured
+   products need placeholder images). Faces below mirror .cat-face exactly. */
+.feat-face{display:block;aspect-ratio:16/10;background:var(--color-surface-alt);overflow:hidden}
+.feat-face img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease-out}
+.feat:hover .feat-face img{transform:scale(1.03)}
+/* rush band RETIRED 2026-08-28 (chat-2 round 3): Fahad picked "Carousel
+   section" for the home Same Day beat, so home now reuses the ruled
+   /same-day/ rush row (.rush-* below, one generate.py builder for both
+   pages) under a visible heading. The band's delivery fact lives in the
+   why column (rule 88); pre-change files in the chat-2 restore point. */
+.rush-more{text-align:center;margin-top:var(--space-5)}
+
+/* ---------- home doors: D3 "Two Doors" treatment (R2 ruling, Fahad
+   2026-08-28). The tagline's halves ride as door kickers — that is the
+   tagline deployed structurally, not an eyebrow pattern. ---------- */
+/* GREY BAND (Fahad 2026-09-09). SPLIT, not just a background: .doors is on the
+   width-cap list, so painting the section directly would have capped the band
+   with the content and left white strips at the edges — the exact bug .closing
+   had. The section paints and spans; .doors-in is the flex row.
+   overflow-x:clip MOVES WITH THE FLEX ROW, not with the band: it is there
+   because the pre-reveal translateX states expand scrollable overflow and put
+   8px of sideways scroll on phones (caught by the CDP gate 2026-08-28). It has
+   to sit on the element whose children are being translated. */
+.doors{background:var(--color-surface-alt)}
+.doors-in{display:flex;flex-wrap:wrap;gap:var(--space-4);overflow-x:clip}
+/* overflow-x:clip is load-bearing: the pre-reveal translateX states expand
+   scrollable overflow and put 8px of sideways scroll on phones (caught by
+   the CDP gate 2026-08-28) — do not remove */
+.door{flex:1;min-width:0;border-radius:14px;padding:var(--space-6);min-height:420px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;text-decoration:none;transition:flex .55s cubic-bezier(.3,.8,.3,1)}
+.door:hover,.door:focus-visible{flex:1.9}
+.door small{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-bottom:10px;color:var(--color-on-brand)}
+.door h3{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,2.8vw,38px);line-height:1.1;margin-bottom:10px;color:var(--color-on-brand)}
+.door p{font-size:15.5px;max-width:40ch;opacity:.92;margin-bottom:18px;color:var(--color-on-brand)}
+.door-go{font-weight:700;font-size:15px;color:var(--color-on-brand);text-decoration:underline;text-underline-offset:4px}
+/* PHOTO DOORS (Fahad 2026-09-09). The alt is EMPTY on purpose: the picture is
+   decorative behind a link whose own text already says where it goes, so a
+   screen reader announcing it twice would be noise. The house pattern
+   (::before) stays as the ground the photo sits on, so a slow or failed image
+   leaves a designed panel rather than a hole. */
+.door-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+/* THE SCRIM IS CONTRAST, NOT STYLE. Text sits in the bottom 55% at desktop and
+   the bottom 89% on a phone, in white, over photographs that are mostly pale.
+   Values were set by measuring the composite against the actual pixels, not by
+   eye — see BUILD-NOTES. z-index 1 puts it above the photo and below the text. */
+.door::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to top,rgba(8,5,4,.93) 0%,rgba(8,5,4,.90) 50%,
+    rgba(8,5,4,.62) 68%,rgba(8,5,4,.22) 85%,rgba(8,5,4,0) 100%)}
+.door>small,.door>h3,.door>p,.door>.door-go{position:relative;z-index:2}
+.d-event{background:var(--color-surface-brand)}
+.d-event::before{content:"";position:absolute;inset:-40% -20% auto auto;width:70%;aspect-ratio:1;background:
+  repeating-linear-gradient(45deg,rgba(255,163,71,.16) 0 2px,transparent 2px 26px),
+  repeating-linear-gradient(-45deg,rgba(255,255,255,.10) 0 2px,transparent 2px 26px);border-radius:50%}
+.d-biz{background:var(--az-ink)}
+.d-biz::before{content:"";position:absolute;inset:auto auto -35% -15%;width:65%;aspect-ratio:1;background:
+  repeating-linear-gradient(0deg,rgba(255,163,71,.14) 0 2px,transparent 2px 34px),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.09) 0 2px,transparent 2px 34px)}
+.js .doors.reveal .d-event{opacity:0;transform:translateX(-24px);transition:opacity .55s ease-out,transform .55s ease-out,flex .55s cubic-bezier(.3,.8,.3,1)}
+.js .doors.reveal .d-biz{opacity:0;transform:translateX(24px);transition:opacity .55s ease-out .1s,transform .55s ease-out .1s,flex .55s cubic-bezier(.3,.8,.3,1)}
+.js .doors.revealed .d-event,.js .doors.revealed .d-biz{opacity:1;transform:none}
+.doors-foot{flex-basis:100%;margin-top:var(--space-2)}
+/* STACKED NEEDS A TALLER BOX AND A DEEPER SCRIM, both for the same reason: the
+   text does not shrink when the box does, so at 280px it filled 89% of the door
+   and started where the gradient had already faded to nothing. Measured worst
+   contrast there was 1.24:1 against white. At 400px the text band is 67% and
+   the same white type measures 7.1:1, with the top third of the photo clear. */
+/* flex-basis:100% on .doors-foot means WIDTH in a row and HEIGHT in a column.
+   Stacked, it asked for the full height of the container, and with flex-wrap it
+   took a second column with it: the two doors squeezed to 491px inside a 736px
+   box and the footer link stood beside them, 859px tall. It only surfaced when
+   .doors-in became a grid item, which gave the flex container the definite
+   height that column-wrapping needs. Basis has to go back to auto here. */
+/* flex-wrap:wrap is a ROW device here — it exists so .doors-foot drops onto its
+   own line beside two side-by-side doors. In a COLUMN it means "start a second
+   column when the content exceeds the container height", and the container
+   resolved to 867px against 1710px of content, so it did exactly that: two
+   491px doors in one column with the footer link standing 859px tall beside
+   them. nowrap is the fix; flex-basis on the foot goes back to auto for the
+   same reason, since basis is height in a column. */
+@media (max-width:768px){.doors-in{flex-direction:column;flex-wrap:nowrap}.doors-foot{flex-basis:auto}.door{min-height:400px;flex:auto}.door:hover,.door:focus-visible{flex:auto}
+  .door::after{background:linear-gradient(to top,rgba(8,5,4,.94) 0%,rgba(8,5,4,.90) 70%,
+    rgba(8,5,4,.45) 86%,rgba(8,5,4,0) 100%)}}
+@media (prefers-reduced-motion:reduce){.door{transition:none}.door:hover,.door:focus-visible{flex:1}}
+
+/* ---------- home: steps strip ---------- */
+.step-row{list-style:none;counter-reset:step;display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-5)}
+.step-row li{counter-increment:step;font-size:15px;color:var(--color-text-muted)}
+.step-row li b{display:block;color:var(--color-text);margin-bottom:4px}
+.step-row li::before{content:counter(step,decimal-leading-zero);display:block;font-family:var(--font-display-sm);font-weight:700;font-size:var(--text-lg);color:var(--color-accent-display);margin-bottom:var(--space-2)}
+@media (max-width:768px){.step-row{grid-template-columns:1fr 1fr}}
+
+/* ---------- home: projects ---------- */
+.projects{background:var(--color-surface-alt)}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4)}
+.proj-grid figure:first-child{grid-column:span 2;grid-row:span 2}
+.proj-grid img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius)}
+.proj-grid figure{display:flex;flex-direction:column;gap:var(--space-2)}
+.proj-grid figcaption{font-size:var(--text-sm);color:var(--color-text-muted)}
+.proj-note{margin-top:var(--space-4);font-size:var(--text-sm);color:var(--color-text-muted)}
+@media (max-width:768px){.proj-grid{grid-template-columns:1fr}.proj-grid figure:first-child{grid-column:auto;grid-row:auto}}
+
+/* ---------- home: why as icon-led reasons columns (Fahad by reference
+   screenshot, 2026-08-28 chat-2 round 2: "Why us should be something
+   similar to this"). STRUCTURE from his reference; SKIN stays AZ (rule 99):
+   flat inline-SVG icons carrying the brand inks (amber, red, deep red, ink
+   — the show-the-range ruling inside the identity), no eyebrow (rule 53),
+   approved fact copy (the reference's own lines are wallpaper claims). The
+   old 3-item .why-list layout is replaced, not parked: the same facts live
+   on in the columns (rule 88), and the pre-change files are in the chat-2
+   restore point. Uniform 4-up is his call; rule-26 asymmetry note is in the
+   runsheet. Own classes on purpose: .types/.type-block are shared with the
+   category pages and /same-day/ and stay untouched. ---------- */
+.why-cols{text-align:center;background:var(--color-surface-alt)}
+.why-cols h2{margin-bottom:var(--space-7)}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-7) var(--space-5)}
+.why-col{display:flex;flex-direction:column;align-items:center;gap:var(--space-2)}
+.why-col svg{width:72px;height:72px;margin-bottom:var(--space-2)}
+.why-col h3{font-size:19px;margin:0}
+.why-col p{font-size:15px;color:var(--color-text-muted);max-width:30ch}
+@media (max-width:900px){.why-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.why-grid{grid-template-columns:1fr}}
+/* RED ABOUT BOX RETIRED (Fahad, 2026-08-28 chat-2 round 4: "remove the
+   about us box, and implement it like the one in this website" —
+   urgentprint.ca's Welcome split). .exp-block/.about-teaser/.about-story
+   are gone; the copy moved intact into .welcome below (rule 88). */
+/* home welcome split: heading + story + button beside the owner's REAL
+   storefront photo (images/shop-storefront.jpg, derived from 04 - Brand —
+   real client photography, NOT on the placeholder register). Structure
+   from the reference, skin AZ (rule 99). */
+/* GREY BAND (Fahad 2026-09-09). Safe to put the background straight on the
+   section here, unlike .closing: .welcome is NOT on the width-cap list and its
+   grid lives on the child .welcome-grid, so the section already spans full
+   width and the band reaches the edges. If this section ever grows a cap or
+   becomes the grid itself, split it the way .closing was. */
+.welcome{background:var(--color-surface-alt)}
+.welcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-7);align-items:center}
+.welcome-txt h2{margin-bottom:var(--space-5)}
+.welcome-txt p{max-width:52ch;margin-bottom:var(--space-4);color:var(--color-text-muted)}
+.welcome-txt .cta-row{margin-top:var(--space-5)}
+.welcome-photo{margin:0}
+.welcome-photo img{width:100%;height:auto;border-radius:var(--radius-lg)}
+@media (max-width:860px){.welcome-grid{grid-template-columns:1fr}}
+
+/* HOME COHERENCE PASS (Fahad, 2026-08-28 chat-2 round 4: "the issue with
+   my site is that its not all looking connected yet", urgentprint.ca as
+   the reference). Their glue is one repeated section-head treatment; ours
+   does the same job without their text eyebrow (rule 53): every home
+   section h2 centers, with the MONOGRAM BAR beneath — a 56x4 keyline in
+   the mark's own two inks, red half into amber half at a hard stop (two
+   solids, not a gradient). HOME-SCOPED this round (rule 73); rolling it
+   sitewide is one selector swap when Fahad orders it. sr-only h2s take
+   the rules invisibly and harmlessly. */
+[data-page="/"] main>section>h2{text-align:center}
+[data-page="/"] .show-more{text-align:center}
+[data-page="/"] main>section>h2::after,
+[data-page="/"] .rush-head h2::after,
+[data-page="/"] .welcome-txt h2::after{content:"";display:block;width:56px;height:4px;margin:16px auto 0;background:linear-gradient(90deg,var(--az-red) 0 50%,var(--az-amber) 50% 100%)}
+[data-page="/"] .welcome-txt h2::after{margin-left:0}
+.doors-foot{flex-basis:100%;margin-top:var(--space-2)}
+
+/* ---------- home: reviews + faq teaser + closing ---------- */
+.rev-empty{color:var(--color-text-muted);border:1px dashed var(--color-border);border-radius:var(--radius-lg);padding:var(--space-6);max-width:60ch}
+.qa dt{font-weight:700;margin-top:var(--space-4)}
+.qa dt:first-child{margin-top:0}
+.qa dd{color:var(--color-text-muted);margin-top:4px;max-width:66ch}
+.qa-large dt{font-size:var(--text-md);font-family:var(--font-display);font-weight:800}
+/* FAQ ACCORDION (Fahad 2026-09-09, by reference image). <details>/<summary>,
+   with NO JavaScript: it toggles on Enter and Space, sits in the tab order and
+   works with scripting off, all from the platform. A JS-gated FAQ was a
+   web-critic finding on this site once already; do not reintroduce one.
+   The chevron is two borders on ::after rather than an icon, so there is no
+   asset to load and rotating it is one transform. */
+.qa-acc{border-bottom:1px solid var(--color-border)}
+.qa-item{border-top:1px solid var(--color-border)}
+.qa-item summary{list-style:none;cursor:pointer;display:flex;align-items:center;
+  justify-content:space-between;gap:var(--space-4);padding:var(--space-5) 0;
+  font-family:var(--font-display);font-weight:800;font-size:var(--text-md);
+  line-height:1.25;color:var(--color-text)}
+.qa-item summary::-webkit-details-marker{display:none}
+.qa-item summary:focus-visible{outline:3px solid var(--color-ring);outline-offset:2px}
+.qa-item summary::after{content:"";flex:none;width:11px;height:11px;margin-right:6px;
+  border-right:2.5px solid var(--color-primary);border-bottom:2.5px solid var(--color-primary);
+  transform:rotate(45deg) translate(-3px,-3px);transition:transform .2s ease}
+.qa-item[open] summary::after{transform:rotate(-135deg) translate(-3px,-3px)}
+.qa-a{padding:0 0 var(--space-5)}
+.qa-a p{max-width:66ch;color:var(--color-text-muted);margin:0}
+@media (prefers-reduced-motion:reduce){.qa-item summary::after{transition:none}}
+/* align-items:start, or the shorter column is stretched to the form's height
+   and carries the difference as empty white. It was ~500px of it. */
+/* minmax(0,1fr), NEVER a bare 1fr. `1fr` means `minmax(auto,1fr)`, and that
+   auto minimum is the ITEM'S MIN-CONTENT, so a track can resolve WIDER than the
+   space it was given: at a 560px viewport this column came out 566px inside a
+   528px content box and pushed the whole document 3px sideways. The house rule
+   is already in the stylesheet — `main>section` uses minmax(0,var(--wrap)) for
+   exactly this reason — and .closing's override to `1fr 1fr` dropped it. */
+.closing{background:var(--color-surface-alt)}
+.closing-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:var(--space-6);align-items:start}
+.close-visit h3{font-size:var(--text-lg)}
+.close-visit p{margin-top:var(--space-3);max-width:48ch}
+.visit-nap{font-weight:600}
+.close-quote{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-6)}
+/* Home quote form heading (2026-08-28 copy round, Fahad's deck section 8: the
+   form gained a real heading, "Request a free quote"). Matches .close-visit h3
+   so both halves of .closing lead in the same voice. .close-quote is home-only. */
+.close-quote h3{font-family:var(--font-display);font-weight:800;font-size:var(--text-lg);margin-bottom:var(--space-4)}
+@media (max-width:860px){.closing-in{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- forms ---------- */
+.quote-form{display:flex;flex-direction:column;gap:var(--space-4)}
+/* SHORT FIELDS SIT TWO-UP (Fahad 2026-09-09: make the closing section smaller).
+   Name/phone and category/quantity are all short answers, so stacking five full
+   rows spent height on nothing. Only the free-text box keeps a full row.
+   The pair collapses back to one column under 560px, where two inputs side by
+   side would each be too narrow to read what you typed. */
+/* minmax(0,1fr) for the reason spelled out on .closing, and this one is the
+   sharper case: a bare <input> has an INTRINSIC width of about 218px from its
+   default size attribute, so the field's min-content never shrinks and the pair
+   pushed the document 100px sideways between 861 and 1024. Text wraps; form
+   controls do not. */
+.field-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-4)}
+.field-pair>.field{min-width:0}
+@media (max-width:559px){.field-pair{grid-template-columns:minmax(0,1fr)}}
+.form-lede{max-width:48ch}
+/* F11 FORM HARNESS, ported from ZEF 2026-08-28. The label/control pairing moved
+   out of a wrapping <label> into .field so every control can carry a real
+   for/id link AND its own error line, which a wrapping label cannot do: an
+   error announced by aria-describedby needs an element the label does not
+   contain. .err is hidden until .field.invalid, so nothing shouts before the
+   visitor has done anything. */
+.field{display:flex;flex-direction:column;gap:6px}
+/* The control moved OUT of the label in the F11 port, so a column flex here has
+   nothing left to stack but the label text and its required asterisk — which it
+   duly did, putting a lone "*" on its own line under every required field and
+   costing the form a line each time. A row is what it always needed to be. */
+.quote-form label{display:flex;align-items:baseline;gap:4px;font-weight:600;font-size:var(--text-sm)}
+.field label{font-weight:600;font-size:var(--text-sm)}
+.req{color:var(--color-primary-deep)}
+.err{display:none;font-size:13px;color:var(--color-primary-deep);font-weight:600}
+.field.invalid .err{display:block}
+.field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--color-primary-deep)}
+/* The honeypot must be reachable by a bot and invisible to a person, so it is
+   moved off-screen rather than display:none, which many bots skip. */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+/* role="alert" on an empty node: it stays empty until a send actually fails, so
+   nothing is announced on load. */
+.formerr:empty{display:none}
+.formerr{font-weight:600;color:var(--color-primary-deep);border-left:3px solid var(--color-primary-deep);padding-left:12px}
+/* The confirmation is a SIBLING of the form, never a replacement for it. If a
+   send fails the typed details are still in the DOM behind it. */
+.quote-wrap .sent{border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5);background:var(--color-surface-alt)}
+.quote-wrap.done .quote-form{display:none}
+.quote-wrap.done .sent{display:block}
+.quote-form input,.quote-form select,.quote-form textarea{font:inherit;padding:11px 12px;border:1.5px solid var(--color-border);border-radius:var(--radius);background:var(--color-surface);color:var(--color-text)}
+.quote-form input:focus,.quote-form select:focus,.quote-form textarea:focus{border-color:var(--color-ring);outline:none}
+.form-privacy{font-size:13px;color:var(--color-text-muted)}
+
+/* ---------- services hub ---------- */
+/* ONE SURFACE on the products hub (Fahad, 2026-09-08: "it should be one colour
+   throughout"). The rest of the site keeps its banded rhythm, so this is scoped
+   by the body's data-page hook rather than changed globally — .page-head alone
+   appears on 24 pages. The deep-red CTA panel is left as it is: that is a brand
+   accent block, not one of the grey bands he was pointing at. */
+[data-page="/categories/"] .page-head,
+[data-page="/categories/business-cards/"] .page-head,
+[data-page="/categories/signs-banners/"] .page-head,
+[data-page="/categories/flyers-posters/"] .page-head,
+[data-page="/categories/stickers-labels/"] .page-head,
+[data-page="/categories/apparel/"] .page-head,
+[data-page="/categories/photo-canvas/"] .page-head,
+[data-page="/categories/promo-gifts/"] .page-head{background:var(--color-surface)}
+/* SECTION RHYTHM on this page. --sec-pad is 96px and every section carries it
+   top AND bottom, so each boundary was 192px of empty white — fine when it
+   separated a grey band from a white one, a hole now that the whole page is one
+   surface. Measured at four boundaries before changing anything.
+   Space belongs to the thing that FOLLOWS, so the top is larger than the
+   bottom: 48 + 24 = a 72px gap. The red CTA panel is excluded — a coloured
+   block earns its own air, and squeezing it would turn it into a strip. */
+[data-page="/categories/"] main>section:not(.cta-panel),
+[data-page="/categories/business-cards/"] main>section:not(.cta-panel),
+[data-page="/categories/signs-banners/"] main>section:not(.cta-panel),
+[data-page="/categories/flyers-posters/"] main>section:not(.cta-panel),
+[data-page="/categories/stickers-labels/"] main>section:not(.cta-panel),
+[data-page="/categories/apparel/"] main>section:not(.cta-panel),
+[data-page="/categories/photo-canvas/"] main>section:not(.cta-panel),
+[data-page="/categories/promo-gifts/"] main>section:not(.cta-panel){
+  padding-top:var(--space-7);padding-bottom:var(--space-5)}
+/* These two come AFTER the rule above ON PURPOSE. The heading and the grid it
+   introduces are one unit, so they close up tighter than a section boundary;
+   they must also MATCH ITS SHAPE (main>section.x), not just follow it: the
+   general rule scores (0,2,2) and a bare `[data-page] .class` only (0,2,0), so
+   order alone loses and the gap Fahad had already asked to close silently
+   reopened to 72px. Specificity first, then order. */
+[data-page="/categories/"] main>section.page-head,
+[data-page="/categories/business-cards/"] main>section.page-head,
+[data-page="/categories/signs-banners/"] main>section.page-head,
+[data-page="/categories/flyers-posters/"] main>section.page-head,
+[data-page="/categories/stickers-labels/"] main>section.page-head,
+[data-page="/categories/apparel/"] main>section.page-head,
+[data-page="/categories/photo-canvas/"] main>section.page-head,
+[data-page="/categories/promo-gifts/"] main>section.page-head{padding-top:var(--space-8);
+  padding-bottom:var(--space-6)}
+[data-page="/categories/"] main>section.svc-grid-wrap{padding-top:0}
+
+/* ROUTE BANDS on the products hub (Fahad 2026-09-08, third revision).
+   History, because the shape was argued out rather than designed once:
+   v1 was three cards across in one row — that SHORTENED the page, which was the
+   opposite of the ask. v2 made them three full-bleed COLOURED bands. v3, this
+   one, keeps the three separate sections but drops the colour: Fahad ruled the
+   page should be one homogeneous white surface, like the rest of it.
+   Each band now carries a small CATALOGUE and a view-more, except accounts,
+   which is information only because it has nothing to show.
+   Both catalogues REUSE the site's existing builders — rush_row_html() and
+   ind_home_tiles() — rather than restating their content here, so this page
+   cannot drift from the home page or from /same-day/ and /industries/. */
+.route-band small{display:block;font-size:12.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--color-text-muted);margin-bottom:10px}
+.route-band h2{margin-bottom:12px}
+.route-band > p{font-size:17px;line-height:1.6;max-width:66ch;
+  color:var(--color-text);margin-bottom:24px}
+.route-band .band-cta{margin-bottom:0;margin-top:var(--space-5)}
+/* The two catalogue builders bring their own section padding on the pages they
+   were written for; here they sit inside a band that already has it. */
+.route-band .rush-scroller,.route-band .ind-row{margin-top:var(--space-5)}
+.route-band .rush-nav{margin-top:0}
+
+/* ============================================================================
+   PRODUCT CARDS + CONFIGURATOR — category pages that opt in via products=
+   (Fahad, 2026-09-08: list each thing with a picture, click it, choose what you
+   want, add it to the cart like Etsy). Business cards is the first; the other
+   six category pages still use .type-block until the pattern is approved.
+   It ends in the QUOTE LIST, not a checkout: the shop has no confirmed prices
+   and the site has no payment. The panel therefore asks the CUSTOMER what they
+   want rather than offering a menu of sizes and stocks AZ has never confirmed.
+   Everything below .prod-toggle is JS-GATED (rule 31): without JS the card is
+   its name, its picture and its description, which is the old type block.
+   ============================================================================ */
+/* .types is itself a 2-column grid (it was built for .type-block), so the
+   product grid must span BOTH of its columns or it renders at half width in
+   one of them — which is exactly what it did first time. */
+.types>.prod-grid{grid-column:1/-1}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:var(--space-5)}
+.prod{scroll-margin-top:calc(var(--nav-height) + 16px);border:1px solid var(--color-border);border-radius:var(--radius-lg);
+  background:var(--color-surface);overflow:hidden;display:flex;flex-direction:column}
+.prod-face{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;order:-1;
+  background:var(--color-surface-alt)}
+.prod-face img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+.prod:hover .prod-face img{transform:scale(1.04)}
+/* No photo yet: a house panel rather than a grey hole, same call as the
+   industry tiles. Five of the six slots on business cards are waiting on
+   1200x750 orange-ground renders. */
+.prod-panel{position:absolute;inset:0;background:var(--color-surface-brand)}
+.pp-a{background:
+  repeating-linear-gradient(45deg,rgba(255,163,71,.16) 0 2px,transparent 2px 24px),
+  var(--color-surface-brand)}
+.pp-b{background:
+  repeating-linear-gradient(0deg,rgba(255,163,71,.14) 0 2px,transparent 2px 30px),
+  var(--az-ink)}
+.prod-name{font-family:var(--font-display-sm);font-weight:800;font-size:18px;
+  margin:var(--space-4) var(--space-4) 0}
+.prod-desc{color:var(--color-text-muted);font-size:15px;
+  margin:6px var(--space-4) var(--space-4)}
+.prod-toggle{display:none;font:inherit;font-weight:700;font-size:15px;cursor:pointer;
+  margin:auto var(--space-4) var(--space-4);padding:11px 16px;border-radius:var(--radius);
+  border:1.5px solid var(--color-text);background:none;color:var(--color-text);
+  min-height:44px}
+.js .prod-toggle{display:block}
+/* PRESENCE BUILD: the card ends in a link, not a configurator trigger. It takes
+   .prod-toggle's box so the two builds' cards are the same height and the grid
+   does not shift between them; it is a real <a>, so it needs no JS gate. */
+.prod-ask{display:block;text-align:center;font-weight:700;font-size:15px;
+  margin:auto var(--space-4) var(--space-4);padding:11px 16px;border-radius:var(--radius);
+  border:1.5px solid var(--color-text);color:var(--color-text);text-decoration:none;
+  min-height:44px}
+.prod-ask:hover{background:var(--color-text);color:var(--color-surface)}
+/* The card picture opens the window too, so it has to look like it does.
+   JS-gated with everything else (rule 31): without JS nothing here is
+   clickable and a pointer cursor would be a lie. */
+.js .prod-face{cursor:pointer}
+.prod-toggle:hover{background:var(--color-text);color:var(--color-surface)}
+.prod-toggle:focus-visible{outline:3px solid var(--color-ring);outline-offset:2px}
+
+/* THE CONFIGURATOR WINDOW (2026-09-09, Fahad, against an Instacart product
+   overlay: "that is far too big of a tile, but this is what I meant").
+   Native <dialog> + showModal(), so focus trapping, ESC-to-close, the inert
+   background and the backdrop are the platform's job rather than ours.
+   SAME TRAP AS .prod-cfg[hidden] BEFORE IT: the UA rule that hides a closed
+   dialog is `dialog:not([open]){display:none}`, and ANY author display wins
+   over it because author origin beats UA origin no matter the specificity. So
+   the display MUST be scoped to [open]. A bare `.prod-modal{display:flex}`
+   ships six permanently-open windows stacked on the page. */
+/* CENTERING, and why it is not margin:auto. A modal dialog gets inset:0 from
+   the UA, and `margin:auto` only centers when there is free space to
+   distribute. Clearing max-width/max-height lets the box fill the viewport, at
+   which point there is none and the window sits in the top-left corner, which
+   is exactly how this shipped first. The dialog is therefore a full-viewport
+   CENTERING LAYER holding a fixed-width shell, which also gives the backdrop
+   click a target: a click landing on the layer is a click outside the card. */
+.prod-modal{padding:0;border:none;background:transparent;max-width:none;max-height:none;
+  width:100%;height:100%;inset:0}
+.prod-modal[open]{display:grid;place-items:center}
+.prod-modal::backdrop{background:rgba(20,18,17,.62)}
+/* The shell, not the dialog, is the positioning context for the close button.
+   A modal <dialog> is placed by the UA (top layer, centered by margin), so
+   overriding its `position` to hang a child off it is asking for trouble; and
+   putting the button inside .pm-body would let it scroll away with the form on
+   a short screen. */
+.pm-shell{position:relative}
+/* The name spans both columns; the picture column carries the description and
+   the no-payment line beneath it. Two columns of very different heights left a
+   third of the window as empty white under the photo, which is what made a
+   compact window still read as oversized. */
+.prod-modal .pm-name{grid-column:1/-1;padding-right:44px}
+.pm-aside{display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+.prod-modal .pm-body{display:grid;grid-template-columns:320px 1fr;
+  align-items:start;gap:var(--space-3) var(--space-5);
+  width:min(720px,calc(100vw - 2 * var(--space-4)));max-height:calc(100vh - 2 * var(--space-5));
+  overflow:auto;background:var(--color-surface);color:var(--color-text);
+  border-radius:var(--radius-lg);padding:var(--space-5);
+  box-shadow:0 18px 50px rgba(20,18,17,.28)}
+.pm-x{position:absolute;top:10px;right:10px;z-index:2;width:40px;height:40px;
+  display:grid;place-items:center;font-size:26px;line-height:1;cursor:pointer;
+  border:none;border-radius:50%;background:var(--color-surface);color:var(--color-text)}
+.pm-x:hover{background:var(--color-surface-alt)}
+.pm-x:focus-visible{outline:3px solid var(--color-ring);outline-offset:2px}
+/* width:100% is load-bearing, and `align-self:start` is what it replaces.
+   .pm-aside is a flex COLUMN, so align-self sizes the cross axis, and a face
+   holding only a house panel (a span with an aspect-ratio and no content) got
+   max-content width, which is ZERO. Eleven of the thirteen products have no
+   photo yet, so eleven windows opened with no picture in them at all, while the
+   one product that does have a photo looked perfect. */
+/* 4:3 IN THE WINDOW, 16:10 ON THE CARD (Fahad 2026-09-09: "the image needs to
+   be larger on the left side of the window with subcopy below it"). 320 wide at
+   4:3 is 240 tall against the old 230x144, so the picture carries 2.4x the area.
+   It stops at 4:3 rather than filling the column's full height because these
+   renders are 16:10 and object-fit crops from the centre: a square slot would
+   cut roughly 40% off the width of a business-card shot and lose its edges,
+   which is the same mistake that decapitated the mugs on /categories/. */
+.pm-face{position:relative;display:block;width:100%;aspect-ratio:4/3;overflow:hidden;
+  border-radius:var(--radius);background:var(--color-surface-alt)}
+.pm-face img{width:100%;height:100%;object-fit:cover;display:block}
+/* Subcopy under the picture, sized up from the card's 15px: it is the only
+   prose in the window now that the no-payment line is gone. */
+.pm-desc{font-size:var(--text-base)}
+.pm-face img{width:100%;height:100%;object-fit:cover;display:block}
+.pm-main{display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+/* Franklin renders LIGHT at 400 on a --font-display face: weight it explicitly.
+   See the token comment in the weight contract. */
+.pm-name{font-family:var(--font-display);font-weight:900;font-size:var(--text-lg);
+  letter-spacing:-.01em;line-height:1.15;margin:0}
+.pm-desc{color:var(--color-text-muted);font-size:15px;margin:0}
+.cfg-f{display:flex;flex-direction:column;gap:5px;font-weight:600;font-size:var(--text-sm)}
+.cfg-f input,.cfg-f textarea,.cfg-f select{font:inherit;font-weight:400;padding:10px 12px;
+  border:1.5px solid var(--color-border);border-radius:var(--radius);
+  background:var(--color-surface);color:var(--color-text);min-height:44px;width:100%}
+.cfg-f textarea{min-height:66px;resize:vertical}
+.cfg-f input:focus,.cfg-f textarea:focus,.cfg-f select:focus{border-color:var(--color-ring);outline:none}
+/* Both the menu row and the free-text row are toggled by [hidden], and .cfg-f
+   sets display:flex, which beats the UA style. Same line, same reason, as
+   .prod-cfg[hidden] before it. */
+.pm-other[hidden],.cfg-f[hidden]{display:none}
+/* THE END OF THE WINDOW (Fahad 2026-09-09): a favourites heart, then the
+   add-to-cart button. The heart is a fixed square so the button keeps the
+   full remaining width and still reads as the primary action; both clear the
+   44px touch floor. */
+.pm-actions{display:flex;gap:var(--space-2);align-items:stretch;margin-top:var(--space-1)}
+/* SELECTOR SHAPE, NOT JUST POSITION — the round-29 lesson again. The button is
+   also `.js .add-quote` (0,2,0), which carries min-height:44px and an 8px
+   margin-top for its normal use under a paragraph on the .type-block pages. A
+   bare `.pm-add` scores (0,1,0) and LOSES, so the margin stayed, the row grew
+   to 52, and the heart stretched to 52 while the button sat 44 tall and 8px
+   lower. Ordering it later changes nothing; only the specificity does. */
+.js .add-quote.pm-add{min-height:46px;flex:1;margin-top:0;justify-content:center}
+.pm-fav{flex:0 0 46px;width:46px;min-height:46px;display:grid;place-items:center;
+  cursor:pointer;border:1.5px solid var(--color-border);border-radius:var(--radius);
+  background:var(--color-surface);color:var(--color-text-muted)}
+.pm-fav:hover{border-color:var(--color-ring);color:var(--color-ring)}
+.pm-fav:focus-visible{outline:3px solid var(--color-ring);outline-offset:2px}
+/* Saved is a FILLED heart, not just a colour change: colour alone is not a
+   state a colour-blind customer can read, and the fill survives being printed
+   or screenshotted. */
+.pm-fav[aria-pressed="true"]{color:var(--color-ring);border-color:var(--color-ring)}
+.pm-fav[aria-pressed="true"] svg{fill:currentColor}
+/* Saved for later, on /quote/. Hidden until something is in it, and the
+   attribute needs the author display for the same reason .prod-cfg[hidden] did. */
+.saved-sec[hidden]{display:none}
+.saved-lede{color:var(--color-text-muted);margin:calc(-1 * var(--space-3)) 0 var(--space-4)}
+.q-move{font:inherit;font-weight:700;font-size:14px;cursor:pointer;padding:8px 14px;
+  min-height:44px;border-radius:var(--radius);border:1.5px solid var(--color-text);
+  background:none;color:var(--color-text)}
+.q-move:hover{background:var(--color-text);color:var(--color-surface)}
+.cfg-note{font-size:13px;color:var(--color-text-muted);margin:0}
+@media (max-width:559px){
+  .prod-modal .pm-body{grid-template-columns:1fr;padding:var(--space-4)}
+  .prod-modal .pm-name{padding-right:40px}
+  /* 3:2 on one column, not the old 2:1 letterbox: the picture leads the window
+     here too, but it stays shorter than the desktop 4:3 because on a phone the
+     face and the whole form share one column, and a 4:3 face pushes the body
+     past the height clamp and starts it scrolling before the customer has seen
+     a single field. */
+  .pm-face{aspect-ratio:3/2}
+  /* On one column the reassurance line belongs under the button it reassures
+     about. `order` inside .pm-aside cannot do that, because the whole aside
+     sits above .pm-main either way; display:contents dissolves the aside so its
+     children become grid items in their own right and can be ordered against
+     the form. */
+  .pm-aside{display:contents}
+  .pm-face{order:1} .pm-desc{order:2} .pm-main{order:3}
+}
+/* The spec a customer typed, shown back to them on /quote/. */
+.quote-spec{display:block;font-size:14px;color:var(--color-text-muted);margin-top:2px}
+
+/* ============================================================================
+   BENTO — the "All products" hub only (Fahad, 2026-09-08).
+   Fahad supplied a React/framer-motion LayoutGrid as the reference. Its
+   INTERACTION is click-to-expand-in-place, wrong for tiles that must navigate,
+   so only the layout idea was taken and built natively — this site is
+   generate.py + CSS, not React. .svc-tile is LEFT ALONE: /services/ uses it.
+
+   V2, after Fahad rejected v1 as not varied enough. v1 used auto-placement on
+   uniform 208px rows, which produced only THREE tile sizes and made every edge
+   line up — regular, not abstract. This version places every tile on EXPLICIT
+   grid lines over a 6 x 12 lattice of 88px rows, so tiles carry five different
+   proportions and their edges deliberately do not align across columns.
+
+   The lattice tiles EXACTLY: 6 x 15 = 90 cells, no holes, no overlaps.
+     signs 20 · cards 8 · stickers 12 · photo 14 · apparel 8 · promo 6 ·
+     flyers 12 · docs 12  =  90. SIX proportions: 2.59, 1.52, 1.27, 0.94,
+     0.75, 0.53.
+   HOW TO ADD A TILE, because it is not local: the grid is three 2-column
+   LANES, and a tile spanning lanes (signs, docs) forces the lanes it covers
+   to stay in step. Every lane must total the same rows or the foot goes
+   ragged. Adding the 8th tile grew lanes A and B by 3, so lane C had to grow
+   by 3 too — cards went 3->4 rows and stickers 4->6 to absorb it.
+   The mugs were 192px tall in the first cut, where the caption and its scrim
+   swallowed the product; nothing shorter than about 290px can carry a caption
+   AND still show what it sells.
+   Change one span and you must re-derive the whole lattice; the sum has to
+   come back to 90 AND all three lanes must still total 15. Aspect ratios are matched to the ART (the canvas is the one
+   truly upright product so it takes the 0.62 slot; the mugs are widest so they
+   take the 1.96). A slot more extreme than about 2:1 decapitates a centred
+   product — that is what v1 got wrong with a 3.69:1 slot.
+   ============================================================================ */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:88px;gap:var(--space-4)}
+.bento-tile{position:relative;display:block;overflow:hidden;border-radius:var(--radius-lg);
+  text-decoration:none;background:var(--color-surface-alt)}
+.bento-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+/* Stops are in PIXELS, not percentages, and that is load-bearing: as
+   percentages a short tile got a third of a tall tile's dark base and white
+   type measured 2.56:1 over the mugs. Pixel stops give every tile the same
+   protection under the caption. All seven measure 6.5-8.8:1 on the composite. */
+.bento-tile::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(8,5,4,.94) 0,rgba(8,5,4,.90) 82px,
+    rgba(8,5,4,.46) 134px,rgba(8,5,4,.10) 180px,rgba(8,5,4,0) 214px)}
+.bento-cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:var(--space-5);display:block}
+.bento-cap h3{color:#fff;margin:0;font-size:var(--text-md);line-height:1.15}
+.bento-cap p{color:rgba(255,255,255,.88);margin:6px 0 0;font-size:14.5px;line-height:1.4;max-width:40ch}
+.bento-tile:hover img,.bento-tile:focus-visible img{transform:scale(1.05)}
+.bento-tile:focus-visible{outline:3px solid var(--color-accent-fill);outline-offset:3px}
+.b-signs   {grid-column:1/5;  grid-row:1/6}    /* 768x504  1.52 */
+.b-cards   {grid-column:5/7;  grid-row:1/5}    /* 376x400  0.94 */
+.b-stickers{grid-column:5/7;  grid-row:5/10}   /* 376x504  0.75 */
+.b-photo   {grid-column:1/3;  grid-row:6/13}   /* 376x712  0.53 upright */
+.b-apparel {grid-column:3/5;  grid-row:6/10}   /* 376x400  0.94 */
+.b-promo   {grid-column:3/5;  grid-row:10/13}  /* 376x296  1.27 */
+.b-flyers  {grid-column:5/7;  grid-row:10/16}  /* 376x608  0.62 upright */
+.b-docs    {grid-column:1/5;  grid-row:13/16}  /* 768x296  2.59 horizontal */
+.b-signs .bento-cap h3{font-size:var(--text-lg)}
+/* Tablet: a 2-column lattice, re-derived for 8 tiles. Both lanes must total
+   the same rows or the foot goes ragged: A = 4+4+4 = 12, B = 3+5+4 = 12,
+   with the two full-width tiles (signs, docs) top and bottom. */
+@media (max-width:960px){
+  .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:84px}
+  .b-signs   {grid-column:1/3; grid-row:1/5}
+  .b-cards   {grid-column:1/2; grid-row:5/9}
+  .b-apparel {grid-column:1/2; grid-row:9/13}
+  .b-promo   {grid-column:1/2; grid-row:13/17}
+  .b-stickers{grid-column:2/3; grid-row:5/8}
+  .b-photo   {grid-column:2/3; grid-row:8/13}
+  .b-flyers  {grid-column:2/3; grid-row:13/17}
+  .b-docs    {grid-column:1/3; grid-row:17/20}
+}
+@media (max-width:560px){
+  .bento{grid-template-columns:1fr;grid-auto-rows:auto}
+  .bento-tile{grid-column:1/2!important;grid-row:auto!important;aspect-ratio:16/10}
+  .b-photo,.b-flyers{aspect-ratio:4/5}
+  .b-signs,.b-docs{aspect-ratio:16/9}
+  .bento-cap{padding:var(--space-4)}
+}
+@media (prefers-reduced-motion:reduce){.bento-tile img{transition:none}
+  .bento-tile:hover img,.bento-tile:focus-visible img{transform:none}}
+
+.svc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--space-4)}
+.svc-tile{display:block;text-decoration:none;color:var(--color-text);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5);background:var(--color-surface)}
+.svc-tile:hover{border-color:var(--color-primary);box-shadow:0 12px 28px rgba(140,22,26,.10)}
+.svc-tile p{color:var(--color-text-muted);margin-top:6px;font-size:15px}
+.svc-lead{grid-column:span 3;background:var(--color-surface-alt);border-top:5px solid var(--color-primary-deep)}
+.svc-lead h3{font-size:var(--text-lg)}
+.svc-std{grid-column:span 2}
+@media (max-width:860px){.svc-lead{grid-column:span 6}.svc-std{grid-column:span 3}}
+@media (max-width:600px){.svc-std{grid-column:span 6}}
+.counter-strip{background:var(--color-surface-alt)}
+.counter-strip p{font-weight:600}
+.ramp-list{list-style:none;display:grid;gap:var(--space-4)}
+.ramp-list li{border-left:4px solid var(--color-accent-fill);padding-left:var(--space-4)}
+.timing-band h2{margin-bottom:var(--space-2)}
+
+/* ---------- category pages ---------- */
+.types{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-5) var(--space-6)}
+.type-block{border-top:3px solid var(--color-text);padding-top:var(--space-3);scroll-margin-top:calc(var(--nav-height) + 16px)}
+.type-block p{color:var(--color-text-muted)}
+@media (max-width:700px){.types{grid-template-columns:1fr}}
+/* same-day rush row (Fahad 2026-08-28, by reference screenshot: the
+   Print2Go-style product carousel, restated in AZ tokens). Faces reuse the
+   home-grid identities via .cat-face; the row is navigation only, and the
+   qualifying claim stays the owner bracket in the lede. Arrow buttons are
+   JS-gated (.js) and hidden on phones, where the row scrolls by touch;
+   overflow-x:auto CONTAINS the overflow so document scrollWidth stays at
+   viewport width (the phone gate checks this). */
+.rush-head{text-align:center;margin-bottom:var(--space-4)}
+.rush-head p{max-width:62ch;margin:0 auto;color:var(--color-text-muted)}
+.rush-nav{display:none}
+.js .rush-nav{display:flex;justify-content:flex-end;gap:var(--space-2);margin-bottom:var(--space-3)}
+@media (max-width:700px){.js .rush-nav{display:none}}
+.rush-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-primary-deep);display:grid;place-items:center;cursor:pointer}
+.rush-btn:hover{border-color:var(--color-primary);background:var(--color-surface-alt)}
+.rush-btn[data-dir="-1"] svg{transform:rotate(180deg)}
+/* smooth lives in CSS, not the JS call: scrollLeft assignment resolves its
+   behavior from this property (CSSOM View), reduced-motion switches it off
+   below, and QA verifies end states by injecting scroll-behavior:auto first
+   (same doctrine as the transition trap). scrollBy({behavior:'smooth'}) on a
+   snap container was a silent no-op in headless Chrome; do not go back. */
+.rush-scroller{display:flex;gap:var(--space-4);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;padding-bottom:var(--space-2);scrollbar-width:thin}
+@media (prefers-reduced-motion:reduce){.rush-scroller{scroll-behavior:auto}}
+.rush-card{position:relative;flex:0 0 calc((100% - 3*var(--space-4))/4);scroll-snap-align:start;display:flex;flex-direction:column;text-decoration:none;color:var(--color-text);border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface)}
+.rush-card:hover{border-color:var(--color-primary);box-shadow:0 12px 28px rgba(140,22,26,.12)}
+.rush-name{font-family:var(--font-display-sm);font-weight:700;font-size:16px;padding:12px 58px 14px 16px}
+.rush-go{position:absolute;right:12px;bottom:10px;width:34px;height:34px;border-radius:50%;background:var(--color-primary);color:var(--color-on-brand);display:grid;place-items:center}
+.rush-card:hover .rush-go{background:var(--color-primary-deep)}
+@media (max-width:1000px){.rush-card,.feat{flex-basis:calc((100% - 2*var(--space-4))/3)}}
+@media (max-width:700px){.rush-card,.feat{flex-basis:calc((100% - var(--space-4))/1.35)}}
+/* documents motif: a white sheet with two ghost sheets behind it, on the ink
+   face; joins the motif system (circle, frame, mug, lattice) */
+.motif-doc{position:absolute;inset:0;margin:auto;width:24%;aspect-ratio:4/5;background:var(--color-surface);border-radius:2px;box-shadow:9px 9px 0 rgba(255,255,255,.32),18px 18px 0 rgba(255,255,255,.14)}
+
+/* quote list (NAV v3, Fahad 2026-08-28): the honest cart. Add buttons are
+   JS-gated (rule 31) — without JS the type sections are unchanged and the
+   /quote/ page is a plain quote form. */
+.add-quote{display:none}
+.js .add-quote{display:inline-flex;align-items:center;min-height:44px;margin-top:var(--space-2);padding:8px 16px;font:inherit;font-size:14px;font-weight:700;color:var(--color-primary-deep);background:var(--color-surface);border:1.5px solid var(--color-primary);border-radius:var(--radius);cursor:pointer}
+.js .add-quote:hover{background:var(--color-primary);color:var(--color-on-brand)}
+.js .add-quote[disabled]{border-color:var(--color-border);color:var(--color-text-muted);background:var(--color-surface-alt);cursor:default}
+.quote-items{max-width:56ch}
+.quote-empty{color:var(--color-text-muted)}
+.quote-row{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:10px 0;border-bottom:1px solid var(--color-border)}
+.quote-row a{font-weight:600;color:var(--color-text);margin-right:auto}
+/* A saved row carries TWO controls where a cart row carries one, so the link
+   takes the free space (margin-right:auto) and the buttons group at the end.
+   Left to space-between the pair straddled the row with a gap between them. */
+#saved-items .quote-row{gap:var(--space-2)}
+.q-remove,.q-unfav{min-height:44px;padding:8px 14px;font:inherit;font-size:14px;font-weight:600;color:var(--color-text-muted);background:none;border:1.5px solid var(--color-border);border-radius:var(--radius);cursor:pointer}
+.q-remove:hover,.q-unfav:hover{border-color:var(--color-primary);color:var(--color-primary-deep)}
+.quote-form-sec h2{margin-bottom:var(--space-4)}
+
+.file-note{background:var(--color-surface-alt)}
+/* ONE COLOUR ON THE DESIGNED PAGES (Fahad 2026-09-09: "remove all the grey,
+   lets keep it one colour (white)"). The grey band was doing two jobs at once:
+   tinting the section AND telling the eye where one section ended. Removing it
+   removes the second job too, so these pages replace it with an h2 rhythm and
+   the tightened 48/24 spacing above. Take the tint out on its own and the page
+   reads as one undifferentiated column.
+   The deep-red CTA panel stays: that is a brand accent block, not one of the
+   grey bands he was pointing at. */
+[data-page="/categories/business-cards/"] .file-note,
+[data-page="/categories/signs-banners/"] .file-note,
+[data-page="/categories/flyers-posters/"] .file-note,
+[data-page="/categories/stickers-labels/"] .file-note,
+[data-page="/categories/apparel/"] .file-note,
+[data-page="/categories/photo-canvas/"] .file-note,
+[data-page="/categories/promo-gifts/"] .file-note{background:var(--color-surface)}
+/* The heading that replaces the band. Sized with the other section h2s, and
+   given the same rule as .file-note's own h2 so the page has one heading
+   rhythm rather than two. */
+.cat-head{grid-column:1/-1;margin-bottom:var(--space-5)}
+/* The cross-sell row is a CAROUSEL and its cards live in a .rush-scroller, so
+   they need the flex geometry .feat has rather than the grid geometry .prod
+   has. Same four-across formula and the same two breakpoints, so the row keeps
+   step with the home carousels instead of drifting to its own rhythm. */
+.related .rush-scroller{margin-top:var(--space-5)}
+.related .rush-scroller .prod{flex:0 0 calc((100% - 3*var(--space-4))/4);scroll-snap-align:start}
+@media (max-width:1000px){.related .rush-scroller .prod{flex-basis:calc((100% - 2*var(--space-4))/3)}}
+@media (max-width:700px){.related .rush-scroller .prod{flex-basis:calc((100% - var(--space-4))/1.35)}}
+/* The arrows sit above the row, right-aligned, exactly as on the home page. */
+.related .rush-nav{justify-content:flex-end}
+.related .show-more{margin-top:var(--space-5);text-align:center}
+.file-note h2{margin-bottom:var(--space-2)}
+.file-note p{max-width:66ch}
+/* The What-to-send list. Plain list, sized with the prose around it; the bold
+   lead-in is what a reader scans when gathering things to bring in.
+   TWO RICHER TREATMENTS WERE BUILT AND REJECTED (Fahad 2026-09-09): three cards
+   plus two route boxes, then prose plus a right-hand links panel. He asked for
+   the plain version back. Do not re-tile or re-panel this without him. */
+.send-list{max-width:66ch;margin:var(--space-4) 0;padding-left:1.15em}
+.send-list li{margin-bottom:6px}
+.file-note p+p{margin-top:var(--space-3)}
+.cat-sample img{border-radius:var(--radius)}
+.cat-sample figcaption{font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-2)}
+
+/* ---------- weddings ---------- */
+.occasion-head{border-bottom:6px solid var(--color-accent-fill)}
+.occ-grid{display:grid;grid-template-columns:2fr 1fr;gap:var(--space-5)}
+.occ{background:var(--color-surface-alt);border-radius:var(--radius-lg);padding:var(--space-5)}
+.occ-grid .occ:first-child{grid-row:span 2;background:var(--color-surface-brand);color:var(--color-on-brand)}
+.occ-grid .occ:first-child h3{color:var(--color-on-brand);font-size:var(--text-lg)}
+.occ-grid .occ:first-child p{max-width:44ch}
+.occ p{margin-top:6px;color:inherit}
+.occ-note{margin-top:var(--space-4);font-size:var(--text-sm);color:var(--color-text-muted)}
+@media (max-width:768px){.occ-grid{grid-template-columns:1fr}.occ-grid .occ:first-child{grid-row:auto}}
+
+/* ---------- how it works / about / faq / contact ---------- */
+.journey-list{list-style:none;counter-reset:j;display:grid;gap:var(--space-5);max-width:760px}
+.journey-list li{counter-increment:j;display:grid;grid-template-columns:64px 1fr;gap:var(--space-4);color:var(--color-text-muted)}
+.journey-list li b{color:var(--color-text)}
+.journey-list li::before{content:counter(j,decimal-leading-zero);font-family:var(--font-display-sm);font-weight:700;font-size:var(--text-xl);color:var(--color-accent-display);line-height:1}
+.story p,.shop-today p{max-width:66ch}
+.photo-note{font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-3)}
+.contact-grid{display:grid;grid-template-columns:3fr 2fr;gap:var(--space-6)}
+.contact-form-col{background:var(--color-surface-alt);border-radius:var(--radius-lg);padding:var(--space-6)}
+.c-block{margin-bottom:var(--space-5)}
+.c-block h2{font-size:var(--text-md);margin-bottom:var(--space-2)}
+.c-block p{color:var(--color-text-muted)}
+@media (max-width:860px){.contact-grid{grid-template-columns:1fr}}
+
+/* ---------- footer ---------- */
+.site-foot{background:var(--az-ink);color:var(--az-paper);padding:var(--space-8) var(--space-4)}
+.foot-in{max-width:var(--wrap);margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--space-6)}
+@media (max-width:900px){.foot-in{grid-template-columns:1fr 1fr}}
+.foot-name{font-family:var(--font-display-sm);font-weight:700;font-size:var(--text-md);margin-bottom:var(--space-3)}
+.foot-label{font-weight:700;margin-bottom:var(--space-3)}
+.foot-col p{margin-bottom:var(--space-2);color:var(--az-paper)}
+.foot-col a{display:block;color:var(--az-paper);text-decoration:none;padding:4px 0;opacity:.92}
+.foot-col a:hover{text-decoration:underline;opacity:1}
+.foot-nap a{display:inline}
+@media (max-width:700px){.foot-in{grid-template-columns:1fr}}
+
+/* ---------- v2 additions: home strip, occasions hub, industries hub ---------- */
+.paths-strip{padding-top:0 !important}
+.paths-strip p{font-size:var(--text-base)}
+/* .exp-link retired with the red about box (chat-2 round 4) */
+.occ-flagship{background:var(--color-surface-brand);color:var(--color-on-brand)}
+.occ-flagship h2,.occ-flagship p{color:var(--color-on-brand)}
+.occ-flagship p{max-width:56ch}
+.occ-flagship .btn-primary{background:var(--color-surface);color:var(--color-primary-deep);margin-top:var(--space-3)}
+.occ-section{border-top:1px solid var(--color-border);scroll-margin-top:calc(var(--nav-height) + 16px)}
+.occ-section p{max-width:56ch;color:var(--color-text-muted)}
+.order-list{list-style:none;margin-top:var(--space-4);display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-4)}
+.order-list a{font-weight:600;color:var(--color-primary);text-decoration:underline;text-underline-offset:3px}
+.chip-row{display:flex;flex-wrap:wrap;gap:var(--space-2);padding:var(--space-4);max-width:var(--wrap);margin:0 auto}
+.chip-row a{font-size:14px;font-weight:600;color:var(--color-text);text-decoration:none;border:1px solid var(--color-border);border-radius:999px;padding:8px 14px}
+.chip-row a:hover{border-color:var(--color-primary);color:var(--color-primary-deep)}
+/* Home "Industries we serve" — EXPANDING TILES (Fahad, 2026-09-08: "a few tiles
+   for the popular industries and then a see more for all industries"). Replaces
+   the 12-chip row that lived here from 2026-08-28; .chip-row itself stays, the
+   hub still uses it.
+
+   THE INTERACTION IS NOT A NEW COMPONENT. It is .door's flex accordion, which
+   this same page already runs two sections above: identical .55s
+   cubic-bezier(.3,.8,.3,1), identical :focus-visible parity, identical
+   reduced-motion reset. A second hover-expand tuned differently would read as a
+   bug on one page. Fahad's reference for this was a React/framer-motion gallery
+   that animates `flex` on hover — the same idea, and the same call as the
+   /categories/ bento on 2026-09-08: take the idea, drop the component. Its
+   click behaviour is a LIGHTBOX, which is wrong here for the third time on this
+   site: these tiles navigate to a trade's section on the hub, and trapping a
+   lead in a photo viewer is the opposite of what the section is for.
+
+   RETUNED FOR FIVE, not two. .door expands 1 -> 1.9 with one sibling; at five
+   tiles the row is 1096px inside the wrap, so rest is ~219px each and the
+   ratio has to buy real width without starving the other four. 2.2 gives
+   389px expanded against 177px squeezed. Above ~2.6 the siblings lose their
+   second label line. */
+/* gap is --space-2 (8px), NOT the --space-4 the rest of the home grids use
+   (Fahad, 2026-09-08, with a reference image): a run of tall portrait tiles
+   reads as ONE band only when the gaps are hairlines. In the reference the
+   gap is ~3% of tile width; at --space-4 these were at 7.3%. Do not "align"
+   this back to the sitewide grid gap — it is deliberately tighter. */
+.ind-row{display:flex;flex-wrap:wrap;gap:var(--space-2);overflow-x:clip}
+/* overflow-x:clip mirrors .doors and for the same reason (CDP gate,
+   2026-08-28): transformed children add scrollable overflow and put sideways
+   scroll on phones. overflow-x:hidden would force overflow-y:auto — do not
+   swap it. */
+.ind-tile{flex:1;min-width:0;min-height:clamp(320px,34vw,420px);border-radius:14px;
+  position:relative;overflow:hidden;text-decoration:none;display:flex;
+  flex-direction:column;justify-content:flex-end;background:var(--az-ink);
+  transition:flex .55s cubic-bezier(.3,.8,.3,1)}
+.ind-tile:hover,.ind-tile:focus-visible{flex:2.2}
+.ind-tile:focus-visible{outline:3px solid var(--color-accent-fill);outline-offset:3px}
+.ind-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+/* PIXEL stops, not percentages — the same rule the bento learned. Here it
+   matters more, not less: these tiles change width as you hover, so under
+   percentages the squeezed tile and the expanded tile would carry different
+   amounts of dark under identical white type. */
+.ind-tile::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(8,5,4,.94) 0,rgba(8,5,4,.90) 82px,
+    rgba(8,5,4,.46) 134px,rgba(8,5,4,.10) 180px,rgba(8,5,4,0) 214px)}
+.ind-cap{position:relative;z-index:2;padding:var(--space-5);display:block}
+.ind-name{display:block;font-family:var(--font-display-sm);font-weight:800;font-size:19px;
+  line-height:1.15;color:var(--color-on-brand)}
+/* The line is what the expansion BUYS, and it is collapsed with grid 0fr->1fr
+   rather than opacity. Opacity was the first cut and it was wrong twice: an
+   invisible paragraph still RESERVES its height, so the five names sat at five
+   different heights instead of on one baseline (a two-line name reserved less
+   than a four-line one), and a caption that tall pushes text out of the scrim's
+   strong band into its .10 tail, where white type over a bright photo fails
+   contrast. 0fr reserves nothing, so at rest the caption is just the name — the
+   ~68px the existing scrim ladder was tuned for — and it grows only on the tile
+   that has expanded to 389px, where the line wraps short. min-height:0 on the
+   row is what actually lets it clip. */
+.ind-more{display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .4s cubic-bezier(.3,.8,.3,1)}
+.ind-tile:hover .ind-more,.ind-tile:focus-visible .ind-more{grid-template-rows:1fr}
+.ind-line{display:block;min-height:0;overflow:hidden;color:rgba(255,255,255,.90);
+  font-size:14.5px;line-height:1.4;opacity:0;transition:opacity .3s ease-out .05s}
+.ind-tile:hover .ind-line,.ind-tile:focus-visible .ind-line{opacity:1;padding-top:8px}
+/* No-photo state. Fahad supplies the photography and it is never generated, so
+   until a file lands each tile draws a house panel rather than a grey hole.
+   Both grounds are dark on purpose: white type sits on them with no photo
+   under the scrim doing the work. */
+.ind-face{position:absolute;inset:0}
+.if-a{background:var(--az-ink)}
+.if-b{background:var(--color-surface-brand)}
+.ind-face::before{content:"";position:absolute;inset:0}
+.if-a::before{background:
+  repeating-linear-gradient(45deg,rgba(255,163,71,.15) 0 2px,transparent 2px 26px),
+  repeating-linear-gradient(-45deg,rgba(255,255,255,.08) 0 2px,transparent 2px 26px)}
+.if-b::before{background:
+  repeating-linear-gradient(0deg,rgba(255,163,71,.14) 0 2px,transparent 2px 30px),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 2px,transparent 2px 30px)}
+/* Reduced motion FIRST, the 900 block after: media queries carry equal
+   specificity, so source order is what lets the narrow layout win for a user
+   who has both. (.door has these two in the other order — left alone, rule 73.)
+   Nothing expands here, so the line is shown outright and the tiles simply run
+   taller to fit it rather than clipping it. */
+@media (prefers-reduced-motion:reduce){
+  .ind-tile{transition:none}
+  .ind-tile:hover,.ind-tile:focus-visible{flex:1}
+  .ind-more{grid-template-rows:1fr;transition:none}
+  .ind-line{opacity:1;padding-top:8px;transition:none}
+}
+/* Hover does not exist on touch and a 5-wide row does not fit a phone. Two per
+   row, the fifth taking the last row on its own, everything shown outright.
+   Basis is 50% - space-4, which is slack against the 8px gap (two per row only
+   needs 50% - 4px) — flex-grow takes up the rest, and the slack is what keeps
+   the pair on one row when a scrollbar eats a few px.
+   1023 is NOT a fresh breakpoint — it is this site's existing desktop line (the
+   nav goes burger below 1024). At my first cut of 900 the accordion engaged at
+   920px and gave five 165px slivers; at 1024 the narrowest column is 186px, and
+   the section now flips on the same width as everything else on the page. */
+@media (max-width:1023px){
+  .ind-tile{flex:1 1 calc(50% - var(--space-4));min-height:210px}
+  .ind-tile:hover,.ind-tile:focus-visible{flex:1 1 calc(50% - var(--space-4))}
+  .ind-name{font-size:17px}
+  .ind-more{grid-template-rows:1fr}
+  .ind-line{opacity:1;padding-top:8px}
+}
+.ind-section{border-top:1px solid var(--color-border);padding-top:var(--space-6) !important;padding-bottom:var(--space-6) !important;scroll-margin-top:calc(var(--nav-height) + 16px)}
+.ind-intro{color:var(--color-text-muted);max-width:60ch}
+.ind-cta{margin-top:var(--space-3)}
+.anchor-band{background:var(--color-surface-alt)}
+.anchor-band p{font-weight:600;max-width:60ch}
+/* CATCH-ALL on the industries hub (Fahad 2026-09-09). Given the page's own
+   section furniture rather than a band of its own: it is one of the sections,
+   not a footnote under them, which is exactly the point of moving it out of
+   the lede. */
+.ind-open{border-top:1px solid var(--color-border)}
+.ind-open p{max-width:62ch;color:var(--color-text-muted)}
+.ind-open .cta-row{margin-top:var(--space-5)}
+.accounts-strip p{font-size:var(--text-md)}
+
+/* sections that declare their own grid override main>section's centered
+   column and would go full-bleed — re-contain them (bug caught 2026-08-27
+   on /same-day/; applies to every category page's .types) */
+/* .closing is NOT on this list any more. These sections override
+   main>section's own centred track with a multi-column grid, so they need the
+   cap put back by hand — but a cap on the SECTION caps its background too, and
+   .closing paints a band. Its columns moved to .closing-in, which means
+   main>section's minmax(0,var(--wrap)) + justify-content:center constrains the
+   content for free while the band runs edge to edge. Any other banded section
+   that grows columns should move the same way rather than join this list. */
+.types,.contact-grid{width:100%;max-width:calc(var(--wrap) + 2*var(--space-4));margin-left:auto;margin-right:auto}
+
+/* ---------- reveal (JS-gated, rule 31: content visible without JS) ---------- */
+.js .reveal{opacity:0;transform:translateY(14px);transition:opacity .45s ease-out,transform .45s ease-out}
+.js .reveal.revealed{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none;transition:none}
+  *{transition-duration:.01ms !important;animation-duration:.01ms !important}
+}
