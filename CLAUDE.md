@@ -111,14 +111,15 @@ the year the owner took over are both absent.
 `mfahadishtiaq/az-printing-landing`, Pages from `main` at root. A window for
 the client only; a real domain comes later.
 
-**The real domain is decided: `azprintingandsigns.ca`** (2026-09-10, free at
+**`azprintingandsigns.ca` is BOUGHT (2026-09-10)** in the client's Cloudflare
+account: expires 2027-09-11, auto-renew on, Cloudflare nameservers. It was free at
 CIRA that day; the short `azprinting.ca` was rejected because the domain must
 match the store name, the cards and the Google listing). Plan, in order:
 Cloudflare account on the CLIENT'S email (rule 120) -> register the domain
 there in the business's name (CIRA legal type = the corporation if
 incorporated, else the owner; auto-renew on) -> add Vela's email as a member
--> Workers & Pages, connect this repo, branch `main`, **no build command,
-output `/`** -> custom domains apex + www (Cloudflare writes the DNS itself
+-> Workers & Pages serving an **ALLOWLIST of built files only** (see the
+warning below; NOT this repo root) -> custom domains apex + www (Cloudflare writes the DNS itself
 because the zone is in the same account) -> Claude adds the www-to-root
 redirect, verifies from outside (DoH, every asset, certificate) and makes the
 old `github.io` link 301 to the domain. Why Cloudflare and not Squarespace:
@@ -127,6 +128,16 @@ to it). A later move to Shopify is DNS only: A @ 23.227.38.65, CNAME www
 shops.myshopify.com, both DNS-only (grey cloud) because Shopify issues its
 own certificate. Fahad buys it himself; Claude never creates the account or
 enters payment.
+
+**THIS REPO IS PUBLIC AND GITHUB PAGES SERVES EVERY FILE IN IT.** Checked
+2026-09-10: `/CLAUDE.md` and `/build.py` both return 200 on the live github.io
+site, so these internal notes are world-readable. Pointing Cloudflare Pages at
+the repo root with output `/` would publish them on the client's own domain.
+**Before hosting is connected**, split it the way ZEF does: this folder's repo
+goes private, and a deploy script copies an ALLOWLIST (index.html, css/, js/,
+images/, favicons, robots.txt) into a separate public repo or output folder that
+Pages serves. Keep it an allowlist; "everything except X" is how the next new
+script ends up public.
 
 **EVERY LOCAL ASSET PATH IS RELATIVE, and must stay that way.** GitHub serves a
 project site under a **subpath**, so `/css/site.css` resolves to the domain
