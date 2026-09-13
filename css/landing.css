@@ -1,117 +1,414 @@
-/* ============================================================================
-   LANDING SITE ONLY (2026-09-09). Loaded AFTER site.css, which it inherits the
-   whole design system from: type, palette, buttons, hero, category tiles, FAQ
-   accordion, form fields, footer and the mobile phone bar all come from there
-   unchanged. This file is only the parts a ONE-PAGE site needs and a catalogue
-   site does not.
-   ========================================================================== */
+/* AZ Printing & Signs — landing page stylesheet.
+   2026-09-13, CLIENT FEEDBACK ROUND: "more sophisticated and neutral, similar
+   to Staples". Standalone: the shop build's site.css is NOT loaded any more
+   (it carried the red/amber "pop" direction and a two-tier mega-nav this page
+   never used). site.css stays on disk only as the pre-redesign record; the git
+   tag pre-neutral-redesign-2026-09-13 restores the old page whole.
 
-/* THE HEADER IS A SLIM ANCHOR BAR, not the shop's two-tier mega-nav. Six
-   merchandise families with drop-panels is right for 25 pages and absurd for
-   one, and the shop bar's label sizes are a measured ladder that only makes
-   sense with its own seven labels in it. */
-.lp-head{position:sticky;top:0;z-index:60;background:var(--color-surface);
-  border-bottom:1px solid var(--color-border)}
-/* THE BAR SPANS THE FULL WIDTH, brand flush left (Fahad 2026-09-09: "move AZ
-   to the top left"). It used to be constrained to the centred content width
-   like every section below it, which put the logo 220px from the left edge at
-   1600 and 380px at 1920 — marooned rather than anchored. The SECTIONS stay
-   centred; a header bar is furniture, not content, and belongs to the window. */
-.lp-head-in{width:100%;display:flex;align-items:center;gap:var(--space-5);
-  padding:10px clamp(var(--space-4), 3vw, var(--space-7));min-height:62px}
-/* The brand block is the SHOP'S, markup and all: monogram plus the wordmark
-   "Printing & Signs" (Fahad 2026-09-09: the top looked empty). The word is
-   spelled with an AMPERSAND, not "and", because that is the canonical name by
-   Fahad's own 2026-08-27 ruling and this build's BANNED list refuses the drift
-   spelling. The monogram's alt is just "AZ", so a screen reader does not read
-   the name twice.
-   site.css sizes it at 48px, which suits the shop's 64px tier-1 and is tall for
-   this 62px bar, so it is trimmed here. The word hides below 520px, where the
-   Call button matters more than the name. */
-.lp-head .brand img{height:40px}
-/* site.css hides .brand-word below 1100px, because the SHOP'S tier-1 bar also
-   carries a search field, three links, an account link, a cart and a phone
-   number, and the name is the first thing that has to go. This bar carries four
-   anchors and one button, so it has room: the word stays down to 520px, where
-   the Call button finally matters more than the name. */
-@media (max-width:1100px){.lp-head .brand-word{display:block}}
-.lp-head .brand-word{font-size:14px}
-@media (max-width:520px){.lp-head .brand-word{display:none}}
-.lp-nav{display:flex;gap:var(--space-5);margin-left:auto}
-.lp-nav a{font-weight:600;font-size:15px;color:var(--color-text);text-decoration:none;
-  padding:6px 0;border-bottom:2px solid transparent}
-.lp-nav a:hover{border-bottom-color:var(--color-primary)}
-.lp-call{white-space:nowrap}
-@media (max-width:860px){
-  /* The nav collapses rather than becoming a burger: four anchors do not earn
-     a menu, and the phone bar at the foot already carries the actions. */
-  .lp-nav{display:none}
-  .lp-head-in{gap:var(--space-3)}
-  .lp-call{margin-left:auto;font-size:14px;padding:10px 14px}
+   INKS. Every colour names its source (rule 56). The neutrals are read from
+   Staples Print Canada's live CSS on 2026-09-13, and they turn out to be
+   Pantone ink references, which is the right vocabulary for a print shop:
+     --ink    #101820  Pantone Black 6 C. Staples' heading colour.
+     --text   #343B41  Black 6 C at an 85% screen. Body copy, 11.4:1 on white.
+     --muted  #53565A  Pantone Cool Gray 11 C. Secondary copy, 7.3:1 on white,
+                       6.8:1 on --band.
+     --rule   #D9D9D6  Pantone Cool Gray 1 C. Staples' card border.
+     --band   #F6F6F5  Cool Gray 1 C at a 25% screen. Alternate section ground.
+     --field  #888B8D  Pantone Cool Gray 8 C. Form borders, 3.5:1 on white
+                       (the 3:1 floor for a control's edge).
+     --red    #A01D20  AZ brand PDF. Buttons, active states, focus. White on it
+                       measures 7.8:1.
+     --red-dk #8C161A  AZ brand PDF. Hover and pressed.
+   Red is the ONLY colour doing work. Amber lives in the logo and nowhere else.
+
+   TYPE. Libre Franklin stays (ruled 2026-09-08, sourced from the shop's own
+   fascia). What changed is the WEIGHT: the old contract ran headings at 900,
+   which is poster register. Staples sets its headings at 500; Franklin reads
+   best one step up, so headings are 600 and labels 500. */
+
+:root {
+  --ink: #101820;
+  --text: #343B41;
+  --muted: #53565A;
+  --rule: #D9D9D6;
+  --band: #F6F6F5;
+  --field: #888B8D;
+  --paper: #FFFFFF;
+  --red: #A01D20;
+  --red-dk: #8C161A;
+
+  --font: "Libre Franklin", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --wrap: 1200px;
+  --gutter: 20px;
+  --head-h: 64px;
+  --r-card: 8px;
+  --r-btn: 4px;
+  --sec-pad: 64px;
+}
+@media (min-width: 768px) { :root { --gutter: 32px; --head-h: 72px; --sec-pad: 88px; } }
+@media (min-width: 1280px) { :root { --sec-pad: 104px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--head-h) + 8px); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--paper); color: var(--text);
+  font: 400 16px/1.6 var(--font); letter-spacing: .005em;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  padding-bottom: 64px; /* room for the phone bar */
+}
+@media (min-width: 1024px) { body { font-size: 17px; padding-bottom: 0; } }
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+h1, h2, h3, h4 { color: var(--ink); font-weight: 600; margin: 0; letter-spacing: -.012em; }
+h1 { font-size: clamp(2.5rem, 1.7rem + 3.4vw, 4rem); line-height: 1.04; letter-spacing: -.022em; }
+h2 { font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem); line-height: 1.12; letter-spacing: -.018em; }
+h3 { font-size: 1.25rem; line-height: 1.25; }
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+a { color: inherit; }
+figure { margin: 0; }
+dl, dd { margin: 0; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+.wrap { width: 100%; max-width: calc(var(--wrap) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--ink); color: #fff; padding: 10px 16px; border-radius: var(--r-btn); text-decoration: none; }
+.skip:focus { top: 12px; }
+
+/* ---------- buttons and links ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 0 22px; border-radius: var(--r-btn);
+  font: 600 15px/1.2 var(--font); letter-spacing: .01em; text-decoration: none; white-space: nowrap;
+  border: 1px solid transparent; cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.btn-primary { background: var(--red); color: #fff; }
+.btn-primary:hover { background: var(--red-dk); }
+.btn-line { background: var(--paper); color: var(--ink); border-color: var(--ink); }
+.btn-line:hover { background: var(--ink); color: #fff; }
+.btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.7); }
+.btn-ghost:hover { background: #fff; color: var(--ink); border-color: #fff; }
+.text-link { color: var(--ink); font-weight: 500; text-decoration: underline; text-decoration-color: var(--field); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.text-link:hover { color: var(--red); text-decoration-color: var(--red); }
+
+/* ---------- top bar and header ---------- */
+/* Address and hours at the very top at EVERY width. On a phone they otherwise
+   first appear about 8,400px down, and "where are you, are you open" is the
+   first question a local visitor has. */
+.topbar { background: var(--ink); color: #fff; font-size: 13px; }
+.topbar-in { display: flex; justify-content: space-between; gap: 24px; min-height: 36px; align-items: center; }
+@media (max-width: 767px) {
+  .topbar-in { flex-direction: column; align-items: flex-start; gap: 0; padding-bottom: 9px; }
+  .topbar a { display: inline-flex; align-items: center; min-height: 44px; }
+}
+.topbar a { color: #fff; text-decoration: none; }
+.topbar a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.head { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,.97); border-bottom: 1px solid var(--rule); }
+@supports (backdrop-filter: blur(8px)) { .head { background: rgba(255,255,255,.9); backdrop-filter: saturate(1.4) blur(8px); } }
+.head-in { display: flex; align-items: center; gap: 24px; height: var(--head-h); }
+.brand { display: flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: none; color: var(--ink); margin-right: auto; }
+.brand img { width: auto; height: 38px; }
+.brand span { font-weight: 600; font-size: 17px; letter-spacing: -.01em; white-space: nowrap; }
+@media (min-width: 768px) { .brand img { height: 44px; } .brand span { font-size: 19px; } }
+.nav { display: none; }
+@media (min-width: 1024px) {
+  .nav { display: flex; gap: 4px; }
+  .nav a { padding: 10px 14px; font-size: 15px; font-weight: 500; color: var(--text); text-decoration: none; border-radius: var(--r-btn); }
+  .nav a:hover { color: var(--ink); background: var(--band); }
+}
+.head-call { min-height: 44px; padding: 0 16px; }
+.head-call-long { display: none; }
+@media (min-width: 560px) { .head-call-long { display: inline; } .head-call-short { display: none; } }
+
+/* ---------- sections ---------- */
+.sec { padding: var(--sec-pad) 0; }
+.band { background: var(--band); }
+.sec-head { max-width: 720px; margin-bottom: 32px; }
+.sec-head p { margin-top: 12px; color: var(--muted); font-size: 1.0625rem; }
+@media (min-width: 768px) { .sec-head { margin-bottom: 44px; } }
+
+.card-img { display: block; background: #fff; border: 1px solid var(--rule); border-radius: var(--r-card); overflow: hidden; }
+.card-img img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+
+/* ---------- hero ---------- */
+.hero { background: var(--band); border-bottom: 1px solid var(--rule); padding: 40px 0 44px; }
+.hero-in { display: grid; gap: 32px; }
+.hero-sub { font-size: 1.125rem; color: var(--text); max-width: 34ch; margin: 18px 0 28px; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 0; }
+.hero-art { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hero-art .ha-1 { grid-column: 1 / -1; }
+.hero-art .ha-2, .hero-art .ha-3 { display: none; }
+@media (min-width: 560px) { .hero-art .ha-2, .hero-art .ha-3 { display: block; } }
+@media (min-width: 1024px) {
+  .hero { padding: 72px 0 80px; }
+  .hero-in { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 64px; align-items: center; }
+  .hero-sub { font-size: 1.25rem; }
+  .hero-art { gap: 16px; }
+}
+@media (max-width: 559px) { .hero-ctas .btn { flex: 1 1 100%; } }
+
+/* ---------- products explorer ---------- */
+/* Without JavaScript every panel is visible and the index is a list of jump
+   links (rule 31). The .js class, set in the head before first paint, turns it
+   into one panel at a time. Nothing here hides content on its own. */
+.explorer { display: grid; gap: 24px; }
+.ex-index { display: flex; flex-wrap: wrap; gap: 8px; }
+.ex-tab {
+  display: flex; align-items: center; justify-content: space-between; min-height: 44px;
+  padding: 0 16px; border: 1px solid var(--rule); border-radius: 999px; background: #fff;
+  color: var(--text); font-size: 15px; font-weight: 500; text-decoration: none; white-space: nowrap;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.ex-tab:hover { border-color: var(--ink); color: var(--ink); }
+.ex-tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.ex-panels { display: grid; gap: 56px; min-width: 0; }
+.js .ex-panels { gap: 0; }
+/* Before the script has run, show the first panel only, so a slow first paint
+   never flashes twelve stacked panels and then collapses them (a layout shift
+   right under the hero). If the script never runs, the head's timed failsafe
+   adds .js-failsafe and every panel comes back (rule 31). Once the script is
+   up it owns visibility through the hidden attribute, and these stop applying. */
+.js:not(.js-failsafe) .explorer:not(.ex-ready) .ex-panel:not(:first-child) { display: none; }
+.js-failsafe .explorer:not(.ex-ready) .ex-panels { gap: 56px; }
+
+/* phone and tablet: the index is a swipeable row that sticks under the header
+   while its panel is on screen. The sticky parent must not clip (overflow
+   hidden silently disables sticky), so the scroller carries its own overflow. */
+@media (max-width: 1023px) {
+  .js .ex-index {
+    position: sticky; top: var(--head-h); z-index: 20; flex-wrap: nowrap; overflow-x: auto;
+    margin: 0 calc(-1 * var(--gutter)); padding: 12px var(--gutter);
+    background: rgba(255,255,255,.97); border-bottom: 1px solid var(--rule);
+    scrollbar-width: none; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
+  }
+  .js .ex-index::-webkit-scrollbar { display: none; }
+  .js .ex-tab { flex: 0 0 auto; scroll-snap-align: start; }
+  .ex-panel { scroll-margin-top: calc(var(--head-h) + 76px); }
 }
 
-.lp-lede{max-width:60ch;margin-top:calc(-1 * var(--space-3));margin-bottom:var(--space-5);
-  color:var(--color-text-muted)}
+@media (min-width: 1024px) {
+  .explorer { grid-template-columns: 260px minmax(0, 1fr); gap: 48px; align-items: start; }
+  .ex-index { flex-direction: column; flex-wrap: nowrap; gap: 0; position: sticky; top: calc(var(--head-h) + 24px); border-top: 1px solid var(--rule); }
+  .ex-tab {
+    border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; min-height: 50px;
+    padding: 0 14px; font-size: 15.5px; white-space: normal; position: relative;
+  }
+  .ex-tab::after { content: ""; width: 7px; height: 7px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; transform: rotate(45deg); opacity: 0; transition: opacity .15s ease; flex: none; margin-left: 12px; }
+  .ex-tab:hover { background: var(--band); color: var(--ink); }
+  .ex-tab[aria-selected="true"] { background: var(--band); color: var(--ink); font-weight: 600; box-shadow: inset 3px 0 0 var(--red); }
+  .ex-tab[aria-selected="true"]::after { opacity: 1; }
+}
 
-/* THE TILES DO NOT LINK on a one-page site, so they must not look like they do:
-   no pointer, no hover lift. They are information, and the actions are the
-   call buttons and the form. */
-.cat-ads .cat-card{cursor:default}
-.cat-ads .cat-card:hover{transform:none;box-shadow:none;border-color:var(--color-border)}
+.ex-panel:focus { outline: none; }
+.ex-panel:focus-visible { outline: 2px solid var(--red); outline-offset: 6px; border-radius: var(--r-card); }
+.ex-panel.is-in { animation: ex-in .32s cubic-bezier(.2, .7, .2, 1); }
+@keyframes ex-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .ex-panel.is-in { animation: none; } }
 
-/* Same-day gets the brand block, because it is the one section whose job is to
-   make someone call TODAY rather than bookmark the page. */
-.lp-rush{background:var(--color-surface-brand)}
-.lp-rush-in{max-width:calc(var(--wrap) + 2*var(--space-4));margin:0 auto;text-align:center}
-.lp-rush h2,.lp-rush p{color:var(--color-on-brand)}
-.lp-rush p{max-width:60ch;margin:var(--space-4) auto 0}
-.lp-rush .cta-row{justify-content:center}
-.lp-rush .btn-primary{background:var(--color-surface);color:var(--color-primary-deep)}
-.lp-rush .btn-line{border-color:var(--color-on-brand);color:var(--color-on-brand)}
-.lp-rush .btn-line:hover{background:var(--color-on-brand);color:var(--color-primary-deep)}
+.ex-head { display: grid; gap: 0; border: 1px solid var(--rule); border-radius: var(--r-card); overflow: hidden; background: #fff; }
+.ex-head-txt { padding: 24px 22px 26px; order: 2; }
+.ex-head-txt h3 { font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem); letter-spacing: -.016em; }
+.ex-head-txt > p { margin: 10px 0 20px; color: var(--muted); max-width: 46ch; }
+.ex-ask { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.ex-ask .text-link { font-size: 15px; display: inline-flex; align-items: center; min-height: 44px; }
+.nap .text-link { display: inline-flex; align-items: center; min-height: 44px; margin: -10px 0; }
+.ex-media { order: 1; background: #fff; border-bottom: 1px solid var(--rule); }
+.ex-media img, .ex-media .ex-svg { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+@media (min-width: 768px) {
+  .ex-head { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: stretch; }
+  .ex-head-txt { order: 1; padding: 36px 36px; align-self: center; }
+  .ex-media { order: 2; border-bottom: 0; border-left: 1px solid var(--rule); display: flex; align-items: center; }
+}
 
-/* INDUSTRY TILES: the shop's photo accordion, with one change that matters.
-   Here the tiles are <div>s, because a one-page site gives them nowhere to
-   link, and a <div> cannot take keyboard focus. On the shop site the line is
-   revealed by :hover and :focus-visible together, so keyboard users get it too;
-   with no focus to give, that pairing would leave the copy reachable by mouse
-   and invisible to everyone else. So the line is ALWAYS OPEN here and the
-   hover-grow stays as nothing more than a flourish. Do not "restore" the
-   collapse without making the tiles focusable again. */
-.ind-home{background:var(--color-surface-alt)}
-.ind-home .ind-tile{cursor:default}
-.ind-home .ind-more{grid-template-rows:1fr}
-.ind-home .ind-line{opacity:1;padding-top:8px}
-/* THE SCRIM HAD TO BE REDRAWN, and this is the reason the collapse existed on
-   the shop site. There the caption at rest is just the name, about 68px, and
-   the scrim is tuned for it: .90 opaque for the bottom 82px, then falling away
-   to nothing by 214px. Opening every line permanently makes the caption reach
-   61-67% UP the tile, so its top rows landed in the faded tail over bright
-   photograph. MEASURED, not guessed: all five tiles failed at 4.5:1, worst
-   1.47:1, which is white text on a sunlit sky.
-   Percentages rather than pixels, so it keeps covering the caption when the
-   tile changes height. Re-measured after the change: worst 7.61:1. If the line
-   copy grows, measure again. */
-.ind-home .ind-tile::after{
-  background:linear-gradient(to top,rgba(8,5,4,.94) 0%,rgba(8,5,4,.90) 42%,
-    rgba(8,5,4,.55) 60%,rgba(8,5,4,.15) 80%,rgba(8,5,4,0) 100%)}
-.lp-ind-note{max-width:66ch;margin-top:var(--space-5);color:var(--color-text-muted)}
+.ex-set { margin-top: 28px; }
+.ex-set-h { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.ex-types { display: grid; }
+.ty { padding: 18px 0 20px; border-top: 1px solid var(--rule); }
+.ty dt { font-weight: 600; color: var(--ink); font-size: 1.0625rem; line-height: 1.3; }
+.ty dd { margin-top: 5px; color: var(--muted); font-size: .96rem; line-height: 1.55; }
+@media (min-width: 768px) {
+  .ex-types { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
+}
 
-/* The doors keep their photographs and their scrim from the shop build; only
-   the destination changes, since there is one page to point at.
-   THE BAND BEHIND THEM IS WHITE HERE. On the shop home the doors sit on grey,
-   but this page alternates white and grey down its whole length (Fahad
-   2026-09-09), and the doors fall on a white beat between two greys: what to
-   expect above, who we print for below. The section still spans full width, so
-   nothing about the split that band needed on the shop site changes. */
-.doors{background:var(--color-surface)}
-/* The shop's home page bands .welcome grey (Fahad, earlier the same day). Here
-   the story falls on a WHITE beat, between the red same-day block and the grey
-   what-to-expect, so the inherited band is overridden rather than the pattern
-   bent around it. */
-.welcome{background:var(--color-surface)}
-.doors .door{cursor:pointer}
+/* ---------- services ---------- */
+.services-in { display: grid; gap: 32px; }
+.services-intro p { color: var(--muted); margin: 12px 0 28px; font-size: 1.0625rem; max-width: 40ch; }
+.services-intro .card-img { max-width: 520px; }
+/* On a phone the copier picture is a screen of scrolling that tells a customer
+   nothing the list does not; it returns from tablet width up. */
+@media (max-width: 767px) { .services-intro .card-img { display: none; } .services-intro p { margin-bottom: 0; } }
+.svc-list { display: grid; background: #fff; border: 1px solid var(--rule); border-radius: var(--r-card); padding: 4px 22px; }
+.svc { padding: 18px 0; border-top: 1px solid var(--rule); }
+.svc:first-child { border-top: 0; }
+.svc dt { font-weight: 600; color: var(--ink); font-size: 1.0625rem; }
+.svc dd { margin-top: 4px; color: var(--muted); font-size: .96rem; }
+@media (min-width: 768px) {
+  .svc-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; padding: 8px 32px; }
+  .svc:nth-child(2) { border-top: 0; }
+}
+@media (min-width: 1024px) {
+  .services-in { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 64px; align-items: start; }
+  .services-intro { position: sticky; top: calc(var(--head-h) + 32px); }
+}
 
-.skip{position:absolute;left:-9999px}
-.skip:focus{left:var(--space-4);top:var(--space-4);z-index:99;background:var(--color-surface);
-  padding:10px 16px;border-radius:var(--radius);border:2px solid var(--color-primary)}
+/* ---------- same day ---------- */
+.rush { background: var(--ink); color: #fff; padding: 48px 0; }
+.rush h2 { color: #fff; }
+.rush p { color: rgba(255,255,255,.86); max-width: 58ch; margin-top: 10px; }
+.rush-in { display: grid; gap: 24px; }
+.rush-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 0; }
+@media (max-width: 559px) { .rush-ctas .btn { flex: 1 1 100%; } }
+@media (min-width: 1024px) {
+  .rush { padding: 56px 0; }
+  .rush-in { grid-template-columns: minmax(0, 1fr) auto; gap: 48px; align-items: center; }
+}
+
+/* ---------- about ---------- */
+.about-in { display: grid; gap: 32px; }
+.about-txt p { color: var(--text); max-width: 54ch; }
+.about-txt h2 { margin-bottom: 20px; }
+.about-txt .btn { margin-top: 8px; }
+.about-photo img { width: 100%; border-radius: var(--r-card); aspect-ratio: 4 / 3; object-fit: cover; }
+@media (min-width: 1024px) {
+  .about-in { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 72px; align-items: center; }
+}
+
+/* ---------- what to expect ---------- */
+.why-grid { display: grid; gap: 0; background: #fff; border: 1px solid var(--rule); border-radius: var(--r-card); }
+.why { padding: 26px 24px; border-top: 1px solid var(--rule); }
+.why:first-child { border-top: 0; }
+.why-ic { display: block; width: 44px; height: 44px; color: var(--ink); margin-bottom: 16px; }
+.why-ic svg { width: 44px; height: 44px; }
+.why h3 { font-size: 1.125rem; margin-bottom: 8px; }
+.why p { color: var(--muted); font-size: .96rem; }
+/* phone: icon beside the text, not above it, so four reasons are not four screens */
+@media (max-width: 767px) {
+  .why { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 16px; padding: 20px 18px; }
+  .why-ic { grid-row: span 2; width: 40px; height: 40px; margin: 2px 0 0; }
+  .why-ic svg { width: 40px; height: 40px; }
+  .why h3 { margin-bottom: 4px; }
+}
+@media (min-width: 768px) {
+  .why-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .why:nth-child(2) { border-top: 0; }
+  .why:nth-child(even) { border-left: 1px solid var(--rule); }
+}
+@media (min-width: 1100px) {
+  .why-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .why { border-top: 0; padding: 32px 28px; }
+  .why + .why { border-left: 1px solid var(--rule); }
+}
+
+/* ---------- doors ---------- */
+.doors-in { display: grid; gap: 20px; }
+.door { display: grid; grid-template-rows: auto 1fr; align-content: start; text-decoration: none; color: var(--text); background: #fff; border: 1px solid var(--rule); border-radius: var(--r-card); overflow: hidden; transition: border-color .15s ease; }
+.door:hover { border-color: var(--ink); }
+.door-img img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.door:hover .door-img img { transform: scale(1.03); }
+@media (prefers-reduced-motion: reduce) { .door-img img, .door:hover .door-img img { transition: none; transform: none; } }
+.door-img { overflow: hidden; }
+@media (max-width: 899px) { .door-img img { aspect-ratio: 2 / 1; } }
+.door-body { display: block; padding: 24px 24px 26px; }
+.door-body small { display: block; font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+.door-body h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.door-p { display: block; color: var(--muted); margin-bottom: 18px; }
+.door-go { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+.door-go::after { content: ""; width: 7px; height: 7px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; transform: rotate(45deg); }
+.door:hover .door-go { color: var(--red); border-color: var(--red); }
+@media (min-width: 900px) { .doors-in { grid-template-columns: 1fr 1fr; gap: 24px; } .door-body { padding: 28px 32px 32px; } }
+
+/* ---------- industries ---------- */
+.ind-row { display: grid; grid-auto-flow: column; grid-auto-columns: 72%; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter) 6px; scrollbar-width: thin; }
+/* No card frame here: What to expect and the doors above are both bordered
+   white boxes, and a third framed section in a row read as one repeated
+   skeleton. The photographs carry the edge on their own. */
+.ind { scroll-snap-align: start; }
+.ind img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--r-card); }
+.ind figcaption { padding: 14px 2px 0; }
+.ind strong { display: block; color: var(--ink); font-weight: 600; line-height: 1.3; }
+.ind span { display: block; margin-top: 6px; color: var(--muted); font-size: .9rem; line-height: 1.5; }
+@media (min-width: 640px) { .ind-row { grid-auto-columns: 42%; } }
+@media (min-width: 1024px) {
+  .ind-row { grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); overflow: visible; margin: 0; padding: 0; gap: 16px; }
+}
+
+/* ---------- faq ---------- */
+.faq-in { display: grid; gap: 28px; }
+.faq-intro p { color: var(--muted); margin-top: 12px; }
+.qa-list { border-top: 1px solid var(--rule); }
+.qa { border-bottom: 1px solid var(--rule); }
+.qa summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px;
+  min-height: 60px; padding: 16px 0; font-weight: 600; color: var(--ink); font-size: 1.0625rem;
+}
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary::after { content: ""; flex: none; width: 9px; height: 9px; border-right: 2px solid var(--red); border-bottom: 2px solid var(--red); transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s ease; }
+.qa[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.qa-a { padding: 0 0 20px; color: var(--muted); max-width: 64ch; }
+@media (min-width: 1024px) {
+  .faq-in { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 64px; align-items: start; }
+}
+
+/* ---------- contact ---------- */
+.contact-in { display: grid; gap: 20px; }
+.panel { background: #fff; border: 1px solid var(--rule); border-radius: var(--r-card); padding: 26px 22px; }
+.panel h3 { font-size: 1.375rem; margin-bottom: 10px; }
+.panel > p { color: var(--muted); }
+.nap { margin: 22px 0 24px; border-top: 1px solid var(--rule); }
+.nap > div { display: grid; grid-template-columns: 1fr; gap: 2px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.nap dt { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.nap dd { color: var(--ink); }
+.visit-ctas { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@media (min-width: 560px) { .visit-ctas { grid-template-columns: repeat(2, minmax(0, 1fr)); } .visit-ctas .btn:last-child { grid-column: 1 / -1; } }
+@media (min-width: 560px) { .nap > div { grid-template-columns: 170px minmax(0, 1fr); gap: 16px; } }
+@media (min-width: 1024px) {
+  .contact-in { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  .panel { padding: 36px 36px; }
+}
+
+.quote-form { margin-top: 22px; display: grid; gap: 16px; }
+.field-pair { display: grid; gap: 16px; }
+@media (min-width: 560px) { .field-pair { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label { font-size: 14px; font-weight: 600; color: var(--ink); }
+.req { color: var(--red); }
+.field input, .field textarea {
+  width: 100%; min-width: 0; font: 400 16px/1.4 var(--font); color: var(--ink);
+  background: #fff; border: 1px solid var(--field); border-radius: var(--r-btn); padding: 12px 14px; min-height: 48px;
+}
+.field textarea { resize: vertical; }
+.field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; border-color: var(--ink); }
+.quote-form .btn { justify-self: start; }
+@media (max-width: 559px) { .quote-form .btn { justify-self: stretch; } }
+.form-note { font-size: 14px; color: var(--muted); }
+
+/* ---------- footer ---------- */
+.foot { background: var(--ink); color: rgba(255,255,255,.8); padding: 56px 0 0; font-size: 15px; }
+.foot a { color: #fff; text-decoration: none; }
+.foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.foot-in { display: grid; gap: 36px; }
+.foot-name { color: #fff; font-weight: 600; font-size: 1.25rem; margin-bottom: 10px; }
+.foot-brand p { margin-bottom: 6px; }
+.foot-h { color: #fff; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px; }
+.foot-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.foot-col li a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+.foot-col ul { gap: 0; }
+.foot-col li:not(:has(a)) { padding: 6px 0; }
+.foot-brand a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 767px) { .foot-col ul { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; } }
+.foot-base { border-top: 1px solid rgba(255,255,255,.16); margin-top: 44px; padding-top: 18px; padding-bottom: 22px; font-size: 13px; color: rgba(255,255,255,.7); }
+@media (min-width: 768px) {
+  .foot-in { grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr); gap: 48px; }
+  .foot-col:nth-child(2) ul { grid-template-columns: 1fr; }
+}
+
+/* ---------- phone bar ---------- */
+.phone-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: grid; grid-template-columns: 1fr 1fr 1.2fr; background: #fff; border-top: 1px solid var(--rule); box-shadow: 0 -4px 18px rgba(16,24,32,.06); padding-bottom: env(safe-area-inset-bottom); }
+.phone-bar a { display: flex; align-items: center; justify-content: center; min-height: 56px; font-weight: 600; font-size: 15px; color: var(--ink); text-decoration: none; }
+.phone-bar a + a { border-left: 1px solid var(--rule); }
+.phone-bar .pb-quote { background: var(--red); color: #fff; }
+@media (min-width: 1024px) { .phone-bar { display: none; } }

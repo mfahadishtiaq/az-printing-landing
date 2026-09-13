@@ -1,164 +1,160 @@
 # AZ Printing & Signs — LANDING SITE (presence build)
 
-A **separate deliverable** from the shop build in `../05 - Site/`. Fahad,
-2026-09-09: the client wants an online presence now, **"not an ecommerce site
-yet"**, and the shop launches later and is transitioned onto afterwards.
-
-**One long page. Its only job is to make someone pick up the phone.**
+A **separate deliverable** from the shop build in `../05 - Site/`. The client wants
+an online presence now, **not an e-commerce site**; the shop launches later.
+**One page that shows everything the shop does and tells a visitor how to reach it.**
 
 ```
-python3 build.py           # build + verify
-python3 build.py --check   # verify only
+python3 build.py             # build + verify
+python3 build.py --check     # verify only
+python3 build.py --confirm   # the owner confirm list (markdown)
+node test/explorer.js        # explorer gate, 20 checks (needs the dev server)
 ```
 Preview: dev config **"az-landing"** (port 8804), serving this folder as root.
+Phone gate: `node ../05\ -\ Site/test/qa-mobile.js http://localhost:8804/ <outDir> index.html`.
 
-## Why it is its own build, not a mode of the shop generator
+Evidence for everything below (research, measurements, what broke):
+**`BUILD-NOTES.md`**. Read the heading you need, not the whole file.
 
-That was tried first and was the wrong shape. `generate.py --presence` strips
-the ordering surface out of the shop build and leaves a 24-page catalogue with
-the cart missing, which is not a landing page. The two share the **design**
-(`css/site.css`, `js/site.js`, copied here) and the approved **copy**, which is
-copied deliberately rather than imported — the two are expected to diverge.
+## THE 2026-09-13 CLIENT RULINGS — the page was rebuilt on these
 
-The `--presence` mode still exists in the shop generator. It is **superseded by
-this folder**; do not develop it further without Fahad saying so.
+The client (relayed by Fahad): incorrect terms, products under the wrong groups;
+one landing page that demonstrates the services and gives information; no
+e-commerce; **sub-categories explained** ("business cards have multiple types,
+glossy, matte, etc."); **design more sophisticated and neutral, similar to
+Staples**. These are the client's own choices (rule 66). They supersede, FOR
+THIS SITE, the "pop" direction and the "show the range in many colours" note.
 
-## The rule this build adds
+Restore point for the page before this round: git tag
+**`pre-neutral-redesign-2026-09-13`**.
 
-**No bracketed unknowns.** `[$X]`, `[owner to confirm]` and friends are the shop
-build's honest way of marking a fact nobody has confirmed, and they are fine on
-a site that is noindexed and unlaunched. **This page is meant to go public**, so
-`verify()` refuses to build if one survives. Where a fact is unknown here, the
-sentence is left out instead — which is why the delivery-threshold reason and
-the year the owner took over are both absent.
+## THE CATALOGUE — rules that keep the terms right
 
-## Decisions that bind it
+- **Twelve product groups, trade-standard, in the order of `GROUPS`.** Grouping
+  follows Staples Print Canada's live menu (read 2026-09-13) and the GTA trade.
+  **Products and services are separate lists**: a service filed inside a product
+  group ("Sign Installation" under Storefront Signs) was exactly the complaint.
+- **A product NAME is the trade's word, and the owner's where he has one.** His
+  window says LAWN SIGNS, so the product is Lawn Signs and "coroplast" is
+  explained inside the line, never the other way round. Friendly paraphrases
+  ("Handouts", "printed mugs" for all promo products) are what the client called
+  incorrect terms. Rule 20 governs the explanation, not the name.
+- **Every item carries a source tag** (`owner` · `client` · `window` · `signs` ·
+  `std`). `owner`/`client` are the owner's own word; the rest print on
+  `--confirm`. verify() refuses an unknown tag.
+- **No production detail the owner has not given** inside a line: no "raised"
+  Spot UV, no "stretched over a wooden frame", no "wall and desk" calendars. The
+  owner confirmed the PRODUCT; the specifics are his to add.
+- verify() also refuses: a name listed in two groups or as both product and
+  service; an explanation that is not a full sentence or runs past 150
+  characters; a group with fewer than three products; a set without a title in
+  a multi-set group; a group with no footer link.
+- **Production claims are banned words** (`printed at our`, `printed here`,
+  `made or finished`, `in-house`…). Apparel is sent out (brief v2); say a job is
+  ordered, handled or delivered here, never that everything is printed here.
+- **No bracketed unknowns** on a page that goes public. Where a fact is unknown,
+  the sentence is left out.
+- **Window items deliberately NOT on the page:** Resume, Business Boards,
+  Perfumes (unclear or not print). They are questions on the confirm list.
 
-- **NINE BLOCKS AND A WHITE / GREY PATTERN** (Fahad 2026-09-09, exact order):
-  hero (dark) · **Products we offer** (white) · Need it today (red) · the shop's
-  story (white) · What to expect (grey) · For your event / business (white) ·
-  Who we print for (grey) · Questions (white) · Find us (grey).
-  **Two inherited bands are overridden to hold that beat**, both banded grey on
-  the shop home earlier the same day: `.welcome` and `.doors`. If either is
-  edited on the shop site, this page's pattern is unaffected — the overrides
-  live in `landing.css` — but check the beat still alternates.
-  **"Products we offer" is Fahad's wording.** It replaced a keyword-led heading;
-  the location words moved into the lede beneath it so the page keeps them
-  without overriding his choice.
-- **What to expect uses the SHOP'S ICONS**, copied verbatim so the two sites
-  cannot end up with subtly different drawings of the same idea.
-  **Its delivery line drops a number the shop shows.** The shop reads "free
-  delivery ... on orders over `[$250]`", and that bracket sits in its
-  KNOWN_BRACKETS register next to `[$X]` — so from here a confirmed threshold
-  and an unfilled placeholder are indistinguishable. This page goes public, and
-  a wrong threshold costs the shop money on every order under it, so the fact
-  stays and the number goes. **If Fahad confirms $250 is the owner's own figure,
-  it is one edit to put back.**
-- **The category tiles DO NOT LINK.** On a one-page site there is nowhere for
-  them to go, and eight tiles pointing at the same anchor is noise pretending to
-  be navigation. `landing.css` removes the pointer and the hover lift so they
-  do not look clickable.
-- **The header carries the wordmark** (Fahad 2026-09-09: the top looked empty).
-  It is the shop's own `.brand` block, markup and all: monogram plus
-  "Printing &amp; Signs". **Ampersand, never "and"** — that is the canonical
-  name by Fahad's 2026-08-27 ruling, and this build's BANNED list refuses the
-  drift spelling. The monogram's alt is just "AZ" so the name is not read twice.
-  `site.css` hides `.brand-word` below 1100px because the SHOP'S tier-1 also
-  carries a search field, three links, an account link, a cart and a phone
-  number, and the name is the first thing that has to go there. **This bar has
-  room**, so `landing.css` puts the word back down to 520px.
-- **The header bar spans the FULL WIDTH, brand flush left** (Fahad 2026-09-09:
-  "move AZ to the top left"). It used to be constrained to the centred content
-  width like the sections below it, which left the logo 220px from the left edge
-  at 1600 and 380px at 1920. The sections stay centred; a header bar is
-  furniture, not content, and belongs to the window.
-- **The maps link carries the BUSINESS NAME, not just the address.** An
-  address-only query can land on the plaza rather than the unit. `verify()`
-  refuses a build where the name has fallen out of it. Source: the Google
-  Business Profile Fahad supplied 2026-09-09.
-- **The header is a slim anchor bar**, not the shop's two-tier mega-nav. Four
-  anchors do not earn a burger, so below 860px the nav hides entirely and the
-  phone bar at the foot carries the actions.
-- **Industries are the shop's PHOTO TILES**, imported with their pictures
-  (Fahad 2026-09-09). An earlier note here said the photographs did not exist;
-  that was wrong — they were wired into the shop build the same day.
-  **The tiles are `<div>`s and every line stays permanently open.** On the shop
-  site the line is revealed by `:hover` AND `:focus-visible` together, so
-  keyboard users get it; a `<div>` cannot take focus, so that pairing would
-  leave the copy reachable by mouse and invisible to everyone else. Do not
-  restore the collapse without making the tiles focusable again.
-  **THE SCRIM HAD TO BE REDRAWN FOR THAT, and it is the reason the collapse
-  exists on the shop site.** There the resting caption is just the name, ~68px,
-  and the scrim is tuned for it: `.90` opaque for the bottom 82px, gone by 214.
-  Opening every line makes the caption reach 61-67% UP the tile, so its top rows
-  landed in the faded tail over bright photograph. Measured, not guessed: **all
-  five failed, worst 1.47:1**. The landing scrim holds `.90` to 42% and measures
-  **7.61 to 10.31:1**. Percentages, not pixels, so it keeps covering the caption
-  if the tile height changes. If the line copy grows, measure again.
-- **The two doors are imported whole**, photographs and scrim, with only the
-  destination changed: on the shop they open `/occasions/` and `/industries/`,
-  and here there is one page, so both point at `#contact` with a label that
-  says what they will do.
-- **THE FORM HAS NO BACKEND AND DOES NOT PRETEND TO.** There is no domain, so
-  FormSubmit cannot be activated, and a form that silently swallows a customer's
-  details is worse than no form. Submitting builds a WhatsApp message from the
-  fields and hands it over. **When a domain exists, wire a real endpoint and
-  delete `js/landing.js`'s fallback.**
+## DESIGN — the Staples register, sourced
+
+- **Standalone `css/landing.css`.** `css/site.css` and `js/site.js` are the shop
+  build's copies from 09-09 and are NOT loaded; they sit on disk as the record.
+- **Inks, each with its source (rule 56):** ink #101820 Pantone Black 6 C and
+  rule #D9D9D6 Pantone Cool Gray 1 C (both Staples' live CSS); body #343B41;
+  muted #53565A Cool Gray 11 C; band #F6F6F5; field #888B8D Cool Gray 8 C; red
+  #A01D20 / #8C161A from the AZ brand PDF. **Red is the only colour doing work**
+  (buttons, active tab, focus). Amber is in the logo and nowhere else.
+- **Type stays Libre Franklin (ruled 09-08); the weights moved**: headings 600,
+  labels 500, body 400. Do not restore the 900 poster weights here.
+- **Hero art is general**: no cultural-occasion card in the hero (rule 54). The
+  nikkah invitation is used nowhere on the page today.
+- **Industry photos have no card frame**, on purpose: What to expect and the
+  doors are bordered boxes, and a third in a row read as one repeated skeleton.
+
+## THE EXPLORER — mechanics and traps
+
+- **Markup ships every panel visible; the index is jump links.** With scripting
+  off the whole catalogue reads top to bottom (tested).
+- **`.js` (set in the head) hides panels 2-12 BEFORE the script runs**, so a slow
+  first paint never flashes twelve panels and collapses them. **The head's 4s
+  timer adds `.js-failsafe`**, which shows them all again if `js/landing.js`
+  never runs. The script adds `.ex-ready` and from then the `hidden` attribute
+  owns visibility. Remove the failsafe and a blocked script hides eleven groups
+  forever; verify() refuses a build without it.
+- **No `tabindex` on panels.** With it, a link such as `/#signs` focused the
+  panel on arrival and drew a red focus ring round it. Panels already hold
+  buttons, so the ARIA pattern does not need it.
+- Deep links and footer links work through the hash: `#business-cards` opens
+  that group on load, and `hashchange` handles same-page links.
+- **The phone chip row is sticky under the header.** Its ancestors must not
+  clip; `overflow:hidden` anywhere above it silently kills sticky.
+- **Test trap:** the page sets `scroll-behavior:smooth`, so a test that measures
+  an element in the same tick as `scrollIntoView` clicks where it USED to be.
+  Scroll instantly, wait, then measure; poll for end states after long scrolls.
+
+## IMAGES
+
+- **Every photo has a right-sized variant and a `srcset`** (`VARIANTS` in
+  build.py): products `-800`, industry tiles `-560` (q 6), doors and storefront
+  `-900`. **Replacing a photo means regenerating its variant** (ffmpeg lanczos,
+  `-q:v 4`), or the browser keeps serving the old picture at small sizes. verify()
+  fails a srcset naming a missing file. `window-graphics.jpg` has no variant: it
+  is a 730px crop of the storefront photo, and upscaling would only add bytes.
+- **Stationery & Forms has no render**; its panel draws a flat SVG mock-up
+  (letterhead, envelope, white/yellow/pink NCR book) in `stationery_svg()`. A
+  photo slot at 1200x750 on white would replace it.
+- Every product render is a SAMPLE design (alt text says so); none is presented
+  as a client's job (rule 30).
+
+## Still true from the 09-09 build
+
+- **The maps link carries the BUSINESS NAME**; an address-only query can land on
+  the plaza. verify() refuses a build without it.
+- **EVERY LOCAL ASSET PATH IS RELATIVE**, srcset included. GitHub serves a project
+  site under a subpath, so `/css/x.css` 404s; the first push shipped with no CSS.
+  Check the URL the browser will request, not a path you typed.
+- **THE FORM HAS NO BACKEND AND DOES NOT PRETEND TO.** Submit composes a WhatsApp
+  message. When the domain serves, wire a real endpoint and delete the fallback.
+- **Ampersand, never "and", in the name.** BANNED refuses the drift spelling.
 
 ## Deployment
 
-**Live:** https://mfahadishtiaq.github.io/az-printing-landing/ — repo
-`mfahadishtiaq/az-printing-landing`, Pages from `main` at root. A window for
-the client only; a real domain comes later.
+**Live preview (still the 09-10 page until pushed):**
+https://mfahadishtiaq.github.io/az-printing-landing/ — repo
+`mfahadishtiaq/az-printing-landing`, Pages from `main` at root.
 
 **`azprintingandsigns.ca` is BOUGHT (2026-09-10)** in the client's Cloudflare
-account: expires 2027-09-11, auto-renew on, Cloudflare nameservers. It was free at
-CIRA that day; the short `azprinting.ca` was rejected because the domain must
-match the store name, the cards and the Google listing). Plan, in order:
-Cloudflare account on the CLIENT'S email (rule 120) -> register the domain
-there in the business's name (CIRA legal type = the corporation if
-incorporated, else the owner; auto-renew on) -> add Vela's email as a member
--> Workers & Pages serving an **ALLOWLIST of built files only** (see the
-warning below; NOT this repo root) -> custom domains apex + www (Cloudflare writes the DNS itself
-because the zone is in the same account) -> Claude adds the www-to-root
-redirect, verifies from outside (DoH, every asset, certificate) and makes the
-old `github.io` link 301 to the domain. Why Cloudflare and not Squarespace:
-no nameserver move, so no Squarespace-default DNSSEC/DS trap (ZEF lost a day
-to it). A later move to Shopify is DNS only: A @ 23.227.38.65, CNAME www
-shops.myshopify.com, both DNS-only (grey cloud) because Shopify issues its
-own certificate. Fahad buys it himself; Claude never creates the account or
-enters payment.
+account: expires 2027-09-11, auto-renew on, Cloudflare nameservers. Plan, in
+order: add Vela's email as an account member (rule 120) -> Workers & Pages
+serving an **ALLOWLIST of built files only** -> custom domains apex + www -> Claude
+adds the www-to-root redirect, verifies from outside (DoH, every asset,
+certificate) and makes the old github.io link 301 to the domain. A later move to
+Shopify is DNS only: A @ 23.227.38.65, CNAME www shops.myshopify.com, both
+DNS-only. Fahad does anything needing his login or payment; Claude never
+creates accounts or enters payment.
 
-**THIS REPO IS PUBLIC AND GITHUB PAGES SERVES EVERY FILE IN IT.** Checked
-2026-09-10: `/CLAUDE.md` and `/build.py` both return 200 on the live github.io
-site, so these internal notes are world-readable. Pointing Cloudflare Pages at
-the repo root with output `/` would publish them on the client's own domain.
-**Before hosting is connected**, split it the way ZEF does: this folder's repo
-goes private, and a deploy script copies an ALLOWLIST (index.html, css/, js/,
-images/, favicons, robots.txt) into a separate public repo or output folder that
-Pages serves. Keep it an allowlist; "everything except X" is how the next new
-script ends up public.
+**THIS REPO IS PUBLIC AND GITHUB PAGES SERVES EVERY FILE IN IT** (`/CLAUDE.md`,
+`/build.py`, `/BUILD-NOTES.md`, `/test/`). Before hosting is connected, split it
+the way ZEF does: this repo private, a deploy script copying an ALLOWLIST
+(index.html, css/landing.css, js/landing.js, the referenced images, favicons,
+robots.txt) into what Pages serves. An allowlist, never "everything except X".
 
-**EVERY LOCAL ASSET PATH IS RELATIVE, and must stay that way.** GitHub serves a
-project site under a **subpath**, so `/css/site.css` resolves to the domain
-ROOT and 404s — the first push went live with no stylesheet and no images.
-`verify()` now refuses any absolute local path. Relative paths work under the
-subpath AND at the root of a real domain later, so they are correct either way.
-
-**The check that missed it is the lesson.** The assets were confirmed by asking
-whether the FILE EXISTS on the server, with the subpath typed in by hand. The
-question that mattered was whether the URL THE BROWSER WILL REQUEST resolves.
-Fetch the page's own references, not paths you construct.
+**At deploy time, add what needs the real domain:** `<link rel="canonical">`,
+`og:image` and `og:url` (absolute URLs), and `url` in the LocalBusiness JSON-LD.
 
 ## Open
 
-- **Hosting:** GitHub Pages until the owner sends his email address; then the
-  Cloudflare plan under Deployment. `azprintingandsigns.com` (not .ca) is
-  held by someone since 2023-03-02 with no site; the owner is being asked
-  whether it is his (brief follow-up 19).
-- **Still noindexed?** No — this build sets no robots tag, because it is meant
-  to be found. The shop build's placeholder-image coupling does not apply here.
-  Before it goes public, confirm every image on it is one AZ may use.
-- The live page at `mfahadishtiaq.github.io/az-printing/` still serves the
-  scrapped Direction F site **printing the retired 416 number**. It should be
-  switched off whatever happens to this build.
+- **The owner confirm list** (`../00 - Source of Truth/00-Owner-Confirm-List-2026-09-13.md`):
+  28 product lines (mostly signs, because he skipped that questionnaire grid)
+  plus 7 page facts (20+ years, 2-4 days, proof on every job, samples at the
+  counter, the UV reading, three unexplained window items). The page should not
+  go public on the domain until he has been through it.
+- **Page length: 12.9 phone screens against rule 26's 7-9.** The doors and the
+  industries are two cuts of "who we print for"; cutting the doors saves ~1,020px
+  on a phone. A deletion is Fahad's ruling (rule 106).
+- **About copy says "He"** (rule 82 wants we/us). Approved copy; Fahad's call.
+- The door photo showing the fictional "BRIOVA" brand was flagged 09-09; his call.
+- `mfahadishtiaq.github.io/az-printing/` still serves the scrapped Direction F
+  site printing the retired 416 number. Switch it off whatever else happens.
