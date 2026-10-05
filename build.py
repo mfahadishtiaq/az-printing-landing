@@ -551,12 +551,9 @@ def home():
     h += f'''
 <section class="hero" aria-labelledby="hero-h">
   <div class="hero-text"{style_vars("text")}>
+    <p class="hero-eyebrow">We print · We design · We build brands</p>
     <h1 id="hero-h">{words("Your business deserves to be seen")}</h1>
-    <ul class="hero-list">
-      <li>We<br>print</li>
-      <li>We<br>design</li>
-      <li>We build<br>brands</li>
-    </ul>
+    <p class="hero-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="hero-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
   </div>
   <div class="hero-view"><div class="hero-stage" aria-label="Printed pieces side by side, each a link to its product: a menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign, stickers and a notepad">
     {hero_stage(root)}

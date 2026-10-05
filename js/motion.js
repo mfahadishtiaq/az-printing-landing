@@ -59,10 +59,12 @@
   /* 2. the hero */
   var items = gsap.utils.toArray('.hero-item');
   var words = gsap.utils.toArray('.hero h1 .w');
-  var list = gsap.utils.toArray('.hero-list li');
+  var list = gsap.utils.toArray('.hero-list li, .hero-ctas > *');
+  var eyebrow = document.querySelector('.hero-eyebrow');
   html.classList.remove('pre');
   var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  tl.from(words, { y: 40, opacity: 0, duration: 0.8, stagger: 0.06 }, 0)
+  if (eyebrow) tl.from(eyebrow, { y: 14, opacity: 0, duration: 0.6 }, 0);
+  tl.from(words, { y: 40, opacity: 0, duration: 0.8, stagger: 0.06 }, 0.1)
     .from(list, { y: 18, opacity: 0, duration: 0.6, stagger: 0.08 }, 0.4)
     .from(items, { y: 70, scale: 0.94, opacity: 0, duration: 1, stagger: 0.09 }, 0.15)
     .from('.hero-quality', { opacity: 0, duration: 0.6 }, 1.2)
