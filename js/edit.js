@@ -61,7 +61,7 @@
         var r = textBlock.getBoundingClientRect(), s = stageRect();
         return { x: (r.left - s.left) / s.width * 100, y: (r.top - s.top) / s.height * 100,
                  w: r.width / s.width * 100, h: r.height / s.height * 100,
-                 h1: fontVw(h1), list: fontVw(list) };
+                 h1: fontVw(h1), list: list ? fontVw(list) : 0 };
       },
       set: function (b, scale) {
         textBlock.style.setProperty('--tx', b.x.toFixed(3) + '%');
@@ -69,7 +69,7 @@
         textBlock.style.setProperty('--tw', b.w.toFixed(3) + '%');
         if (scale) {
           textBlock.style.setProperty('--h1', (b.h1 * scale).toFixed(3) + 'vw');
-          textBlock.style.setProperty('--lsz', (b.list * scale).toFixed(3) + 'vw');
+          if (b.list) textBlock.style.setProperty('--lsz', (b.list * scale).toFixed(3) + 'vw');
         }
       }
     };
