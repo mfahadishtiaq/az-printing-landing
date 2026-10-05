@@ -430,16 +430,18 @@ html.editing .hero-item img { filter: none; }
 .ed-box i[data-h="sw"] { left: -7px; bottom: -7px; cursor: nesw-resize; }
 .ed-box i[data-h="se"] { right: -7px; bottom: -7px; cursor: nwse-resize; }
 .ed-box .ed-name { position: absolute; left: -2px; top: -26px; background: #00b8d9; color: #fff; font: 700 11px/1 var(--sans); padding: 5px 7px; border-radius: 3px; letter-spacing: .04em; text-transform: uppercase; }
-.ed-panel { position: fixed; right: 16px; top: 100px; z-index: 200; width: 300px; background: #111; color: #eee; font: 13px/1.45 var(--sans); padding: 14px 16px; border-radius: 10px; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
-.ed-panel h2 { color: #fff; font: 800 14px/1.2 var(--sans); margin: 0 0 8px; text-transform: uppercase; letter-spacing: .06em; }
-.ed-panel p { margin: 0 0 10px; color: #bbb; }
-.ed-panel .ed-sel { border-top: 1px solid #333; padding-top: 10px; margin-top: 4px; }
-.ed-panel .ed-sel strong { display: block; color: #00e5ff; margin-bottom: 6px; }
-.ed-panel label { display: inline-flex; align-items: center; gap: 6px; margin: 0 10px 6px 0; }
-.ed-panel input { width: 70px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 4px 6px; font: inherit; }
-.ed-panel .ed-actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-.ed-panel button { font: 700 12px/1 var(--sans); padding: 8px 10px; border: 0; border-radius: 5px; background: #00b8d9; color: #fff; cursor: pointer; }
-.ed-panel button[data-a="undo"], .ed-panel button[data-a="reset"] { background: #333; }
-.ed-panel .ed-out { width: 100%; font: 11px/1.3 ui-monospace, Menlo, monospace; background: #000; color: #9f9; border: 1px solid #333; border-radius: 4px; padding: 6px; resize: vertical; }
-.ed-panel .ed-foot { margin: 8px 0 0; font-size: 12px; }
+.ed-panel { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 200; background: #111; color: #eee; font: 13px/1.4 var(--sans); padding: 8px 10px; border-radius: 10px; box-shadow: 0 16px 40px rgba(0,0,0,.45); max-width: calc(100vw - 32px); }
+.ed-panel[style*="left"] { transform: none; }
+.ed-bar { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; white-space: nowrap; }
+.ed-grip { cursor: grab; color: #777; font-size: 18px; padding: 0 4px; user-select: none; }
+.ed-selname { color: #00e5ff; min-width: 110px; }
+.ed-panel label { display: inline-flex; align-items: center; gap: 4px; color: #bbb; }
+.ed-panel input { width: 62px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 4px 6px; font: inherit; }
+.ed-sp { flex: 1; min-width: 6px; }
+.ed-panel button { font: 700 12px/1 var(--sans); padding: 8px 10px; border: 0; border-radius: 5px; background: #333; color: #fff; cursor: pointer; }
+.ed-panel button.ed-main { background: #00b8d9; }
+.ed-panel .ed-more { border-top: 1px solid #333; margin-top: 8px; padding-top: 8px; max-width: 560px; }
+.ed-panel .ed-more p { margin: 0 0 8px; color: #bbb; }
+.ed-panel .ed-out { width: 100%; font: 11px/1.3 ui-monospace, Menlo, monospace; background: #000; color: #9f9; border: 1px solid #333; border-radius: 4px; padding: 6px; resize: vertical; margin-bottom: 8px; }
 .ed-panel code { color: #fff; }
+.ed-pill { position: fixed; right: 14px; bottom: 14px; z-index: 200; font: 700 12px/1 var(--sans); padding: 10px 12px; border: 0; border-radius: 999px; background: #111; color: #fff; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.4); }

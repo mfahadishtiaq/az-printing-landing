@@ -105,22 +105,46 @@
   var panel = document.createElement('div');
   panel.className = 'ed-panel';
   panel.innerHTML =
-    '<h2>Hero edit mode</h2>' +
-    '<p>Click to select. Drag to move. Pull a corner to resize. Arrows nudge (Shift: 10px). [ ] scale. , . send back / bring forward. Cmd-Z undo. Esc deselect.</p>' +
-    '<div class="ed-sel"><strong>Nothing selected</strong>' +
-    '<label>X % <input type="number" step="0.1" data-f="x"></label>' +
-    '<label>Y % <input type="number" step="0.1" data-f="y"></label>' +
-    '<label>Width % <input type="number" step="0.1" data-f="w"></label></div>' +
-    '<div class="ed-actions"><button data-a="copy">Copy layout</button><button data-a="download">Download hero-layout.json</button>' +
-    '<button data-a="undo">Undo</button><button data-a="reset">Reset to built</button></div>' +
-    '<textarea class="ed-out" rows="4" readonly placeholder="The layout JSON appears here when you copy."></textarea>' +
-    '<p class="ed-foot">Drop the file beside build.py, run <code>python3 build.py</code>, and the live page uses this layout.</p>';
+    '<div class="ed-bar">' +
+    '<span class="ed-grip" title="Drag to move this bar">&#8942;</span>' +
+    '<strong class="ed-selname">Nothing selected</strong>' +
+    '<label>X <input type="number" step="0.1" data-f="x">%</label>' +
+    '<label>Y <input type="number" step="0.1" data-f="y">%</label>' +
+    '<label>W <input type="number" step="0.1" data-f="w">%</label>' +
+    '<span class="ed-sp"></span>' +
+    '<button data-a="undo">Undo</button><button data-a="reset">Reset</button>' +
+    '<button data-a="copy">Copy</button><button data-a="download" class="ed-main">Download hero-layout.json</button>' +
+    '<button data-a="help" title="Keys">?</button><button data-a="hide" title="Hide (H)">&times;</button>' +
+    '</div>' +
+    '<div class="ed-more" hidden>' +
+    '<p>Click to select. Drag to move. Pull a corner to resize. Arrows nudge (Shift: 10px). [ ] scale 2%. , . send back / bring forward. Cmd-Z undo. Esc deselect. H hides this bar; drag the grip to move it.</p>' +
+    '<textarea class="ed-out" rows="5" readonly placeholder="The layout JSON appears here when you copy."></textarea>' +
+    '<p>Drop the file beside build.py and run <code>python3 build.py</code>; the live page then uses this layout.</p>' +
+    '</div>';
   document.body.appendChild(panel);
+  var pill = document.createElement('button');
+  pill.className = 'ed-pill'; pill.textContent = 'Edit bar (H)'; pill.hidden = true;
+  document.body.appendChild(pill);
+  function toggleBar() { panel.hidden = !panel.hidden; pill.hidden = !panel.hidden; }
+  pill.addEventListener('click', toggleBar);
+  // the bar is draggable by its grip
+  (function () {
+    var grip = panel.querySelector('.ed-grip'), start = null;
+    grip.addEventListener('pointerdown', function (e) {
+      var r = panel.getBoundingClientRect();
+      start = { x: e.clientX - r.left, y: e.clientY - r.top };
+      panel.style.left = r.left + 'px'; panel.style.top = r.top + 'px'; panel.style.right = 'auto'; panel.style.bottom = 'auto';
+      e.preventDefault();
+      function mv(ev) { panel.style.left = (ev.clientX - start.x) + 'px'; panel.style.top = (ev.clientY - start.y) + 'px'; }
+      document.addEventListener('pointermove', mv);
+      document.addEventListener('pointerup', function () { document.removeEventListener('pointermove', mv); }, { once: true });
+    });
+  })();
   var fields = {};
   panel.querySelectorAll('input[data-f]').forEach(function (i) { fields[i.getAttribute('data-f')] = i; });
 
   function placeBox() {
-    if (!selected) { box.style.display = 'none'; return; }
+    if (!selected) { box.style.display = 'none'; panel.querySelector('.ed-selname').textContent = 'Nothing selected'; return; }
     var r = selected.el.getBoundingClientRect(), h = hero.getBoundingClientRect();
     box.style.display = 'block';
     box.style.left = (r.left - h.left) + 'px';
@@ -130,7 +154,7 @@
     box.querySelector('.ed-name').textContent = selected.name;
     var b = selected.get();
     fields.x.value = b.x.toFixed(1); fields.y.value = b.y.toFixed(1); fields.w.value = b.w.toFixed(1);
-    panel.querySelector('.ed-sel strong').textContent = selected.name;
+    panel.querySelector('.ed-selname').textContent = selected.name;
   }
   function select(e) {
     editables.forEach(function (x) { x.el.classList.remove('ed-on'); });
@@ -233,6 +257,7 @@
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); return; }
     if (e.key === 'Escape') { select(null); return; }
+    if (e.key === 'h' || e.key === 'H') { toggleBar(); return; }
     if (!selected) return;
     var s = stageRect(), step = e.shiftKey ? 10 : 1;
     var b = selected.get(), changed = true;
@@ -273,11 +298,13 @@
     var a = e.target.getAttribute && e.target.getAttribute('data-a');
     if (!a) return;
     if (a === 'undo') undo();
+    if (a === 'hide') toggleBar();
+    if (a === 'help') { var m = panel.querySelector('.ed-more'); m.hidden = !m.hidden; }
     if (a === 'reset') { push(); apply(JSON.parse(built)); placeBox(); }
     if (a === 'copy' || a === 'download') {
       var json = JSON.stringify(layout(), null, 1);
-      out.value = json;
-      if (a === 'copy' && navigator.clipboard) navigator.clipboard.writeText(json);
+      out.value = json; panel.querySelector('.ed-more').hidden = false;
+      if (a === 'copy' && navigator.clipboard) navigator.clipboard.writeText(json).catch(function () { out.select(); });
       if (a === 'download') {
         var blob = new Blob([json], { type: 'application/json' });
         var link = document.createElement('a');
