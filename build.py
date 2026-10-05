@@ -551,7 +551,7 @@ def home():
     title = "AZ Printing & Signs | Printing, signs and design in Brampton"
     desc = ("Printing, signs, graphic design and branding in Brampton: business cards, flyers, lawn signs, "
             "banners, stickers, copying, scanning and binding. Call 905-796-1515.")
-    extra = '<link rel="preload" as="image" href="images/client/hero-ground-1920.jpg" media="(min-width: 900px)">\n'
+    extra = '<link rel="preload" as="image" href="images/client/hero-base-1920.jpg" media="(min-width: 900px)">\n'
     h = head(root, title, desc, extra, business_schema()) + header(root, "home")
     h += f'''
 <section class="hero" aria-labelledby="hero-h">
