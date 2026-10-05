@@ -457,9 +457,7 @@ def hero_stage(root):
         m = json.load(f)
     W, H = m["stage"]
     n = len(m["layers"])
-    out = [f'<img class="hero-ground" src="{root}images/client/hero-ground-1920.jpg" '
-           f'srcset="{root}images/client/hero-ground-1280.jpg 1280w, {root}images/client/hero-ground-1920.jpg 1920w" '
-           f'sizes="100vw" alt="" width="1920" height="1083" fetchpriority="high">']
+    out = []
     for i, L in enumerate(m["layers"]):
         depth = round(0.35 + 0.65 * i / max(n - 1, 1), 2)
         slug, label = HERO_LINKS[L["name"]]
@@ -526,7 +524,7 @@ def home():
       <li>We build<br>brands</li>
     </ul>
   </div>
-  <div class="hero-view"><div class="hero-stage" aria-label="Printed pieces side by side, each a link to its product: a menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign, stickers and a notepad">
+  <div class="hero-view"><img class="hero-ground" src="images/client/hero-ground-1920.jpg" srcset="images/client/hero-ground-1280.jpg 1280w, images/client/hero-ground-1920.jpg 1920w" sizes="100vw" alt="" width="1920" height="1083" fetchpriority="high"><div class="hero-stage" aria-label="Printed pieces side by side, each a link to its product: a menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign, stickers and a notepad">
     {hero_stage(root)}
   </div></div>
   <p class="hero-quality">Premium quality</p>
