@@ -5,9 +5,9 @@
       ZEF's stepper). Without it a trackpad delivers scroll in steps and every
       reveal steps with it.
    2. The hero set piece: each product in the collage is its own cut-out
-      (rendered from the client's PSD), so they rise in one after another,
-      drift with the pointer by depth, and slide up at different rates as the
-      hero scrolls away. One loud moment, at the top, nowhere else.
+      (rendered from the client's PSD), so they rise in one after another and
+      then stay still; the background ribbon drifts instead (CSS). One loud
+      moment, at the top, nowhere else.
    3. Reveals below the fold, ONE ITEM AT A TIME: each item fires on its own
       visibility, through a queue with a minimum gap, so a row reads as a
       sequence and never as one event (Fahad's ruling, 2026-09-03).
@@ -36,6 +36,16 @@
   if (demo) {
     var target = document.querySelector('.hero-item[data-name="' + demo[1] + '"]');
     if (target) { target.classList.add('is-hover'); target.closest('.hero').classList.add('has-hover'); }
+  }
+
+  /* ?swirl=<seconds> freezes the background ribbon at that moment of its
+     loop (negative animation-delay, paused), so a capture can show a phase */
+  var sw = /[?&]swirl=([0-9.]+)/.exec(location.search);
+  if (sw) {
+    document.querySelectorAll('.hero-swirl').forEach(function (el) {
+      el.style.animationDelay = '-' + sw[1] + 's';
+      el.style.animationPlayState = 'paused';
+    });
   }
 
   if (reduce || !window.gsap || !window.Lenis) {
@@ -71,40 +81,17 @@
     .add(afterEntrance);
 
   function afterEntrance() {
-    // idle drift on the picture itself, never on the positioned box
-    items.forEach(function (el, i) {
-      var img = el.querySelector('img');
-      gsap.to(img, { y: 4 + (i % 3) * 2, duration: 3.4 + (i % 4) * 0.5, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-    });
-    // scroll: the collage slides up faster than the page, by depth
-    items.forEach(function (el) {
-      var depth = parseFloat(el.getAttribute('data-depth')) || 0.5;
-      gsap.to(el, {
-        y: -90 * depth, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
-      });
-    });
-    // pointer: parallax by depth on .hero-float, a light on the ground, and
-    // a tilt toward the cursor on the hovered item (fine pointers only)
+    // The products stay STILL after they arrive (Fahad, 2026-10-05 night): no
+    // idle drift, no pointer parallax, no scroll parallax. The background
+    // ribbon carries the motion (CSS keyframes on .hero-swirl). What remains
+    // on the products is their hover response. The cursor light stays.
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      var movers = items.map(function (el) {
-        var depth = parseFloat(el.getAttribute('data-depth')) || 0.5;
-        var wrap = el.querySelector('.hero-float');
-        return { x: gsap.quickTo(wrap, 'x', { duration: 0.9, ease: 'power2.out' }),
-                 y: gsap.quickTo(wrap, 'y', { duration: 0.9, ease: 'power2.out' }), depth: depth };
-      });
       var hero = document.querySelector('.hero');
       hero.classList.add('has-light');
       hero.addEventListener('pointermove', function (e) {
         var r = hero.getBoundingClientRect();
-        var dx = (e.clientX - r.left) / r.width - 0.5;
-        var dy = (e.clientY - r.top) / r.height - 0.5;
-        movers.forEach(function (m) { m.x(dx * 34 * m.depth); m.y(dy * 22 * m.depth); });
         hero.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(2) + '%');
         hero.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(2) + '%');
-      });
-      hero.addEventListener('pointerleave', function () {
-        movers.forEach(function (m) { m.x(0); m.y(0); });
       });
       items.forEach(function (el) {
         var lift = el.querySelector('.hero-lift');

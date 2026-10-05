@@ -489,9 +489,14 @@ def hero_stage(root):
             L["x"], L["y"], L["w"], L["h"] = c["x"] * W / 100, c["y"] * H / 100, c["w"] * W / 100, L["h"] * scale
             layers.append(L)
     n = len(layers)
-    out = [f'<img class="hero-ground" src="{root}images/client/hero-ground-1920.jpg" '
-           f'srcset="{root}images/client/hero-ground-1280.jpg 1280w, {root}images/client/hero-ground-1920.jpg 1920w" '
-           f'sizes="100vw" alt="" width="1920" height="1083" fetchpriority="high">']
+    # the ground: the flat gradient, then the ribbon twice (the real one and a
+    # mirrored, fainter copy behind it) so the background can move while the
+    # products stay still
+    out = [f'<img class="hero-ground" src="{root}images/client/hero-base-1920.jpg" '
+           f'srcset="{root}images/client/hero-base-1280.jpg 1280w, {root}images/client/hero-base-1920.jpg 1920w" '
+           f'sizes="100vw" alt="" width="1920" height="1083" fetchpriority="high">',
+           f'<img class="hero-swirl hero-swirl-b" src="{root}images/client/hero/swirl.webp" alt="" width="1920" height="1083" aria-hidden="true">',
+           f'<img class="hero-swirl hero-swirl-a" src="{root}images/client/hero/swirl.webp" alt="" width="1920" height="1083" fetchpriority="high" aria-hidden="true">']
     for i, L in enumerate(layers):
         depth = round(0.35 + 0.65 * i / max(n - 1, 1), 2)
         slug, label = HERO_LINKS[L["name"]]

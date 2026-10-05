@@ -469,3 +469,25 @@ html.editing .hero-item img { filter: none; }
   .hero-sub { font-size: 1.05rem; }
   .hero h1.h-long { font-size: var(--h1, 3.6rem); }
 }
+
+/* ======================================================================
+   2026-10-05 night: the background moves, the products do not (Fahad).
+   The ribbon is the PSD's own Layer 10 over the flat gradient. It drifts
+   on a slow loop; a mirrored, fainter copy drifts the other way behind it.
+   Transform only, long periods, and still under reduced motion.
+   ====================================================================== */
+.hero-swirl { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; will-change: transform; transform-origin: 50% 50%; }
+.hero-swirl-a { animation: swirl-a 26s ease-in-out infinite alternate; }
+.hero-swirl-b { opacity: .45; transform: scaleX(-1); animation: swirl-b 38s ease-in-out infinite alternate; }
+@keyframes swirl-a {
+  0%   { transform: translate(0%, 0%) rotate(0deg) scale(1.06); }
+  50%  { transform: translate(1.6%, -1.2%) rotate(1.2deg) scale(1.09); }
+  100% { transform: translate(-1.4%, 1.4%) rotate(-1deg) scale(1.07); }
+}
+@keyframes swirl-b {
+  0%   { transform: scaleX(-1) translate(0%, 0%) rotate(0deg) scale(1.12); }
+  50%  { transform: scaleX(-1) translate(-2%, 1.5%) rotate(-1.5deg) scale(1.16); }
+  100% { transform: scaleX(-1) translate(1.8%, -1.6%) rotate(1.2deg) scale(1.13); }
+}
+@media (prefers-reduced-motion: reduce) { .hero-swirl { animation: none; } }
+html.editing .hero-swirl { animation: none; }

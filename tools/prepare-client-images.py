@@ -152,6 +152,7 @@ if __name__ == "__main__":
     welcome()
     mark()
     hero_layers()   # hero() still exists for the flat composite; the page uses the layers
+    hero_ground_layers()
     storefront()
 
 
@@ -215,3 +216,26 @@ def hero_layers():
         print(f"{path[len(SITE)+1:]:48s} {img.width}x{img.height} {os.path.getsize(path)//1024} KB")
     with open(os.path.join(out, "layers.json"), "w") as f:
         json.dump({"stage": [1920, 1083], "layers": manifest}, f, indent=1)
+
+
+def hero_ground_layers():
+    """The ground split in two (Fahad 2026-10-05: products still, background
+    moving): hero-base = the flat gradient (the 'Vector Smart Object'),
+    hero/swirl.webp = 'Layer 10', the looping ribbon at its 71% opacity, with
+    alpha, so the page can drift it over the gradient."""
+    from psd_tools import PSDImage
+    psd = PSDImage.open(os.path.join(DROP, "TOP BANNER.psd"))
+    group = next(l for l in psd if l.name == "Group 4")
+    bx = group.bbox
+    top = 178
+
+    def band(img):
+        return img.crop((0 - bx[0], top - bx[1], 1920 - bx[0], 1261 - bx[1]))
+
+    base = group.composite(layer_filter=lambda l: l.is_visible() and (l.name == "Vector Smart Object" or l is group))
+    save(flat(band(base)), "hero-base", [1920, 1280], quality=84)
+    swirl = group.composite(layer_filter=lambda l: l.is_visible() and (l.name == "Layer 10" or l is group))
+    swirl = band(swirl)
+    p = os.path.join(OUT, "hero", "swirl.webp")
+    swirl.save(p, "WEBP", quality=84, method=6)
+    print(f"{p[len(SITE)+1:]:48s} {swirl.width}x{swirl.height} {os.path.getsize(p)//1024} KB")
