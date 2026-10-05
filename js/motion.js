@@ -16,8 +16,14 @@
    load. Each leaves the page in its final, fully visible state. */
 (function () {
   var html = document.documentElement;
+  var editing = /[?&]edit=1\b/.test(location.search);
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    || /[?&]motion=off\b/.test(location.search);
+    || /[?&]motion=off\b/.test(location.search) || editing;
+  if (editing) {
+    var es = document.createElement('script');
+    es.src = document.querySelector('script[src$="motion.js"]').src.replace('motion.js', 'edit.js');
+    document.body.appendChild(es);
+  }
   var head = document.querySelector('.head');
 
   function headerState(y) {

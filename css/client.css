@@ -397,3 +397,49 @@ html.motion .welcome-photo img { height: 112%; object-fit: cover; }
 .hero-tag.above { top: auto; bottom: 100%; margin-top: 0; margin-bottom: .35vw; transform: translate(-50%, -2px); }
 .hero-tag.above::before { top: auto; bottom: -5px; }
 .hero-item:hover .hero-tag.above, .hero-item:focus-visible .hero-tag.above, .hero-item.is-hover .hero-tag.above { transform: translate(-50%, -8px); }
+
+/* ======================================================================
+   2026-10-05 late: the hero's text takes its position and sizes from
+   variables, so an edited layout (hero-layout.json via build.py, or the
+   ?edit=1 mode live) can move and scale it the way the products move.
+   ====================================================================== */
+@media (min-width: 900px) {
+  .hero-text { left: var(--tx, 4.6%); top: var(--ty, 15%); width: var(--tw, 26%); }
+  .hero h1 { font-size: var(--h1, 3.85vw); }
+  .hero-list { font-size: var(--lsz, 1.15vw); }
+  .hero-quality { right: var(--qr, 2.4%); bottom: var(--qb, 2.6%); font-size: var(--qs, .85vw); }
+}
+@media (min-width: 1480px) {
+  .hero-text { left: var(--tx, calc(50% - 740px + 68px)); width: var(--tw, 400px); }
+  .hero h1 { font-size: var(--h1, 4.6rem); }
+  .hero-list { font-size: var(--lsz, 1.1rem); }
+  .hero-quality { font-size: var(--qs, .8rem); }
+}
+
+/* ---------- edit mode (?edit=1): handles, HUD, no motion, no links ---------- */
+html.editing .hero-lift { transform: none !important; opacity: 1 !important; }
+html.editing .hero-tag { display: none; }
+html.editing .hero.has-light::after { display: none; }
+html.editing .ed { cursor: move; outline: 1px dashed rgba(255,255,255,.35); outline-offset: 2px; }
+html.editing .ed.ed-on { outline: none; }
+html.editing .hero-item img { filter: none; }
+.ed-box { position: absolute; z-index: 100; border: 2px solid #00e5ff; pointer-events: none; display: none; }
+.ed-box i { position: absolute; width: 12px; height: 12px; background: #fff; border: 2px solid #00b8d9; pointer-events: auto; }
+.ed-box i[data-h="nw"] { left: -7px; top: -7px; cursor: nwse-resize; }
+.ed-box i[data-h="ne"] { right: -7px; top: -7px; cursor: nesw-resize; }
+.ed-box i[data-h="sw"] { left: -7px; bottom: -7px; cursor: nesw-resize; }
+.ed-box i[data-h="se"] { right: -7px; bottom: -7px; cursor: nwse-resize; }
+.ed-box .ed-name { position: absolute; left: -2px; top: -26px; background: #00b8d9; color: #fff; font: 700 11px/1 var(--sans); padding: 5px 7px; border-radius: 3px; letter-spacing: .04em; text-transform: uppercase; }
+.ed-panel { position: fixed; right: 16px; top: 100px; z-index: 200; width: 300px; background: #111; color: #eee; font: 13px/1.45 var(--sans); padding: 14px 16px; border-radius: 10px; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.ed-panel h2 { color: #fff; font: 800 14px/1.2 var(--sans); margin: 0 0 8px; text-transform: uppercase; letter-spacing: .06em; }
+.ed-panel p { margin: 0 0 10px; color: #bbb; }
+.ed-panel .ed-sel { border-top: 1px solid #333; padding-top: 10px; margin-top: 4px; }
+.ed-panel .ed-sel strong { display: block; color: #00e5ff; margin-bottom: 6px; }
+.ed-panel label { display: inline-flex; align-items: center; gap: 6px; margin: 0 10px 6px 0; }
+.ed-panel input { width: 70px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 4px 6px; font: inherit; }
+.ed-panel .ed-actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.ed-panel button { font: 700 12px/1 var(--sans); padding: 8px 10px; border: 0; border-radius: 5px; background: #00b8d9; color: #fff; cursor: pointer; }
+.ed-panel button[data-a="undo"], .ed-panel button[data-a="reset"] { background: #333; }
+.ed-panel .ed-out { width: 100%; font: 11px/1.3 ui-monospace, Menlo, monospace; background: #000; color: #9f9; border: 1px solid #333; border-radius: 4px; padding: 6px; resize: vertical; }
+.ed-panel .ed-foot { margin: 8px 0 0; font-size: 12px; }
+.ed-panel code { color: #fff; }

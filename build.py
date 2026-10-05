@@ -445,6 +445,24 @@ HERO_LINKS = {
 }
 
 
+def hero_layout():
+    """Fahad's own hero layout from ?edit=1, saved as hero-layout.json beside
+    this file. Absent: the PSD's boxes. Present: its boxes and order win,
+    and the headline / Premium quality blocks get its variables inline."""
+    p = os.path.join(HERE, "hero-layout.json")
+    if not os.path.exists(p):
+        return None
+    with open(p) as f:
+        return json.load(f)
+
+
+def style_vars(block):
+    custom = hero_layout()
+    if not custom or not custom.get(block):
+        return ""
+    return ' style="' + ";".join(f"--{k}:{v}" for k, v in custom[block].items()) + '"'
+
+
 def hero_stage(root):
     """The collage as positioned cut-outs (images/client/hero/layers.json,
     written by tools/prepare-client-images.py from the PSD). Bottom-to-top
@@ -456,11 +474,25 @@ def hero_stage(root):
     with open(os.path.join(HERE, "images", "client", "hero", "layers.json")) as f:
         m = json.load(f)
     W, H = m["stage"]
-    n = len(m["layers"])
+    layers = m["layers"]
+    custom = hero_layout()
+    if custom:
+        by = {L["name"]: L for L in layers}
+        for name in custom["order"]:
+            if name not in by:
+                fail(f"hero-layout.json names an unknown layer {name}")
+        layers = []
+        for name in custom["order"]:
+            L = dict(by[name])
+            c = custom["layers"][name]
+            scale = (c["w"] * W / 100) / L["w"]
+            L["x"], L["y"], L["w"], L["h"] = c["x"] * W / 100, c["y"] * H / 100, c["w"] * W / 100, L["h"] * scale
+            layers.append(L)
+    n = len(layers)
     out = [f'<img class="hero-ground" src="{root}images/client/hero-ground-1920.jpg" '
            f'srcset="{root}images/client/hero-ground-1280.jpg 1280w, {root}images/client/hero-ground-1920.jpg 1920w" '
            f'sizes="100vw" alt="" width="1920" height="1083" fetchpriority="high">']
-    for i, L in enumerate(m["layers"]):
+    for i, L in enumerate(layers):
         depth = round(0.35 + 0.65 * i / max(n - 1, 1), 2)
         slug, label = HERO_LINKS[L["name"]]
         # a label hangs below its item unless the item sits at the stage's
@@ -518,7 +550,7 @@ def home():
     h = head(root, title, desc, extra, business_schema()) + header(root, "home")
     h += f'''
 <section class="hero" aria-labelledby="hero-h">
-  <div class="hero-text">
+  <div class="hero-text"{style_vars("text")}>
     <h1 id="hero-h">{words("Your business deserves to be seen")}</h1>
     <ul class="hero-list">
       <li>We<br>print</li>
@@ -529,7 +561,7 @@ def home():
   <div class="hero-view"><div class="hero-stage" aria-label="Printed pieces side by side, each a link to its product: a menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign, stickers and a notepad">
     {hero_stage(root)}
   </div></div>
-  <p class="hero-quality">Premium quality</p>
+  <p class="hero-quality"{style_vars("quality")}>Premium quality</p>
 </section>
 
 <section class="slogan" aria-labelledby="slogan-h">
