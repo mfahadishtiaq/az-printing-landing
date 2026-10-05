@@ -59,7 +59,7 @@
   /* 2. the hero */
   var items = gsap.utils.toArray('.hero-item');
   var words = gsap.utils.toArray('.hero h1 .w');
-  var list = gsap.utils.toArray('.hero-list li, .hero-ctas > *');
+  var list = gsap.utils.toArray('.hero-list li, .hero-ctas');  // the two buttons enter as ONE block, never offset
   var eyebrow = document.querySelector('.hero-eyebrow');
   html.classList.remove('pre');
   var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
