@@ -430,10 +430,29 @@ def business_schema():
 # home: the client's mockup, tiles now links
 # ---------------------------------------------------------------------------
 
+# What each hero cut-out IS and where it goes: the collage is a navigable
+# showcase (Fahad 2026-10-05 night: "make the hero more interactive").
+HERO_LINKS = {
+    "menu": ("brochures", "Menus"),
+    "business-cards": ("business-cards", "Business Cards"),
+    "poster": ("posters", "Posters"),
+    "rollup-banner": ("rollup-banner", "Rollup Banners"),
+    "lawn-sign": ("lawn-signs", "A-Frame Signs"),
+    "flyer": ("flyers", "Flyers & Brochures"),
+    "group-1": ("round-stickers", "Stickers"),
+    "h-stand": ("lawn-signs", "Lawn Signs"),
+    "object": ("letterhead", "Notepads"),
+}
+
+
 def hero_stage(root):
     """The collage as positioned cut-outs (images/client/hero/layers.json,
     written by tools/prepare-client-images.py from the PSD). Bottom-to-top
-    order; depth grows toward the front so the front moves most."""
+    order; depth grows toward the front so the front moves most. Each is a
+    link to its product page with a label that shows on hover or focus.
+    Nesting, each layer owned by one thing: .hero-item (entrance + scroll,
+    GSAP) > .hero-float (pointer parallax, GSAP) > .hero-lift (hover lift and
+    tilt, CSS) > img (idle drift, GSAP)."""
     with open(os.path.join(HERE, "images", "client", "hero", "layers.json")) as f:
         m = json.load(f)
     W, H = m["stage"]
@@ -443,8 +462,16 @@ def hero_stage(root):
            f'sizes="100vw" alt="" width="1920" height="1083" fetchpriority="high">']
     for i, L in enumerate(m["layers"]):
         depth = round(0.35 + 0.65 * i / max(n - 1, 1), 2)
-        out.append(f'<div class="hero-item" data-depth="{depth}" style="--x:{L["x"]/W*100:.3f}%;--y:{L["y"]/H*100:.3f}%;--w:{L["w"]/W*100:.3f}%">'
-                   f'<div class="hero-float"><img src="{root}images/client/hero/{L["name"]}.webp" alt="" width="{L["w"]}" height="{L["h"]}"></div></div>')
+        slug, label = HERO_LINKS[L["name"]]
+        # a label hangs below its item unless the item sits at the stage's
+        # bottom edge, where it would be clipped; then it goes above
+        above = " above" if (L["y"] + L["h"]) / H > 0.9 else ""
+        out.append(f'<a class="hero-item" href="{root}products/{slug}/" data-name="{L["name"]}" data-depth="{depth}" '
+                   f'aria-label="{esc(label)}: see the types" '
+                   f'style="--x:{L["x"]/W*100:.3f}%;--y:{L["y"]/H*100:.3f}%;--w:{L["w"]/W*100:.3f}%">'
+                   f'<span class="hero-float"><span class="hero-lift">'
+                   f'<img src="{root}images/client/hero/{L["name"]}.webp" alt="" width="{L["w"]}" height="{L["h"]}">'
+                   f'</span></span><span class="hero-tag{above}" aria-hidden="true">{esc(label)}</span></a>')
     return "\n    ".join(out)
 
 
@@ -499,7 +526,7 @@ def home():
       <li>We build<br>brands</li>
     </ul>
   </div>
-  <div class="hero-view" role="img" aria-label="Printed pieces side by side: a restaurant menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign and a roll of stickers"><div class="hero-stage">
+  <div class="hero-view"><div class="hero-stage" aria-label="Printed pieces side by side, each a link to its product: a menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign, stickers and a notepad">
     {hero_stage(root)}
   </div></div>
   <p class="hero-quality">Premium quality</p>

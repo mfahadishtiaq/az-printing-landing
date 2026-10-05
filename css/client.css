@@ -364,3 +364,36 @@ html.motion .welcome-photo img { height: 112%; object-fit: cover; }
   .card-body > span { display: none; }
   .card-body em { padding-top: .25rem; font-size: .8rem; }
 }
+
+/* ======================================================================
+   2026-10-05 night: the hero answers the pointer. Each cut-out is a link
+   with a label; hovering lifts and tilts it, dims the rest, and a soft
+   light follows the cursor across the ground.
+   ====================================================================== */
+.hero-item { text-decoration: none; display: block; z-index: 2; }
+.hero-item:hover, .hero-item:focus-visible, .hero-item.is-hover { z-index: 20; }
+.hero-item:focus-visible { outline: none; }
+.hero-float { display: block; perspective: 900px; }
+.hero-lift { display: block; transform: translateY(var(--lift, 0)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--s, 1)); transform-style: preserve-3d; transition: transform .35s cubic-bezier(.22,1,.36,1), opacity .35s ease; }
+.hero-item:hover .hero-lift, .hero-item:focus-visible .hero-lift, .hero-item.is-hover .hero-lift { --lift: -14px; --s: 1.05; }
+.hero-item:hover img, .hero-item:focus-visible img, .hero-item.is-hover img { filter: drop-shadow(0 30px 36px rgba(60, 0, 40, .42)); }
+.hero-item img { transition: filter .35s ease; }
+/* the rest step back while one is held */
+.hero-stage:has(.hero-item:hover) .hero-item:not(:hover) .hero-lift,
+.hero-stage:has(.hero-item:focus-visible) .hero-item:not(:focus-visible) .hero-lift,
+.hero.has-hover .hero-item:not(.is-hover) .hero-lift { opacity: .55; }
+/* the label */
+.hero-tag { position: absolute; left: 50%; top: 100%; transform: translate(-50%, 2px); margin-top: .35vw; white-space: nowrap; background: #fff; color: var(--magenta); font-weight: 800; font-size: clamp(.7rem, .95vw, 1rem); letter-spacing: .03em; text-transform: uppercase; padding: .45em .9em; border-radius: 999px; box-shadow: 0 8px 20px rgba(60,0,40,.25); opacity: 0; transition: opacity .3s ease, transform .35s cubic-bezier(.22,1,.36,1); pointer-events: none; }
+.hero-tag::before { content: ""; position: absolute; left: 50%; top: -5px; width: 10px; height: 10px; background: #fff; transform: translateX(-50%) rotate(45deg); }
+.hero-item:hover .hero-tag, .hero-item:focus-visible .hero-tag, .hero-item.is-hover .hero-tag { opacity: 1; transform: translate(-50%, 8px); }
+/* the cursor light on the ground */
+.hero.has-light::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .18), rgba(255, 255, 255, 0) 60%); mix-blend-mode: soft-light; transition: opacity .4s ease; }
+.hero-text, .hero-quality { z-index: 3; }
+.hero-view { z-index: 2; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-lift { transform: none !important; }
+  .hero.has-light::after { display: none; }
+}
+.hero-tag.above { top: auto; bottom: 100%; margin-top: 0; margin-bottom: .35vw; transform: translate(-50%, -2px); }
+.hero-tag.above::before { top: auto; bottom: -5px; }
+.hero-item:hover .hero-tag.above, .hero-item:focus-visible .hero-tag.above, .hero-item.is-hover .hero-tag.above { transform: translate(-50%, -8px); }

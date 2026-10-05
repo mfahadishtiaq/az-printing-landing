@@ -24,6 +24,14 @@
     if (head) head.classList.toggle('is-scrolled', y > 8);
   }
 
+  /* ?demo=<name> pins one item in its hover state, so a headless capture can
+     show what a hover looks like (the pane cannot hover and keep it) */
+  var demo = /[?&]demo=([a-z0-9-]+)/.exec(location.search);
+  if (demo) {
+    var target = document.querySelector('.hero-item[data-name="' + demo[1] + '"]');
+    if (target) { target.classList.add('is-hover'); target.closest('.hero').classList.add('has-hover'); }
+  }
+
   if (reduce || !window.gsap || !window.Lenis) {
     html.classList.remove('pre');
     html.classList.add('motion-done');
@@ -68,7 +76,8 @@
         scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
       });
     });
-    // pointer: a small parallax on the inner wrapper, fine pointers only
+    // pointer: parallax by depth on .hero-float, a light on the ground, and
+    // a tilt toward the cursor on the hovered item (fine pointers only)
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       var movers = items.map(function (el) {
         var depth = parseFloat(el.getAttribute('data-depth')) || 0.5;
@@ -77,14 +86,31 @@
                  y: gsap.quickTo(wrap, 'y', { duration: 0.9, ease: 'power2.out' }), depth: depth };
       });
       var hero = document.querySelector('.hero');
+      hero.classList.add('has-light');
       hero.addEventListener('pointermove', function (e) {
         var r = hero.getBoundingClientRect();
         var dx = (e.clientX - r.left) / r.width - 0.5;
         var dy = (e.clientY - r.top) / r.height - 0.5;
-        movers.forEach(function (m) { m.x(dx * 28 * m.depth); m.y(dy * 18 * m.depth); });
+        movers.forEach(function (m) { m.x(dx * 34 * m.depth); m.y(dy * 22 * m.depth); });
+        hero.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(2) + '%');
+        hero.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(2) + '%');
       });
       hero.addEventListener('pointerleave', function () {
         movers.forEach(function (m) { m.x(0); m.y(0); });
+      });
+      items.forEach(function (el) {
+        var lift = el.querySelector('.hero-lift');
+        el.addEventListener('pointermove', function (e) {
+          var r = el.getBoundingClientRect();
+          var px = (e.clientX - r.left) / r.width - 0.5;
+          var py = (e.clientY - r.top) / r.height - 0.5;
+          lift.style.setProperty('--ry', (px * 14).toFixed(2) + 'deg');
+          lift.style.setProperty('--rx', (-py * 14).toFixed(2) + 'deg');
+        });
+        el.addEventListener('pointerleave', function () {
+          lift.style.setProperty('--ry', '0deg');
+          lift.style.setProperty('--rx', '0deg');
+        });
       });
     }
   }
