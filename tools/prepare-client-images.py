@@ -132,11 +132,27 @@ def mark():
     print(f"{p[len(SITE)+1:]:48s} {im.width}x{im.height} {os.path.getsize(p)//1024} KB")
 
 
+def storefront():
+    """The shop's own front (04 - Brand, 2026-08-27 photo, 1600x1200): the
+    fascia sign, the phone plate and the window listings. Cropped to the shop
+    itself (cars and sidewalk off), 4:3. Fahad 2026-10-05: the Welcome section
+    carries this, not the designer's stock window poster."""
+    src = os.path.join(os.path.dirname(SITE), "04 - Brand", "WhatsApp Image 2026-08-27 at 5.19.00 PM.jpeg")
+    im = Image.open(src).convert("RGB")
+    W, H = im.size  # 1600x1200
+    # crop measured on the 1000x750 preview (x 160-985, y 180-730) and
+    # scaled by 1.6: the fascia sign, the phone plate, the three windows and
+    # the door, 3:2.
+    im = im.crop((256, 290, 1576, 1170))
+    save(im, "storefront", [1200, 800], quality=84)
+
+
 if __name__ == "__main__":
     tiles()
     welcome()
     mark()
     hero_layers()   # hero() still exists for the flat composite; the page uses the layers
+    storefront()
 
 
 def hero_layers():

@@ -278,6 +278,17 @@ PRODUCTS = [
      ]},
 ]
 
+# The home page shows the catalogue in three groups (Fahad 2026-10-05: the
+# flat grid of fourteen "looks far too cluttered"). Names are the trade's.
+GROUPS = [
+    ("Print", "Cards, flyers, brochures and stationery, printed to order.",
+     ["business-cards", "flyers", "brochures", "greeting-cards", "posters", "door-hangers", "letterhead"]),
+    ("Signs, Displays & Stickers", "For the lawn, the window, the storefront and the event.",
+     ["lawn-signs", "rollup-banner", "store-branding", "round-stickers"]),
+    ("Counter Services", "Walk in with a file or a stack of paper; walk out with it done.",
+     ["photocopy", "document-scan", "spiral-binding"]),
+]
+
 BANNED = ["—", "AZ Printing and Signs", "416-731-9229", "(416)", "AZ PRINT &", "Eamil",
           "printed at our", "printed here", "made or finished", "in-house"]
 
@@ -441,6 +452,27 @@ def words(text):
     return " ".join(f'<span class="w">{esc(w)}</span>' for w in text.split())
 
 
+def first_sentence(text):
+    return text.split(". ")[0].rstrip(".") + "."
+
+
+def catalog_html(root):
+    """Home: three titled groups of cards, each card a picture, the name, one
+    plain sentence and the link to its types."""
+    out = []
+    for title, lede, slugs in GROUPS:
+        cards = []
+        for slug in slugs:
+            p = by_slug(slug)
+            cards.append(f'<li class="card" data-reveal><a href="{root}products/{slug}/">'
+                         f'<span class="card-img">{tile_img(p, root, "(min-width: 1000px) 22vw, (min-width: 600px) 46vw, 92vw")}</span>'
+                         f'<span class="card-body"><strong>{esc(p["name"])}</strong><span>{esc(first_sentence(p["intro"]))}</span>'
+                         f'<em>See the types</em></span></a></li>')
+        out.append(f'<div class="group"><div class="group-head"><h3>{esc(title)}</h3><p>{esc(lede)}</p></div>'
+                   f'<ul class="cards">{"".join(cards)}</ul></div>')
+    return "\n    ".join(out)
+
+
 def tiles_html(root):
     out = []
     for p in PRODUCTS:
@@ -473,8 +505,14 @@ def home():
   <p class="hero-quality">Premium quality</p>
 </section>
 
-<section class="slogan" aria-label="Our promise">
-  <p><span class="line" data-reveal>we commit</span><span class="line" data-reveal>we deliver</span></p>
+<section class="slogan" aria-labelledby="slogan-h">
+  <div class="wrap slogan-in">
+    <h2 id="slogan-h"><span class="line" data-reveal>we commit</span><span class="line" data-reveal>we deliver</span></h2>
+    <div class="slogan-side" data-reveal>
+      <p>Walk in, call or WhatsApp. English, Urdu, Hindi and Punjabi spoken at the counter.</p>
+      <p class="slogan-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="slogan-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
+    </div>
+  </div>
 </section>
 
 <section class="welcome" id="about" aria-labelledby="welcome-h">
@@ -486,16 +524,17 @@ def home():
       <p data-reveal>Our qualified designer also provides logo design, brand identity, complete rebranding, and marketing design services to help businesses build a professional and consistent image.</p>
       <p data-reveal>From everyday printing to complete branding solutions, AZ PRINTING &amp; SIGNS is here to bring your ideas to life with quality, creativity, and reliable service.<br><a class="contact-link" href="#contact">Contact us</a> today to learn more about how we can help you.</p>
     </div>
-    <figure class="welcome-photo" data-reveal><img src="images/client/welcome-900.jpg" srcset="images/client/welcome-600.jpg 600w, images/client/welcome-900.jpg 900w" sizes="(min-width: 760px) 36vw, 92vw" alt="A woman walking past a printed window poster for a grilled chicken restaurant" width="900" height="1353" loading="lazy"></figure>
+    <figure class="welcome-photo" data-reveal><img src="images/client/storefront-1200.jpg" srcset="images/client/storefront-800.jpg 800w, images/client/storefront-1200.jpg 1200w" sizes="(min-width: 760px) 44vw, 92vw" alt="The AZ Printing &amp; Signs storefront at 499 Ray Lawson Blvd, Brampton: the sign, the phone number and the window listings" width="1200" height="800" loading="lazy"></figure>
   </div>
 </section>
 
-<section class="products" id="products" aria-labelledby="products-h">
+<section class="catalog" id="products" aria-labelledby="products-h">
   <div class="wrap">
-    <h2 id="products-h" class="visually-hidden">Products and services</h2>
-    <ul class="tiles">
-      {tiles_html(root)}
-    </ul>
+    <div class="catalog-head" data-reveal>
+      <h2 id="products-h">What we do</h2>
+      <p>Fourteen products and services. Choose one to see its types, sizes and finishes, each explained in plain words.</p>
+    </div>
+    {catalog_html(root)}
   </div>
 </section>
 

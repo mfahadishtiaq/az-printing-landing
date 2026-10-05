@@ -110,8 +110,7 @@ p { margin: 0 0 1.1em; }
 }
 
 /* ---------- slogan band ---------- */
-.slogan { background: var(--band); text-align: center; padding: clamp(2.5rem, 6vw, 6.5rem) var(--gutter); }
-.slogan p { margin: 0; font-family: var(--display); font-weight: 900; color: var(--plum); font-size: clamp(2.4rem, 7.8vw, 9.4rem); line-height: .98; letter-spacing: -.01em; }
+/* .slogan: see the banner rules at the end of this file (2026-10-05 evening) */
 
 /* ---------- welcome ---------- */
 .welcome { padding: clamp(2.5rem, 5vw, 5rem) 0; }
@@ -307,4 +306,61 @@ html.motion .welcome-photo img { height: 112%; object-fit: cover; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html.pre .hero-item, html.pre .hero h1 .w, html.pre .hero-list li, html.pre .hero-quality { visibility: visible; }
+}
+
+/* ======================================================================
+   2026-10-05 evening: the banner, the storefront welcome, the grouped catalogue
+   ====================================================================== */
+
+/* the slogan band is a proper banner: brand ground, the promise, one line
+   of confirmed fact and the way in */
+.slogan { background: linear-gradient(100deg, #6a2c87 0%, #9f257d 45%, #c52074 100%); color: #fff; text-align: left; padding: clamp(2.5rem, 5vw, 5.5rem) 0; position: relative; overflow: hidden; }
+.slogan::before { content: ""; position: absolute; width: 60vw; height: 60vw; max-width: 900px; max-height: 900px; border-radius: 50%; right: -18vw; top: -40vw; background: radial-gradient(closest-side, rgba(255,255,255,.14), rgba(255,255,255,0)); pointer-events: none; }
+.slogan-in { display: grid; gap: 1.6rem 3rem; align-items: center; position: relative; }
+.slogan h2 { color: #fff; font-family: var(--display); font-weight: 900; font-size: clamp(2.4rem, 6vw, 5.6rem); line-height: .98; letter-spacing: -.01em; margin: 0; }
+.slogan p { margin: 0; }
+.slogan-side p:first-child { font-size: clamp(1.0625rem, 1.2vw, 1.3rem); line-height: 1.5; max-width: 30rem; }
+.slogan-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.4rem; margin-top: 1.2rem !important; }
+.btn-white { background: #fff; color: var(--magenta); }
+.btn-white:hover { background: #fff; color: #7a1d5f; box-shadow: 0 10px 22px rgba(0,0,0,.18); }
+.slogan-call { color: #fff; font-weight: 700; text-decoration: none; display: inline-block; padding: .5em 0; border-bottom: 2px solid rgba(255,255,255,.5); }
+.slogan-call:hover { border-bottom-color: #fff; }
+@media (min-width: 900px) { .slogan-in { grid-template-columns: 1.1fr 1fr; } }
+
+/* the welcome photo is the storefront, landscape */
+.welcome-photo img { aspect-ratio: 3 / 2; object-fit: cover; }
+@media (min-width: 760px) { .welcome-in { grid-template-columns: 1fr 1fr; align-items: center; } }
+
+/* the catalogue: three groups of cards, one picture, one sentence each */
+.catalog { padding: clamp(2.5rem, 5vw, 5rem) 0 clamp(2rem, 4vw, 4rem); }
+.catalog-head { max-width: 42rem; margin-bottom: clamp(1.5rem, 3vw, 3rem); }
+.catalog-head h2 { font-family: var(--display); font-weight: 900; font-size: clamp(1.8rem, 3.1vw, 3.4rem); line-height: 1.1; margin-bottom: .5rem; }
+.catalog-head p { font-size: clamp(1.0625rem, 1.15vw, 1.25rem); margin: 0; }
+.group { margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+.group-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1.2rem; padding-bottom: .8rem; margin-bottom: 1.2rem; border-bottom: 2px solid var(--band); }
+.group-head h3 { font-weight: 900; text-transform: uppercase; letter-spacing: .04em; font-size: 1rem; color: var(--tile); }
+.group-head p { margin: 0; color: var(--body); font-size: .95rem; }
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
+.card a { display: flex; flex-direction: column; height: 100%; text-decoration: none; color: inherit; background: #fff; border: 1px solid #e3e3e0; border-radius: 8px; overflow: hidden; transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease, border-color .3s ease; }
+.card a:hover { transform: translateY(-5px); box-shadow: 0 18px 36px rgba(16,24,32,.12); border-color: #d6d6d2; }
+.card-img { display: block; overflow: hidden; }
+.card-img img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform .6s cubic-bezier(.22,1,.36,1); }
+.card a:hover .card-img img { transform: scale(1.04); }
+.card-body { display: flex; flex-direction: column; gap: .35rem; padding: 1rem 1.1rem 1.1rem; flex: 1; }
+.card-body strong { font-weight: 800; font-size: 1.05rem; color: var(--ink); letter-spacing: .005em; }
+.card-body > span { font-size: .93rem; line-height: 1.45; color: var(--body); }
+.card-body em { font-style: normal; font-weight: 700; font-size: .85rem; color: var(--link); margin-top: auto; padding-top: .5rem; }
+.card-body em::after { content: " \2192"; display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
+.card a:hover .card-body em::after { transform: translateX(5px); }
+@media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; } }
+@media (min-width: 1000px) { .cards { grid-template-columns: repeat(4, 1fr); gap: 1.4rem; } }
+
+/* phones: two cards across and no description, so the catalogue reads as a
+   menu (one-up with sentences ran the page to 13 screens, rule 26 wants 7-9) */
+@media (max-width: 599px) {
+  .cards { grid-template-columns: repeat(2, 1fr); gap: .8rem; }
+  .card-body { padding: .75rem .8rem .85rem; gap: .25rem; }
+  .card-body strong { font-size: .95rem; line-height: 1.25; }
+  .card-body > span { display: none; }
+  .card-body em { padding-top: .25rem; font-size: .8rem; }
 }
