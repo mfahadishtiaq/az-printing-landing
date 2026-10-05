@@ -15,7 +15,7 @@ headline baked into the pixels. The PSD keeps the headline ("Layer 11"), the
 separate layers, so the collage can be rendered without them and the words set
 as real HTML text that wraps on a phone and that search engines can read.
 """
-import os, sys
+import os, re, sys
 from PIL import Image
 
 Image.MAX_IMAGE_PIXELS = None
@@ -135,5 +135,67 @@ def mark():
 if __name__ == "__main__":
     tiles()
     welcome()
-    hero()
     mark()
+    hero_layers()   # hero() still exists for the flat composite; the page uses the layers
+
+
+def hero_layers():
+    """Each product in the hero collage as its own transparent cut-out, plus
+    the gradient ground, so the page can animate them in one by one. Writes
+    images/client/hero/*.webp and layers.json (name, bbox in banner pixels,
+    bottom-to-top order), which build.py turns into positioned markup."""
+    import json
+    try:
+        from psd_tools import PSDImage
+    except ImportError:
+        print("psd-tools not installed; hero layers skipped")
+        return
+    out = os.path.join(OUT, "hero")
+    os.makedirs(out, exist_ok=True)
+    psd = PSDImage.open(os.path.join(DROP, "TOP BANNER.psd"))
+    group = next(l for l in psd if l.name == "Group 4")
+    TEXT = {"Layer 11", "Layer 12", "Layer 13"}
+    bx = group.bbox
+    top = 178  # banner's first row on the page
+
+    def band(img):
+        return img.crop((0 - bx[0], top - bx[1], 1920 - bx[0], 1261 - bx[1]))
+
+    # Ground: everything in the group that is not a product and not text.
+    products = []
+    for child in group:
+        if child.name in TEXT:
+            continue
+        if child.name == "Group 2":
+            products.extend(list(child))
+        elif child.name in ("menu", "Business Cards"):
+            products.append(child)
+    product_names = {id(p) for p in products}
+
+    def is_ground(l):
+        # a layer is ground if no ancestor is one of the product layers
+        a = l
+        while a is not None and a is not psd:
+            if id(a) in product_names or a.name in TEXT:
+                return False
+            a = a.parent
+        return True
+
+    ground = group.composite(layer_filter=lambda l: l.is_visible() and is_ground(l))
+    ground = flat(band(ground))
+    save(ground, "hero-ground", [1920, 1280], quality=84)
+
+    manifest = []
+    for i, p in enumerate(products):
+        name = re.sub(r"[^a-z0-9]+", "-", p.name.lower()).strip("-") or f"layer-{i}"
+        img = p.composite()
+        l, t, r, b = p.bbox
+        # clip to the banner
+        cl, ct, cr, cb = max(l, 0), max(t, top), min(r, 1920), min(b, 1261)
+        img = img.crop((cl - l, ct - t, cr - l, cb - t))
+        path = os.path.join(out, f"{name}.webp")
+        img.save(path, "WEBP", quality=86, method=6)
+        manifest.append({"name": name, "x": cl, "y": ct - top, "w": cr - cl, "h": cb - ct})
+        print(f"{path[len(SITE)+1:]:48s} {img.width}x{img.height} {os.path.getsize(path)//1024} KB")
+    with open(os.path.join(out, "layers.json"), "w") as f:
+        json.dump({"stage": [1920, 1083], "layers": manifest}, f, indent=1)

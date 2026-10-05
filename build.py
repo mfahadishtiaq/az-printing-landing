@@ -15,6 +15,7 @@ word; everything else prints on --confirm so one conversation with him
 settles the lot before the site goes public.
 """
 import html
+import json
 import os
 import re
 import sys
@@ -321,6 +322,7 @@ def head(root, title, description, extra="", schema=""):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
 <meta name="theme-color" content="#9f257d">
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Montserrat:wght@400;500;700;900&display=swap">
@@ -388,6 +390,16 @@ def footer(root):
   </div>
   <div class="wrap foot-base"><p>© 2026 AZ Printing &amp; Signs · Brampton, Ontario</p></div>
 </footer>
+
+<div class="phone-bar" aria-label="Contact options">
+  <a href="tel:{SITE["phone_tel"]}">Call</a>
+  <a href="{SITE["whatsapp"]}">WhatsApp</a>
+  <a class="pb-main" href="{root}#contact">Message</a>
+</div>
+<script src="{root}js/vendor/gsap.min.js" defer></script>
+<script src="{root}js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="{root}js/vendor/lenis.min.js" defer></script>
+<script src="{root}js/motion.js" defer></script>
 </body>
 </html>
 '''
@@ -407,10 +419,32 @@ def business_schema():
 # home: the client's mockup, tiles now links
 # ---------------------------------------------------------------------------
 
+def hero_stage(root):
+    """The collage as positioned cut-outs (images/client/hero/layers.json,
+    written by tools/prepare-client-images.py from the PSD). Bottom-to-top
+    order; depth grows toward the front so the front moves most."""
+    with open(os.path.join(HERE, "images", "client", "hero", "layers.json")) as f:
+        m = json.load(f)
+    W, H = m["stage"]
+    n = len(m["layers"])
+    out = [f'<img class="hero-ground" src="{root}images/client/hero-ground-1920.jpg" '
+           f'srcset="{root}images/client/hero-ground-1280.jpg 1280w, {root}images/client/hero-ground-1920.jpg 1920w" '
+           f'sizes="100vw" alt="" width="1920" height="1083" fetchpriority="high">']
+    for i, L in enumerate(m["layers"]):
+        depth = round(0.35 + 0.65 * i / max(n - 1, 1), 2)
+        out.append(f'<div class="hero-item" data-depth="{depth}" style="--x:{L["x"]/W*100:.3f}%;--y:{L["y"]/H*100:.3f}%;--w:{L["w"]/W*100:.3f}%">'
+                   f'<div class="hero-float"><img src="{root}images/client/hero/{L["name"]}.webp" alt="" width="{L["w"]}" height="{L["h"]}"></div></div>')
+    return "\n    ".join(out)
+
+
+def words(text):
+    return " ".join(f'<span class="w">{esc(w)}</span>' for w in text.split())
+
+
 def tiles_html(root):
     out = []
     for p in PRODUCTS:
-        out.append(f'<li class="tile"><a href="{root}products/{p["slug"]}/"><h3>{esc(p["name"])}</h3>'
+        out.append(f'<li class="tile" data-reveal><a href="{root}products/{p["slug"]}/"><h3>{esc(p["name"])}</h3>'
                    f'{tile_img(p, root, "(min-width: 760px) 30vw, 46vw")}'
                    f'<span class="tile-more">See the types</span></a></li>')
     return "\n      ".join(out)
@@ -421,36 +455,38 @@ def home():
     title = "AZ Printing & Signs | Printing, signs and design in Brampton"
     desc = ("Printing, signs, graphic design and branding in Brampton: business cards, flyers, lawn signs, "
             "banners, stickers, copying, scanning and binding. Call 905-796-1515.")
-    extra = '<link rel="preload" as="image" href="images/client/hero-collage-1920.jpg" media="(min-width: 900px)">\n'
+    extra = '<link rel="preload" as="image" href="images/client/hero-ground-1920.jpg" media="(min-width: 900px)">\n'
     h = head(root, title, desc, extra, business_schema()) + header(root, "home")
     h += f'''
 <section class="hero" aria-labelledby="hero-h">
   <div class="hero-text">
-    <h1 id="hero-h">Your business deserves to be seen</h1>
+    <h1 id="hero-h">{words("Your business deserves to be seen")}</h1>
     <ul class="hero-list">
       <li>We<br>print</li>
       <li>We<br>design</li>
       <li>We build<br>brands</li>
     </ul>
   </div>
-  <figure class="hero-art"><img src="images/client/hero-collage-mobile-900.jpg" alt="Printed pieces side by side: a restaurant menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign and a roll of stickers" width="900" height="613" fetchpriority="high"></figure>
+  <div class="hero-view" role="img" aria-label="Printed pieces side by side: a restaurant menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign and a roll of stickers"><div class="hero-stage">
+    {hero_stage(root)}
+  </div></div>
   <p class="hero-quality">Premium quality</p>
 </section>
 
 <section class="slogan" aria-label="Our promise">
-  <p>we commit<br>we deliver</p>
+  <p><span class="line" data-reveal>we commit</span><span class="line" data-reveal>we deliver</span></p>
 </section>
 
 <section class="welcome" id="about" aria-labelledby="welcome-h">
   <div class="wrap welcome-in">
     <div class="welcome-text">
-      <h2 id="welcome-h">Welcome to Brampton<br>AZ Printing &amp; Signs</h2>
-      <p>AZ PRINTING &amp; SIGNS is your one-stop destination for professional printing, signage, graphic design, and branding services in Brampton.</p>
-      <p>Conveniently located at 499 Ray Lawson Blvd, we offer digital printing, Xerox promotional printing, photocopying (Photo Stat), scanning, spiral binding, and custom signage, including window graphics.</p>
-      <p>Our qualified designer also provides logo design, brand identity, complete rebranding, and marketing design services to help businesses build a professional and consistent image.</p>
-      <p>From everyday printing to complete branding solutions, AZ PRINTING &amp; SIGNS is here to bring your ideas to life with quality, creativity, and reliable service.<br><a class="contact-link" href="#contact">Contact us</a> today to learn more about how we can help you.</p>
+      <h2 id="welcome-h" data-reveal>Welcome to Brampton<br>AZ Printing &amp; Signs</h2>
+      <p data-reveal>AZ PRINTING &amp; SIGNS is your one-stop destination for professional printing, signage, graphic design, and branding services in Brampton.</p>
+      <p data-reveal>Conveniently located at 499 Ray Lawson Blvd, we offer digital printing, Xerox promotional printing, photocopying (Photo Stat), scanning, spiral binding, and custom signage, including window graphics.</p>
+      <p data-reveal>Our qualified designer also provides logo design, brand identity, complete rebranding, and marketing design services to help businesses build a professional and consistent image.</p>
+      <p data-reveal>From everyday printing to complete branding solutions, AZ PRINTING &amp; SIGNS is here to bring your ideas to life with quality, creativity, and reliable service.<br><a class="contact-link" href="#contact">Contact us</a> today to learn more about how we can help you.</p>
     </div>
-    <figure class="welcome-photo"><img src="images/client/welcome-900.jpg" srcset="images/client/welcome-600.jpg 600w, images/client/welcome-900.jpg 900w" sizes="(min-width: 760px) 36vw, 92vw" alt="A woman walking past a printed window poster for a grilled chicken restaurant" width="900" height="1353" loading="lazy"></figure>
+    <figure class="welcome-photo" data-reveal><img src="images/client/welcome-900.jpg" srcset="images/client/welcome-600.jpg 600w, images/client/welcome-900.jpg 900w" sizes="(min-width: 760px) 36vw, 92vw" alt="A woman walking past a printed window poster for a grilled chicken restaurant" width="900" height="1353" loading="lazy"></figure>
   </div>
 </section>
 
@@ -471,9 +507,9 @@ def home():
 def contact_html():
     return f'''<section class="contact" id="contact" aria-labelledby="contact-h">
   <div class="wrap">
-    <h2 id="contact-h">Send us a message</h2>
+    <h2 id="contact-h" data-reveal>Send us a message</h2>
     <div class="contact-in">
-      <form class="contact-form" action="https://formsubmit.co/{SITE["email"]}" method="POST">
+      <form class="contact-form" data-reveal action="https://formsubmit.co/{SITE["email"]}" method="POST">
         <input type="hidden" name="_subject" value="Website message from azprintingandsigns.ca">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="true">
@@ -494,16 +530,10 @@ def contact_html():
         </div>
         <p class="form-sent" id="form-sent" role="status">Thank you. Your message has been sent and we will get back to you soon.</p>
       </form>
-      <figure class="map"><iframe title="Map showing AZ Printing &amp; Signs at 499 Ray Lawson Blvd, Brampton" src="{esc(SITE["map_embed"])}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></figure>
+      <figure class="map" data-reveal><iframe title="Map showing AZ Printing &amp; Signs at 499 Ray Lawson Blvd, Brampton" src="{esc(SITE["map_embed"])}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></figure>
     </div>
   </div>
-</section>
-<script>
-if (location.search.indexOf('sent=1') > -1) {{
-  var s = document.getElementById('form-sent');
-  if (s) {{ s.classList.add('show'); s.scrollIntoView(); }}
-}}
-</script>'''
+</section>'''
 
 
 # ---------------------------------------------------------------------------
@@ -674,7 +704,26 @@ def confirm_list():
     return "\n".join(out)
 
 
+def vendor():
+    """js/vendor/ is copied from node_modules at build so the site stays
+    self-hosted. `npm install` first (gsap, lenis; node_modules is ignored)."""
+    import shutil
+    src = os.path.join(HERE, "node_modules")
+    dst = os.path.join(HERE, "js", "vendor")
+    files = [("gsap/dist/gsap.min.js", "gsap.min.js"), ("gsap/dist/ScrollTrigger.min.js", "ScrollTrigger.min.js"),
+             ("lenis/dist/lenis.min.js", "lenis.min.js")]
+    if not os.path.isdir(src):
+        for _, name in files:
+            if not os.path.exists(os.path.join(dst, name)):
+                fail(f"js/vendor/{name} missing and node_modules absent: run npm install")
+        return
+    os.makedirs(dst, exist_ok=True)
+    for rel, name in files:
+        shutil.copyfile(os.path.join(src, rel), os.path.join(dst, name))
+
+
 def build():
+    vendor()
     for path, h in outputs():
         full = os.path.join(HERE, path)
         os.makedirs(os.path.dirname(full), exist_ok=True)
