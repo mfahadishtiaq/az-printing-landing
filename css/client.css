@@ -397,19 +397,3 @@ html.motion .welcome-photo img { height: 112%; object-fit: cover; }
 .hero-tag.above { top: auto; bottom: 100%; margin-top: 0; margin-bottom: .35vw; transform: translate(-50%, -2px); }
 .hero-tag.above::before { top: auto; bottom: -5px; }
 .hero-item:hover .hero-tag.above, .hero-item:focus-visible .hero-tag.above, .hero-item.is-hover .hero-tag.above { transform: translate(-50%, -8px); }
-
-/* ======================================================================
-   2026-10-05 late: the products take more of the hero (Fahad). The ground
-   covers the whole view; the stage is the collage's 1920x1083 coordinate
-   box anchored to the BOTTOM and scaled up about its base, so the collage
-   grows into headroom added above it rather than into the headline.
-   ====================================================================== */
-.hero-view { aspect-ratio: 1590 / 1230; }
-.hero-ground { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; }
-.hero-stage { top: auto; bottom: 0; height: auto; aspect-ratio: 1920 / 1083; transform: scale(var(--collage-s, 1.14)); transform-origin: var(--collage-ox, 64%) 100%; }
-@media (min-width: 900px) {
-  .hero { aspect-ratio: 1920 / 1230; }
-  .hero-view { aspect-ratio: auto; height: 100%; }  /* inset alone loses to an aspect-ratio */
-  .hero-stage { left: 0; width: 100%; height: auto; }
-  .hero-text { top: 17%; }
-}
