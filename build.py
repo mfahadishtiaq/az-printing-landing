@@ -743,7 +743,7 @@ def home():
 
 <section class="doors" aria-labelledby="doors-h">
   <div class="wrap">
-    <h2 id="doors-h" class="sr-only">For your event or for your business</h2>
+    <div class="catalog-head" data-reveal><h2 id="doors-h">Printing for events and businesses</h2></div>
     <div class="doors-in">{doors_html(root)}</div>
   </div>
 </section>
