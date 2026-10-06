@@ -896,10 +896,13 @@ html[data-promise="stone"] .promise { --b-bg: #e9e1d6; --sw-eyebrow: #5f5346; --
 .ptab { font: 600 .98rem/1.2 var(--sans); color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: .9rem .1rem; min-height: 44px; cursor: pointer; }
 .ptab:hover { color: var(--ink); }
 .ptab[aria-selected="true"] { color: var(--red); border-bottom-color: var(--red); }
-.pcards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.8rem 1rem; }
+/* CARD SIZE: 4 across (Fahad 2026-10-06: "cards are too small", picked B off
+   04 - Decision Boards/2026-10-06-what-we-do-card-size.html; was 140px in one
+   row). Rows centred so a short last row sits in the middle. Phones 2 across. */
+.pcards { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 1rem; }
 .pcards[hidden] { display: none; }
-@media (min-width: 600px) { .pcards { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (min-width: 1100px) { .pcards { display: flex; justify-content: center; gap: 1.4rem; } .pcard { flex: 0 0 140px; } }
+.pcard { flex: 0 0 calc((100% - 1rem) / 2); }
+@media (min-width: 600px) { .pcards { column-gap: 1.4rem; } .pcard { flex-basis: calc((100% - 2 * 1.4rem) / 3); } }
 .pcard a { display: flex; flex-direction: column; align-items: center; gap: .7rem; text-align: center; text-decoration: none; color: var(--ink); }
 .pcard-img { width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; overflow: hidden; background: var(--soft); }
 .pcard-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.22, 1, .36, 1); }
@@ -910,27 +913,13 @@ html[data-promise="stone"] .promise { --b-bg: #e9e1d6; --sw-eyebrow: #5f5346; --
 .pcard-go { width: 30px; height: 30px; border-radius: 50%; background: var(--red); display: grid; place-items: center; transition: background-color .2s ease; }
 .pcard a:hover .pcard-go { background: var(--red-deep); }
 .pcard-go svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-/* CARD SIZE presets (Fahad 2026-10-06: "cards are too small"). "now" = the
-   rules above (140px at 1100+). "four" / "three" = cards fill the section,
-   rows centred so a short last row sits in the middle. Phones stay 2 across. */
-html[data-cards="four"] .pcards, html[data-cards="three"] .pcards { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 1rem; }
-html[data-cards="four"] .pcards[hidden], html[data-cards="three"] .pcards[hidden] { display: none; }
-html[data-cards="four"] .pcard, html[data-cards="three"] .pcard { flex: 0 0 calc((100% - 1rem) / 2); }
-@media (min-width: 600px) { html[data-cards="four"] .pcards { column-gap: 1.4rem; } html[data-cards="four"] .pcard { flex-basis: calc((100% - 2 * 1.4rem) / 3); } }
 @media (min-width: 900px) {
-  html[data-cards="four"] .pcards { gap: 2.4rem 1.6rem; }
-  html[data-cards="four"] .pcard { flex-basis: calc((100% - 3 * 1.6rem) / 4); }
-  html[data-cards="four"] .pcard b { font-size: 1.1rem; }
-}
-@media (min-width: 760px) {
-  html[data-cards="three"] .pcards { gap: 2.8rem 2rem; }
-  html[data-cards="three"] .pcard { flex-basis: calc((100% - 2 * 2rem) / 3); }
-  html[data-cards="three"] .pcard b { font-size: 1.25rem; }
-}
-@media (min-width: 900px) {
-  html[data-cards="four"] .pcard a, html[data-cards="three"] .pcard a { gap: .9rem; }
-  html[data-cards="four"] .pcard-img, html[data-cards="three"] .pcard-img { border-radius: 18px; }
-  html[data-cards="four"] .pcard-go, html[data-cards="three"] .pcard-go { width: 36px; height: 36px; }
+  .pcards { gap: 2.4rem 1.6rem; }
+  .pcard { flex-basis: calc((100% - 3 * 1.6rem) / 4); }
+  .pcard a { gap: .9rem; }
+  .pcard b { font-size: 1.1rem; }
+  .pcard-img { border-radius: 18px; }
+  .pcard-go { width: 36px; height: 36px; }
 }
 .pall { text-align: center; margin: clamp(1.8rem, 3vw, 2.6rem) 0 0; }
 .pall a { font-weight: 700; color: var(--red); text-decoration: none; border-bottom: 2px solid rgba(160, 29, 32, .3); padding-bottom: 2px; }
