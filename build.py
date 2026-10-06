@@ -431,7 +431,7 @@ def head(root, title, description, extra="", schema=""):
 <script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Montserrat:wght@400..900&family=Space+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Merriweather:wght@900&family=Montserrat:wght@400..900&display=swap">
 {extra}<link rel="stylesheet" href="{root}css/client.css">
 <link rel="icon" href="{root}images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="{root}images/apple-touch-icon.png">
@@ -754,11 +754,12 @@ def promise_html():
     """Band 2: four printed swatch tiles, we print / we design / we commit /
     we deliver (concept 6a, Fahad 2026-10-06). The buttons and the languages
     line were removed on his ask the same night: the tiles stand alone."""
+    # Premium restyle (Fahad 2026-10-06, a paint-palette pin as inspiration):
+    # rounded ink blocks, the name in italic serif, the code spaced out below.
     tiles = "".join(
-        f'<li class="sw"><span class="sw-ink" style="background:{c}"><span class="sw-top"><span class="sw-n">{i:02d}</span><span class="sw-hex">{c}</span></span>'
-        f'<span class="sw-word"><span>we</span><b>{v}</b></span></span>'
-        f'<span class="sw-label"><b>{lab}</b></span></li>'
-        for i, (v, lab, c) in enumerate(SWATCHES, 1))
+        f'<li class="sw" style="background:{c}"><span class="sw-name">We {v.capitalize()}</span>'
+        f'<span class="sw-hex">{c.lstrip("#")}</span></li>'
+        for v, lab, c in SWATCHES)
     return f'''<section class="band promise" aria-labelledby="promise-h">
   <div class="wrap">
     <h2 id="promise-h" class="sr-only">We print, we design, we commit, we deliver</h2>

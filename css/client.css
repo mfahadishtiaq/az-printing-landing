@@ -821,27 +821,20 @@ html[data-bands="plum"] .step { box-shadow: none; border: 1px solid rgba(255, 25
   .step:not(:last-child)::after { content: ""; position: absolute; top: 2.5rem; right: -1.4rem; width: 1.4rem; border-top: 2px dashed var(--b-line); }
 }
 
-/* band 2: four printed swatch tiles (concept 6a off the Claude Design canvas,
-   Fahad 2026-10-06). Light warm ground so the four inks carry the colour. */
+/* band 2: four colour tiles, we print / we design / we commit / we deliver
+   (concept 6a off the Claude Design canvas, Fahad 2026-10-06), restyled the
+   same night after a paint-palette pin: rounded ink blocks, no frame or label
+   strip, the name in italic serif (Cormorant Garamond, this band only), the
+   colour code in small spaced capitals under it. */
 .promise { --b-bg: #f6f3f0; --b-fg: var(--ink); --b-muted: #3c3340; padding: clamp(2.6rem, 5vw, 4.4rem) 0; }
-.sw-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem 1.5rem; margin-bottom: clamp(1.2rem, 2.2vw, 1.6rem); }
+.sw-head { margin-bottom: clamp(1.2rem, 2.2vw, 1.6rem); }
 .sw-eyebrow { margin: 0; font: 800 .75rem/1.2 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: #6b5f6e; }
-.promise .band-ctas { gap: .6rem; }
-.btn-out { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.2rem; border: 2px solid var(--ink); border-radius: 4px; color: var(--ink); text-decoration: none; font-weight: 700; font-size: .95rem; transition: background-color .2s ease, color .2s ease; }
-.btn-out:hover { background: var(--ink); color: #fff; }
 .swatches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
-.sw { display: flex; flex-direction: column; background: #fff; border-radius: 10px; padding: 8px; box-shadow: 0 14px 30px rgba(27, 20, 32, .13); }
-.sw-ink { min-height: 170px; border-radius: 4px; display: flex; flex-direction: column; justify-content: space-between; padding: 14px 16px 18px; color: #fff; }
-.sw-n { font: 400 .75rem/1 "Space Mono", ui-monospace, Menlo, monospace; opacity: .75; }
-.sw-word span { display: block; font: 700 1.1rem/1.1 var(--sans); opacity: .85; }
-.sw-word b { display: block; font: 900 clamp(1.9rem, 8vw, 2.4rem)/1 var(--display); letter-spacing: -.015em; }
-.sw:last-child .sw-word b { color: #ff6fb0; }
-.sw-label { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; padding: .7rem .4rem .15rem; }
-.sw-label b { font: 900 .78rem/1 var(--sans); letter-spacing: .14em; color: var(--ink); }
-.sw-label i { font: normal .72rem/1 "Space Mono", ui-monospace, Menlo, monospace; color: #6b5f6e; }
-.sw-foot { margin: clamp(1.2rem, 2.2vw, 1.6rem) 0 0; font-size: 1rem; color: var(--b-muted); }
-@media (min-width: 600px) { .swatches { gap: 1rem; } .sw-ink { min-height: 230px; padding: 20px 22px 24px; } .sw-word span { font-size: 1.4rem; } .sw-word b { font-size: clamp(2.6rem, 5vw, 3.4rem); } }
-@media (min-width: 1000px) { .swatches { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; } .sw { padding: 10px; } .sw-ink { min-height: 330px; padding: 22px 24px 26px; } .sw-word span { font-size: 1.6rem; } .sw-word b { font-size: clamp(3rem, 4.2vw, 3.75rem); } .sw-label { padding: .9rem .5rem .25rem; } .sw-label b { font-size: .94rem; } .sw-label i { font-size: .82rem; } }
+.sw { min-height: 150px; border-radius: 22px; padding: 1.2rem 1.25rem; display: flex; flex-direction: column; gap: .5rem; color: #fff; box-shadow: 0 1px 0 rgba(255, 255, 255, .12) inset, 0 18px 36px -18px rgba(27, 20, 32, .45); }
+.sw-name { font: italic 500 clamp(1.7rem, 7vw, 2.1rem)/1.05 "Cormorant Garamond", "Cormorant", Georgia, serif; letter-spacing: -.005em; }
+.sw-hex { font: 600 .68rem/1 var(--sans); letter-spacing: .24em; opacity: .82; }
+@media (min-width: 600px) { .swatches { gap: 1rem; } .sw { min-height: 200px; border-radius: 26px; padding: 1.6rem 1.7rem; } .sw-name { font-size: clamp(2.2rem, 4.4vw, 2.8rem); } .sw-hex { font-size: .75rem; } }
+@media (min-width: 1000px) { .swatches { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; } .sw { min-height: 280px; border-radius: 30px; padding: 2rem 2rem; gap: .7rem; } .sw-name { font-size: clamp(2.5rem, 3.4vw, 3.1rem); } .sw-hex { font-size: .8rem; } }
 
 /* the localhost colour switch sits above the layout switch */
 .layout-switch.bands-switch { bottom: 64px; }
@@ -850,7 +843,3 @@ html[data-bands="plum"] .step { box-shadow: none; border: 1px solid rgba(255, 25
 .layout-switch::-webkit-scrollbar { display: none; }
 .layout-switch button, .layout-switch span { flex: none; }
 .layout-switch button { white-space: nowrap; }
-/* the colour code sits inside the colour box, top right (Fahad 2026-10-06) */
-.sw-top { display: flex; justify-content: space-between; align-items: baseline; }
-.sw-hex { font: 400 .72rem/1 "Space Mono", ui-monospace, Menlo, monospace; letter-spacing: .04em; opacity: .8; }
-@media (min-width: 1000px) { .sw-hex { font-size: .82rem; } }
