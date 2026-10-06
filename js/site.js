@@ -171,7 +171,7 @@
     var presets = (root.getAttribute('data-band-presets') || '').split(' ').filter(Boolean);
     if (!presets.length) return;
     var local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-    var NAME = { 'blush-magenta': 'Blush + Magenta', 'plum-magenta': 'Plum + Magenta', 'blush-plum': 'Blush + Plum', 'grey-magenta': 'Grey + Magenta' };
+    var NAME = { blush: 'Blush', plum: 'Plum', grey: 'Grey' };
     var bar = null;
     function set(n, remember) {
       if (presets.indexOf(n) < 0) return;
@@ -184,7 +184,7 @@
       bar.className = 'layout-switch bands-switch';
       bar.setAttribute('role', 'group');
       bar.setAttribute('aria-label', 'Band colours (only on localhost)');
-      bar.innerHTML = '<span>Bands</span>' + presets.map(function (p) {
+      bar.innerHTML = '<span>How it works</span>' + presets.map(function (p) {
         return '<button type="button" data-p="' + p + '">' + (NAME[p] || p) + '</button>';
       }).join('');
       bar.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) set(b.getAttribute('data-p'), true); });

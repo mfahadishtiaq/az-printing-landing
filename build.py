@@ -361,7 +361,16 @@ STEP_ICON = {
     "check": '<rect x="9" y="7" width="30" height="34" rx="3"/><path d="M17 25l5 5 10-11"/>',
     "bag": '<path d="M10 16h28l-2 24H12z"/><path d="M18 16v-3a6 6 0 0 1 12 0v3"/>',
 }
-BAND_PRESETS = ("blush-magenta", "plum-magenta", "blush-plum", "grey-magenta")
+# 2026-10-06 later: band 2 is now the swatch tiles (Fahad picked concept 6a on
+# the Claude Design canvas "We Commit Banner Concepts"), which carry their own
+# colours, so the presets now colour band 1 (How it works) only.
+BAND_PRESETS = ("blush", "plum", "grey")
+SWATCHES = [  # (verb, label, colour); the client's hero line + slogan
+    ("print", "PRINT", "#6A2C87"),
+    ("design", "DESIGN", "#9F257D"),
+    ("commit", "COMMIT", "#C52074"),
+    ("deliver", "DELIVER", "#1B0A18"),
+]
 
 # Facts on the home page, outside the product types, that are not yet the
 # owner's word. They print on --confirm under the types.
@@ -422,7 +431,7 @@ def head(root, title, description, extra="", schema=""):
 <script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Montserrat:wght@400..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Montserrat:wght@400..900&family=Space+Mono&display=swap">
 {extra}<link rel="stylesheet" href="{root}css/client.css">
 <link rel="icon" href="{root}images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="{root}images/apple-touch-icon.png">
@@ -742,11 +751,22 @@ def process_html():
 
 
 def promise_html():
+    """Band 2: four printed swatch tiles, we print / we design / we commit /
+    we deliver (concept 6a, Fahad 2026-10-06)."""
+    tiles = "".join(
+        f'<li class="sw"><span class="sw-ink" style="background:{c}"><span class="sw-n">{i:02d}</span>'
+        f'<span class="sw-word"><span>we</span><b>{v}</b></span></span>'
+        f'<span class="sw-label"><b>{lab}</b><i>{c}</i></span></li>'
+        for i, (v, lab, c) in enumerate(SWATCHES, 1))
     return f'''<section class="band promise" aria-labelledby="promise-h">
-  <div class="wrap promise-in">
-    <h2 id="promise-h"><span>we commit</span><span>we deliver</span></h2>
-    <p>Walk in, call or WhatsApp. English, Urdu, Hindi and Punjabi spoken at the counter.</p>
-    <p class="band-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="band-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
+  <div class="wrap">
+    <h2 id="promise-h" class="sr-only">We print, we design, we commit, we deliver</h2>
+    <div class="sw-head">
+      <p class="sw-eyebrow">Our promise, in our colours</p>
+      <p class="band-ctas"><a class="btn" href="#contact">Get a quote</a><a class="btn-out" href="{SITE["whatsapp"]}">WhatsApp us</a><a class="btn-out" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
+    </div>
+    <ul class="swatches">{tiles}</ul>
+    <p class="sw-foot">Walk in, call or WhatsApp. English, Urdu, Hindi and Punjabi spoken at the counter.</p>
   </div>
 </section>
 '''
