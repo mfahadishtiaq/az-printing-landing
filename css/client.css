@@ -240,7 +240,7 @@ p { margin: 0 0 1.1em; }
 /* footer product links */
 .foot-h { font-weight: 900; text-transform: uppercase; letter-spacing: .04em; font-size: .9rem; color: #fff; margin-bottom: .6rem; }
 .foot-nav ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 2rem; }
-.foot-nav li { break-inside: avoid; }
+.foot-nav li { break-inside: avoid; font-size: .95rem; }
 .foot-nav a { text-decoration: none; font-size: .95rem; }
 .foot-nav a:hover { text-decoration: underline; }
 

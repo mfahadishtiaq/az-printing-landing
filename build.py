@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """AZ Printing & Signs site generator (client design, 2026-10-05).
 
-    python3 build.py             # build every page + verify
+    python3 build.py             # build the page + verify
     python3 build.py --check     # verify the files on disk only
     python3 build.py --confirm   # the owner confirm list (markdown)
 
 Home is the client's mockup (Awais Muhammad, 2026-10-04), approved by Fahad
-2026-10-05. Each product tile links to its own page, which lists the TYPES of
-that product with a one-line explanation each; the client asked for this in
-September ("business cards have multiple types, glossy, matte, etc.").
+2026-10-05. ONE PAGE ONLY (Fahad 2026-10-06: "Remove separate product pages,
+this will only be a landing page"): every product card, hero cut-out and
+industry card opens the quote form (#contact). The fourteen product pages and
+the products index are gone (restore: git tag pre-landing-only-2026-10-06).
+PRODUCTS still holds every type: it feeds --confirm, the SHORT lines and the
+owner's types questionnaire.
 
 Every type line carries a source tag. `owner`/`client` are the owner's own
 word; everything else prints on --confirm so one conversation with him
@@ -467,21 +470,12 @@ def vf(label):
 
 
 def header(root, current=""):
-    """Studio nav pattern (ZEF, 2026-09): lockup, a Products mega menu with
-    thumbnails, Call + Get a quote on the right, a burger sheet on phones.
+    """Studio nav pattern (ZEF, 2026-09): lockup, Products / About / Contact
+    as in-page links (the mega menu went with the product pages, 2026-10-06),
+    Call + Get a quote on the right, a burger sheet on phones.
     Above it a utility strip that scrolls away; the main bar is sticky."""
     def cur(key):
         return ' aria-current="page"' if key == current else ""
-    cols = []
-    for title, lede, slugs in GROUPS:
-        items = "".join(
-            f'<a href="{root}products/{sl}/"><span class="mm-thumb"><img src="{root}images/client/tile-{sl}-480.jpg" alt="" width="480" height="480" loading="lazy"></span>'
-            f'<span class="mm-txt"><b>{esc(by_slug(sl)["name"])}</b><i>{esc(SHORT[sl])}</i></span></a>' for sl in slugs)
-        cols.append(f'<div class="mm-col"><p class="mm-h">{esc(title)}</p>{items}</div>')
-    sheet_groups = "".join(
-        f'<details class="sh-group"><summary>{esc(title)}</summary><div>'
-        + "".join(f'<a href="{root}products/{sl}/">{esc(by_slug(sl)["name"])}</a>' for sl in slugs)
-        + '</div></details>' for title, lede, slugs in GROUPS)
     return f'''<a class="skip" href="#main">Skip to content</a>
 
 <div class="util" role="complementary" aria-label="Shop details">
@@ -495,7 +489,7 @@ def header(root, current=""):
   <div class="wrap head-in">
     {brand(root)}
     <nav class="menu" aria-label="Main">
-      <button class="menu-dd" type="button" aria-expanded="false" aria-controls="mega" aria-label="Products"{' data-current="1"' if current == "products" else ""}>{vf("Products")} <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <a href="{root}#products" aria-label="Products">{vf("Products")}</a>
       <a href="{root}#about" aria-label="About"{cur("about")}>{vf("About")}</a>
       <a href="{root}#contact" aria-label="Contact"{cur("contact")}>{vf("Contact")}</a>
     </nav>
@@ -505,24 +499,11 @@ def header(root, current=""):
       <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="l1" d="M4 12H20"/><path class="l2" d="M4 12H20"/><path class="l3" d="M4 12H20"/></svg></button>
     </div>
   </div>
-  <div class="mega" id="mega" hidden>
-    <div class="wrap mega-in">
-      {"".join(cols)}
-      <div class="mm-side">
-        <p class="mm-side-h">Not sure what you need?</p>
-        <p>Send us your idea or your file and we will suggest the right product and finish.</p>
-        <a class="btn" href="{SITE["whatsapp"]}">WhatsApp us</a>
-        <a class="mm-all" href="{root}products/">See all 14 products</a>
-      </div>
-    </div>
-  </div>
 </header>
 
 <div class="sheet" id="sheet" hidden>
   <nav class="sheet-in" aria-label="Menu">
-    <p class="sheet-h">Products</p>
-    {sheet_groups}
-    <a class="sheet-link" href="{root}products/">All products</a>
+    <a class="sheet-link" href="{root}#products">Products</a>
     <a class="sheet-link" href="{root}#about">About</a>
     <a class="sheet-link" href="{root}#contact">Contact</a>
     <div class="sheet-cta"><a class="btn" href="{root}#contact">Get a quote</a><a class="btn-ghost dark" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></div>
@@ -535,7 +516,7 @@ def header(root, current=""):
 
 
 def footer(root):
-    links = "".join(f'<li><a href="{root}products/{p["slug"]}/">{esc(p["name"])}</a></li>' for p in PRODUCTS)
+    links = "".join(f'<li>{esc(p["name"])}</li>' for p in PRODUCTS)
     return f'''
 </main>
 
@@ -550,10 +531,10 @@ def footer(root):
         <p>{esc(SITE["hours"])}</p>
       </div>
     </div>
-    <nav class="foot-nav" aria-label="Products">
+    <div class="foot-nav">
       <h2 class="foot-h">Products</h2>
       <ul>{links}</ul>
-    </nav>
+    </div>
     <!-- Facebook and Instagram icons sit top right here in the mockup. They go in once the owner's pages exist (brief: "owner WILL create"); a dead social link is worse than none. -->
   </div>
   <div class="wrap foot-base"><p>© 2026 AZ Printing &amp; Signs · Brampton, Ontario</p></div>
@@ -661,8 +642,8 @@ def hero_stage(root):
         # a label hangs below its item unless the item sits at the stage's
         # bottom edge, where it would be clipped; then it goes above
         above = " above" if (L["y"] + L["h"]) / H > 0.9 else ""
-        out.append(f'<a class="hero-item" href="{root}products/{slug}/" data-name="{L["name"]}" data-depth="{depth}" '
-                   f'aria-label="{esc(label)}: see the types" '
+        out.append(f'<a class="hero-item" href="{root}#contact" data-name="{L["name"]}" data-depth="{depth}" '
+                   f'aria-label="{esc(label)}: get a quote" '
                    f'style="--x:{L["x"]/W*100:.3f}%;--y:{L["y"]/H*100:.3f}%;--w:{L["w"]/W*100:.3f}%">'
                    f'<span class="hero-float"><span class="hero-lift">'
                    f'<img src="{root}images/client/hero/{L["name"]}.webp" alt="" width="{L["w"]}" height="{L["h"]}">'
@@ -699,7 +680,7 @@ CHEV = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></
 def c3d_card(root, slug, gtitle, cls="", style="", sizes="(min-width: 900px) 24vw, 62vw", w=800):
     """One 3D tilting photo card (js/site.js tilts every .c3d)."""
     p = by_slug(slug)
-    return (f'<li class="c3d{(" " + cls) if cls else ""}"{style}><a href="{root}products/{slug}/">'
+    return (f'<li class="c3d{(" " + cls) if cls else ""}"{style}><a href="{root}#contact">'
             f'<span class="c3d-in">'
             f'<span class="c3d-img"><img src="{root}images/client/tile-{slug}-800.jpg" srcset="{root}images/client/tile-{slug}-480.jpg 480w, {root}images/client/tile-{slug}-800.jpg 800w" sizes="{sizes}" alt="{esc(p["alt"])}" width="800" height="800" loading="lazy"></span>'
             f'<span class="c3d-chip">{esc(gtitle)}</span>'
@@ -724,7 +705,7 @@ def catalog_html(root):
                  sizes="(min-width: 900px) 46vw, 92vw" if a == "bc" else "(min-width: 900px) 24vw, 46vw")
         for sl, a in BENTO_AREAS.items()) + '</ul>'
     views["circles"] = '<ul class="circles">' + "".join(
-        f'<li class="cir"><a href="{root}products/{sl}/"><span class="cir-i"><img src="{root}images/client/tile-{sl}-480.jpg" '
+        f'<li class="cir"><a href="{root}#contact"><span class="cir-i"><img src="{root}images/client/tile-{sl}-480.jpg" '
         f'srcset="{root}images/client/tile-{sl}-480.jpg 480w, {root}images/client/tile-{sl}-800.jpg 800w" sizes="(min-width: 1000px) 12vw, 30vw" '
         f'alt="" width="480" height="480" loading="lazy"></span><b>{esc(by_slug(sl)["name"])}</b></a></li>'
         for _, _, ss in GROUPS for sl in ss) + '</ul>'
@@ -734,26 +715,16 @@ def catalog_html(root):
     panels = "".join(
         f'<ul class="pcards" role="tabpanel" id="ppanel-{gi}" aria-labelledby="ptab-{gi}"{"" if gi == 0 else " hidden"}>'
         + "".join(
-            f'<li class="pcard"><a href="{root}products/{sl}/"><span class="pcard-img"><img src="{root}images/client/tile-{sl}-480.jpg" '
+            f'<li class="pcard"><a href="{root}#contact"><span class="pcard-img"><img src="{root}images/client/tile-{sl}-480.jpg" '
             f'srcset="{root}images/client/tile-{sl}-480.jpg 480w, {root}images/client/tile-{sl}-800.jpg 800w" sizes="(min-width: 1100px) 160px, (min-width: 600px) 24vw, 46vw" '
             f'alt="{esc(by_slug(sl)["alt"])}" width="480" height="480" loading="lazy"></span>'
             f'<b>{esc(by_slug(sl)["name"])}</b><span class="pcard-go" aria-hidden="true">{ARROW}</span></a></li>'
             for sl in ss) + '</ul>'
         for gi, (_, _, ss) in enumerate(GROUPS))
-    views["tabs"] = (f'<div class="ptabs" role="tablist" aria-label="Product groups">{tabs}</div>{panels}'
-                     f'<p class="pall"><a href="{root}products/">See all {len(PRODUCTS)} products</a></p>')
+    views["tabs"] = f'<div class="ptabs" role="tablist" aria-label="Product groups">{tabs}</div>{panels}'
     return "".join(
         f'<div class="cat-view cat-{v}" data-view="{v}"{"" if i == 0 else " hidden"}>{views[v]}</div>'
         for i, v in enumerate(CATALOG_LAYOUTS))
-
-
-def tiles_html(root):
-    out = []
-    for p in PRODUCTS:
-        out.append(f'<li class="tile"><a href="{root}products/{p["slug"]}/"><h3>{esc(p["name"])}</h3>'
-                   f'{tile_img(p, root, "(min-width: 760px) 30vw, 46vw")}'
-                   f'<span class="tile-more">See the types</span></a></li>')
-    return "\n      ".join(out)
 
 
 ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
@@ -810,11 +781,11 @@ def doors_html(root):
 
 
 def industries_html(root):
-    """Five trades as light cards: photo, name, and the product it opens."""
+    """Five trades as light cards: photo, name, the product it uses; opens the quote form."""
     out = []
     for img, name, line, slug in INDUSTRIES:
         out.append(
-            f'<a class="icard" href="{root}products/{slug}/">'
+            f'<a class="icard" href="{root}#contact">'
             f'<span class="icard-img"><img src="{root}images/tiles/{img}-560.jpg" srcset="{root}images/tiles/{img}-560.jpg 560w, {root}images/tiles/{img}.jpg 900w" '
             f'sizes="(min-width: 1100px) 230px, 46vw" alt="" width="900" height="1200" loading="lazy"></span>'
             f'<b>{esc(name)}</b><span class="icard-go">{esc(by_slug(slug)["name"])}{ARROW}</span></a>')
@@ -835,7 +806,7 @@ def home():
     <h1 id="hero-h">{words("Your business deserves to be seen")}</h1>
     <p class="hero-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="hero-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
   </div>
-  <div class="hero-view"><div class="hero-stage" aria-label="Printed pieces side by side, each a link to its product: a menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign, stickers and a notepad">
+  <div class="hero-view"><div class="hero-stage" aria-label="Printed pieces side by side, each a link to the quote form: a menu, business cards, flyers, a roll-up banner, a poster, a lawn sign, an A-frame sign, stickers and a notepad">
     {hero_stage(root)}
   </div></div>
   <p class="hero-quality"{style_vars("quality")}>Premium quality</p>
@@ -846,7 +817,7 @@ def home():
   <div class="wrap">
     <div class="catalog-head">
       <h2 id="products-h">What we do</h2>
-      <p>Fourteen products and services. Choose one to see its types, sizes and finishes, each explained in plain words.</p>
+      <p>Fourteen products and services. Choose one to ask us for a quote.</p>
     </div>
     {catalog_html(root)}
   </div>
@@ -917,107 +888,15 @@ def contact_html():
 
 
 # ---------------------------------------------------------------------------
-# products index + one page per product
-# ---------------------------------------------------------------------------
-
-def products_index():
-    root = "../"
-    title = "Products | AZ Printing & Signs, Brampton"
-    desc = "Every product and service at AZ Printing & Signs in Brampton, each with its types explained. Call 905-796-1515 for a price."
-    h = head(root, title, desc) + header(root, "products")
-    h += f'''
-<section class="page-head">
-  <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="{root}">Home</a> <span>/</span> <span aria-current="page">Products</span></nav>
-    <h1>Products and services</h1>
-    <p class="lede">Choose a product to see its types, sizes and finishes, each explained in plain words. For a price, call <a href="tel:{SITE["phone_tel"]}">{SITE["phone_display"]}</a> or message us on <a href="{SITE["whatsapp"]}">WhatsApp</a>.</p>
-  </div>
-</section>
-<section class="products" aria-label="All products">
-  <div class="wrap">
-    <ul class="tiles">
-      {tiles_html(root)}
-    </ul>
-  </div>
-</section>
-'''
-    return h + footer(root)
-
-
-def product_page(p):
-    root = "../../"
-    name = p["name"]
-    title = f"{name} in Brampton | AZ Printing & Signs"
-    first = p["sets"][0][1][0][0]
-    desc = f"{name} at AZ Printing & Signs, Brampton: {p['intro']} Types include {first.lower()} and more. Call 905-796-1515."
-    ask = wa_link(f"Hello, I would like a price for {name.lower()}.")
-    schema = ('<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":['
-              '{"@type":"ListItem","position":1,"name":"Home","item":"https://azprintingandsigns.ca/"},'
-              '{"@type":"ListItem","position":2,"name":"Products","item":"https://azprintingandsigns.ca/products/"},'
-              f'{{"@type":"ListItem","position":3,"name":"{esc(name)}","item":"https://azprintingandsigns.ca/products/{p["slug"]}/"}}]}}</script>\n')
-    sets = []
-    for stitle, items in p["sets"]:
-        dl = "".join(f'<div class="ty"><dt>{esc(n)}</dt><dd>{esc(x)}</dd></div>' for n, x, _ in items)
-        sets.append((f'<h3 class="set-h">{esc(stitle)}</h3>' if stitle else "") + f'<dl class="types">{dl}</dl>')
-    others = "".join(
-        f'<li><a href="{root}products/{o["slug"]}/">{tile_img(o, root, "(min-width: 760px) 14vw, 30vw")}<span>{esc(o["name"])}</span></a></li>'
-        for o in PRODUCTS if o["slug"] != p["slug"])
-    count = sum(len(items) for _, items in p["sets"])
-    h = head(root, title, desc, "", schema) + header(root, "products")
-    h += f'''
-<section class="page-head">
-  <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="{root}">Home</a> <span>/</span> <a href="{root}products/">Products</a> <span>/</span> <span aria-current="page">{esc(name)}</span></nav>
-    <div class="product-top">
-      <div class="product-text">
-        <h1>{esc(name)}</h1>
-        <p class="lede">{esc(p["intro"])}</p>
-        <p class="product-ctas"><a class="btn" href="{ask}">Get a price on WhatsApp</a><a class="text-link" href="tel:{SITE["phone_tel"]}">Or call {SITE["phone_display"]}</a></p>
-      </div>
-      <figure class="product-photo">{tile_img(p, root, "(min-width: 900px) 38vw, 92vw", lazy=False)}</figure>
-    </div>
-  </div>
-</section>
-
-<section class="product-types" aria-labelledby="types-h">
-  <div class="wrap">
-    <h2 id="types-h">Types of {esc(name.lower())}</h2>
-    <p class="types-note">{count} options, each explained. Not sure which you need? Tell us what it is for and we will suggest one.</p>
-    {"".join(sets)}
-  </div>
-</section>
-
-<section class="product-ask">
-  <div class="wrap product-ask-in">
-    <h2>Ready for a price?</h2>
-    <p>Send your file, or tell us what you have in mind, and we will come back with a quote.</p>
-    <p class="product-ctas"><a class="btn" href="{ask}">WhatsApp us</a><a class="btn btn-line" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a><a class="text-link" href="{root}#contact">Or send a message</a></p>
-  </div>
-</section>
-
-<section class="others" aria-labelledby="others-h">
-  <div class="wrap">
-    <h2 id="others-h">Other products</h2>
-    <ul class="others-list">{others}</ul>
-  </div>
-</section>
-'''
-    return h + footer(root)
-
-
-# ---------------------------------------------------------------------------
 # files, verify, confirm
 # ---------------------------------------------------------------------------
 
 def outputs():
     yield "index.html", home()
-    yield "products/index.html", products_index()
-    for p in PRODUCTS:
-        yield f"products/{p['slug']}/index.html", product_page(p)
 
 
 def sitemap():
-    urls = [SITE["domain"], SITE["domain"] + "products/"] + [SITE["domain"] + f"products/{p['slug']}/" for p in PRODUCTS]
+    urls = [SITE["domain"]]
     body = "".join(f"  <url><loc>{u}</loc></url>\n" for u in urls)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}</urlset>\n'
 
@@ -1048,6 +927,8 @@ def verify():
     if sorted(BENTO_AREAS) != sorted(slugs):
         fail("BENTO_AREAS must place every product exactly once")
     for path, h in outputs():
+        if re.search(r'href="[^"]*products/', h):
+            fail(f"{path}: links to a product page; this site is one landing page")
         text = re.sub(r"<[^>]+>", " ", h)
         for b in BANNED:
             if b in text:
@@ -1067,7 +948,7 @@ def verify():
                 f = part.strip().split(" ")[0]
                 if not os.path.exists(os.path.normpath(os.path.join(d, f))):
                     fail(f"{path}: srcset names missing file {f}")
-    print(f"verify ok: {len(PRODUCTS)} products, {len(names)} type lines, {2 + len(PRODUCTS)} pages")
+    print(f"verify ok: {len(PRODUCTS)} products, {len(names)} type lines, {len(list(outputs()))} page")
 
 
 def confirm_list():
