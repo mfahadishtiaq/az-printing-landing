@@ -199,6 +199,26 @@
   presetSwitch('data-bands', 'How it works', { cream: 'Cream', black: 'Black', grey: 'Grey' }, 'az-bands', 'bands', 'bands-switch', '.process');
   presetSwitch('data-promise', 'Colour tiles', { charcoal: 'Charcoal', deepred: 'Deep red', stone: 'Stone' }, 'az-promise', 'promise', 'promise-switch', '.promise');
 
+  /* ---------- product group tabs (print2go pass, 2026-10-06) ---------- */
+  var ptabs = [].slice.call(document.querySelectorAll('.ptab'));
+  function pselect(i, focus) {
+    ptabs.forEach(function (t, k) {
+      t.setAttribute('aria-selected', k === i ? 'true' : 'false');
+      t.tabIndex = k === i ? 0 : -1;
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      if (panel) panel.hidden = k !== i;
+    });
+    if (focus) ptabs[i].focus();
+  }
+  ptabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { pselect(i, false); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); pselect((i + 1) % ptabs.length, true); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); pselect((i - 1 + ptabs.length) % ptabs.length, true); }
+    });
+  });
+  if (ptabs.length) pselect(0, false);
+
   /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
   var vfPin = /[?&]vf=(\d+)/.exec(location.search);
   var vfEl = vfPin && document.querySelectorAll('.menu > a, .menu > .menu-dd')[+vfPin[1]];

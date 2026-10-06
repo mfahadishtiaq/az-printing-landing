@@ -362,7 +362,7 @@ STEP_ICON = {
 # 2026-10-06 later: band 2 is now the swatch tiles (Fahad picked concept 6a on
 # the Claude Design canvas "We Commit Banner Concepts"), which carry their own
 # colours, so the presets now colour band 1 (How it works) only.
-BAND_PRESETS = ("cream", "black", "grey")  # brand pass 2026-10-06 (was blush / plum / grey)
+BAND_PRESETS = ("white",)  # print2go pass: a plain white feature row under the hero (was cream / black / grey)
 # Background of the colour-tile band (Fahad 2026-10-06: stone "needs to pop
 # more"). First loads; the rest on a localhost switch until he settles it.
 PROMISE_BGS = ("charcoal", "deepred", "stone")
@@ -679,7 +679,10 @@ def first_sentence(text):
 # what loads, and js/site.js shows a switch ONLY on localhost when more than one
 # is listed. BEFORE GO-LIVE cut this to the one he keeps, so the live page ships
 # one copy of the catalogue, not two.
-CATALOG_LAYOUTS = ("shelves", "bento", "circles")  # circles = round-2 board option B, added 2026-10-06
+# PRINT2GO PASS (Fahad 2026-10-06 night: "the page is far too cluttered", reference
+# print2go.com): one layout, "tabs" = group tabs over a single row of light
+# product cards. shelves / bento / circles stay defined below but are off.
+CATALOG_LAYOUTS = ("tabs",)
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
 BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
                "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
@@ -720,6 +723,20 @@ def catalog_html(root):
         f'srcset="{root}images/client/tile-{sl}-480.jpg 480w, {root}images/client/tile-{sl}-800.jpg 800w" sizes="(min-width: 1000px) 12vw, 30vw" '
         f'alt="" width="480" height="480" loading="lazy"></span><b>{esc(by_slug(sl)["name"])}</b></a></li>'
         for _, _, ss in GROUPS for sl in ss) + '</ul>'
+    tabs = "".join(
+        f'<button class="ptab" type="button" role="tab" id="ptab-{gi}" aria-controls="ppanel-{gi}" aria-selected="{"true" if gi == 0 else "false"}">{esc(t)}</button>'
+        for gi, (t, _, _) in enumerate(GROUPS))
+    panels = "".join(
+        f'<ul class="pcards" role="tabpanel" id="ppanel-{gi}" aria-labelledby="ptab-{gi}"{"" if gi == 0 else " hidden"}>'
+        + "".join(
+            f'<li class="pcard"><a href="{root}products/{sl}/"><span class="pcard-img"><img src="{root}images/client/tile-{sl}-480.jpg" '
+            f'srcset="{root}images/client/tile-{sl}-480.jpg 480w, {root}images/client/tile-{sl}-800.jpg 800w" sizes="(min-width: 1100px) 160px, (min-width: 600px) 24vw, 46vw" '
+            f'alt="{esc(by_slug(sl)["alt"])}" width="480" height="480" loading="lazy"></span>'
+            f'<b>{esc(by_slug(sl)["name"])}</b><span class="pcard-go" aria-hidden="true">{ARROW}</span></a></li>'
+            for sl in ss) + '</ul>'
+        for gi, (_, _, ss) in enumerate(GROUPS))
+    views["tabs"] = (f'<div class="ptabs" role="tablist" aria-label="Product groups">{tabs}</div>{panels}'
+                     f'<p class="pall"><a href="{root}products/">See all {len(PRODUCTS)} products</a></p>')
     return "".join(
         f'<div class="cat-view cat-{v}" data-view="{v}"{"" if i == 0 else " hidden"}>{views[v]}</div>'
         for i, v in enumerate(CATALOG_LAYOUTS))
@@ -774,31 +791,28 @@ def promise_html():
 
 
 def doors_html(root):
-    """Two wide photo doors that widen on hover (the shop build's accordion)."""
+    """Two light cards: photo on top, words under it (print2go pass, 2026-10-06)."""
     out = []
     for img, kicker, head_, body, cta in DOORS:
         out.append(
-            f'<a class="door" href="#contact">'
-            f'<img class="door-bg" src="{root}images/tiles/{img}-900.jpg" srcset="{root}images/tiles/{img}-900.jpg 900w, {root}images/tiles/{img}.jpg 1600w" '
-            f'sizes="(min-width: 900px) 62vw, 92vw" alt="" width="1600" height="1000" loading="lazy">'
-            f'<span class="door-body"><small>{esc(kicker)}</small><h3>{esc(head_)}</h3>'
-            f'<span class="door-p">{esc(body)}</span>'
-            f'<span class="door-go">{esc(cta)}<span class="door-arrow">{ARROW}</span></span></span></a>')
+            f'<a class="dcard" href="#contact">'
+            f'<span class="dcard-img"><img src="{root}images/tiles/{img}-900.jpg" srcset="{root}images/tiles/{img}-900.jpg 900w, {root}images/tiles/{img}.jpg 1600w" '
+            f'sizes="(min-width: 900px) 600px, 92vw" alt="" width="1600" height="1000" loading="lazy"></span>'
+            f'<span class="dcard-body"><small>{esc(kicker)}</small><h3>{esc(head_)}</h3>'
+            f'<span class="dcard-p">{esc(body)}</span>'
+            f'<span class="dcard-go">{esc(cta)}{ARROW}</span></span></a>')
     return "".join(out)
 
 
 def industries_html(root):
-    """Five trades as tall tiles; on desktop the hovered one widens and shows
-    its line and the product it opens."""
+    """Five trades as light cards: photo, name, and the product it opens."""
     out = []
     for img, name, line, slug in INDUSTRIES:
         out.append(
-            f'<a class="ind-tile" href="{root}products/{slug}/">'
-            f'<img src="{root}images/tiles/{img}-560.jpg" srcset="{root}images/tiles/{img}-560.jpg 560w, {root}images/tiles/{img}.jpg 900w" '
-            f'sizes="(min-width: 1024px) 34vw, 50vw" alt="" width="900" height="1200" loading="lazy">'
-            f'<span class="ind-cap"><span class="ind-name">{esc(name)}</span>'
-            f'<span class="ind-more"><span class="ind-line">{esc(line)}'
-            f'<span class="ind-go">{esc(by_slug(slug)["name"])}{ARROW}</span></span></span></span></a>')
+            f'<a class="icard" href="{root}products/{slug}/">'
+            f'<span class="icard-img"><img src="{root}images/tiles/{img}-560.jpg" srcset="{root}images/tiles/{img}-560.jpg 560w, {root}images/tiles/{img}.jpg 900w" '
+            f'sizes="(min-width: 1100px) 230px, 46vw" alt="" width="900" height="1200" loading="lazy"></span>'
+            f'<b>{esc(name)}</b><span class="icard-go">{esc(by_slug(slug)["name"])}{ARROW}</span></a>')
     return "".join(out)
 
 
@@ -822,6 +836,7 @@ def home():
   <p class="hero-quality"{style_vars("quality")}>Premium quality</p>
 </section>
 
+{process_html()}
 <section class="catalog" id="products" aria-labelledby="products-h" data-layouts="{" ".join(CATALOG_LAYOUTS)}">
   <div class="wrap">
     <div class="catalog-head">
@@ -832,7 +847,6 @@ def home():
   </div>
 </section>
 
-{process_html()}
 <section class="welcome" id="about" aria-labelledby="welcome-h">
   <div class="wrap welcome-in">
     <div class="welcome-text">
@@ -849,15 +863,14 @@ def home():
 <section class="doors" aria-labelledby="doors-h">
   <div class="wrap">
     <div class="catalog-head"><h2 id="doors-h">Printing for events and businesses</h2></div>
-    <div class="doors-in">{doors_html(root)}</div>
+    <div class="dcards">{doors_html(root)}</div>
   </div>
 </section>
 
-{promise_html()}
 <section class="inds" aria-labelledby="inds-h">
   <div class="wrap">
     <div class="catalog-head"><h2 id="inds-h">Industries we serve</h2></div>
-    <div class="ind-row">{industries_html(root)}</div>
+    <div class="icards">{industries_html(root)}</div>
   </div>
 </section>
 

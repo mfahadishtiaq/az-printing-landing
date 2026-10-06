@@ -862,3 +862,88 @@ html[data-promise="stone"] .promise { --b-bg: #e9e1d6; --sw-eyebrow: #5f5346; --
 .layout-switch::-webkit-scrollbar { display: none; }
 .layout-switch button, .layout-switch span { flex: none; }
 .layout-switch button { white-space: nowrap; }
+
+/* =====================================================================
+   PRINT2GO PASS (Fahad 2026-10-06 night: "the page is far too cluttered",
+   reference print2go.com). Everything below the hero goes light: white and
+   soft-grey surfaces, centred plain headings, light product / industry /
+   event cards (photo, name under it, a small red arrow), a light top strip
+   and footer, more air. The hero is untouched (the client's banner).
+   This block overrides the earlier section styles; it sits last on purpose.
+   ===================================================================== */
+:root { --sec-w: 1240px; --line: #ecebea; --soft: #f5f4f2; --muted: #5a5458; }
+
+.util { background: var(--soft); color: var(--muted); border-bottom: 1px solid var(--line); }
+.util a { color: var(--ink); }
+
+.process .wrap, .catalog .wrap, .welcome .wrap, .doors .wrap, .inds .wrap, .contact .wrap { max-width: var(--sec-w); }
+.catalog, .welcome, .doors, .inds, .contact { padding: clamp(3rem, 6vw, 5.5rem) 0; }
+.doors, .inds { padding-top: 0; }
+.catalog-head { max-width: 40rem; margin: 0 auto clamp(1.5rem, 3vw, 2.4rem); text-align: center; }
+.catalog-head h2, .process h2, .contact h2, .welcome h2 { font: 700 clamp(1.6rem, 2.4vw, 2.2rem)/1.2 var(--sans); letter-spacing: -.01em; color: var(--ink); text-transform: none; }
+.catalog-head p { font-size: 1rem; line-height: 1.55; color: var(--muted); margin: .45rem 0 0; }
+.contact h2 { text-align: center; margin-bottom: clamp(1.6rem, 3vw, 2.4rem); }
+.welcome h2 { margin-bottom: 1rem; }
+.welcome p { font-size: 1.02rem; color: #3d383a; }
+.welcome-photo img { border-radius: 16px; }
+
+/* how it works: a white feature row right under the hero */
+.process { --b-bg: #fff; padding: clamp(2.6rem, 5vw, 4rem) 0; border-bottom: 1px solid var(--line); }
+.process .step-ic { background: #fff; border: 1.5px solid #e6e2e0; box-shadow: none; }
+
+/* what we do: group tabs over one row of light product cards */
+.ptabs { display: flex; justify-content: center; flex-wrap: wrap; gap: .2rem 2rem; margin: 0 auto clamp(1.6rem, 3vw, 2.4rem); border-bottom: 1px solid var(--line); }
+.ptab { font: 600 .98rem/1.2 var(--sans); color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: .9rem .1rem; min-height: 44px; cursor: pointer; }
+.ptab:hover { color: var(--ink); }
+.ptab[aria-selected="true"] { color: var(--red); border-bottom-color: var(--red); }
+.pcards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.8rem 1rem; }
+.pcards[hidden] { display: none; }
+@media (min-width: 600px) { .pcards { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .pcards { display: flex; justify-content: center; gap: 1.4rem; } .pcard { flex: 0 0 140px; } }
+.pcard a { display: flex; flex-direction: column; align-items: center; gap: .7rem; text-align: center; text-decoration: none; color: var(--ink); }
+.pcard-img { width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; overflow: hidden; background: var(--soft); }
+.pcard-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.22, 1, .36, 1); }
+.pcard a:hover .pcard-img img, .pcard a:focus-visible .pcard-img img { transform: scale(1.05); }
+.pcard b { font: 600 .95rem/1.3 var(--sans); }
+.pcard a:hover b { color: var(--red); }
+.pcard-go, .dcard-go svg, .icard-go svg { flex: none; }
+.pcard-go { width: 30px; height: 30px; border-radius: 50%; background: var(--red); display: grid; place-items: center; transition: background-color .2s ease; }
+.pcard a:hover .pcard-go { background: var(--red-deep); }
+.pcard-go svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.pall { text-align: center; margin: clamp(1.8rem, 3vw, 2.6rem) 0 0; }
+.pall a { font-weight: 700; color: var(--red); text-decoration: none; border-bottom: 2px solid rgba(160, 29, 32, .3); padding-bottom: 2px; }
+.pall a:hover { border-bottom-color: var(--red); }
+
+/* printing for events and businesses: two light cards */
+.dcards { display: grid; gap: 1.2rem; }
+@media (min-width: 760px) { .dcards { grid-template-columns: 1fr 1fr; gap: 1.6rem; } }
+.dcard { display: flex; flex-direction: column; background: var(--soft); border-radius: 16px; overflow: hidden; text-decoration: none; color: var(--ink); transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease; }
+.dcard:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(18, 12, 10, .1); }
+.dcard-img { aspect-ratio: 16 / 9; overflow: hidden; }
+.dcard-img img { width: 100%; height: 100%; object-fit: cover; }
+.dcard-body { display: flex; flex-direction: column; gap: .5rem; padding: 1.4rem 1.5rem 1.6rem; }
+.dcard-body small { font: 700 .72rem/1.2 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: #7a706b; }
+.dcard h3 { font: 700 1.35rem/1.25 var(--sans); margin: 0; color: var(--ink); }
+.dcard-p { color: #4a4446; line-height: 1.55; }
+.dcard-go { display: inline-flex; align-items: center; gap: .4rem; margin-top: .3rem; font-weight: 700; color: var(--red); }
+.dcard-go svg, .icard-go svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s ease; }
+.dcard:hover .dcard-go svg, .icard:hover .icard-go svg { transform: translateX(3px); }
+
+/* industries we serve: five light cards */
+.icards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.8rem 1rem; }
+.icards > :last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - .5rem); }
+@media (min-width: 900px) { .icards { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.4rem; } .icards > :last-child:nth-child(odd) { grid-column: auto; width: auto; } }
+.icard { display: flex; flex-direction: column; align-items: center; gap: .5rem; text-align: center; text-decoration: none; color: var(--ink); }
+.icard-img { width: 100%; aspect-ratio: 4 / 5; border-radius: 14px; overflow: hidden; background: var(--soft); margin-bottom: .25rem; }
+.icard-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.22, 1, .36, 1); }
+.icard:hover .icard-img img { transform: scale(1.05); }
+.icard b { font: 700 1rem/1.3 var(--sans); }
+.icard-go { display: inline-flex; align-items: center; gap: .3rem; font-size: .86rem; font-weight: 600; color: var(--red); }
+
+/* light footer */
+.foot { background: var(--soft); color: var(--muted); border-top: 1px solid var(--line); }
+.foot .brand-word, .foot-h, .foot a { color: var(--ink); }
+.foot-base { color: #7a706b; }
+
+@media (prefers-reduced-motion: reduce) { .pcard-img img, .icard-img img, .dcard, .dcard-go svg, .icard-go svg { transition: none; } .dcard:hover { transform: none; } }
+@media (max-width: 599px) { .ptabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; gap: 1.4rem; margin-left: calc(-1 * var(--gutter)); margin-right: calc(-1 * var(--gutter)); padding: 0 var(--gutter); scrollbar-width: none; } .ptabs::-webkit-scrollbar { display: none; } .ptab { flex: none; } }
