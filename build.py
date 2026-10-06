@@ -436,6 +436,7 @@ def head(root, title, description, extra="", schema=""):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Merriweather:wght@900&family=Montserrat:wght@400..900&display=swap">
 {extra}<link rel="stylesheet" href="{root}css/client.css">
+<link rel="icon" href="{root}images/az-mark.svg" type="image/svg+xml">
 <link rel="icon" href="{root}images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="{root}images/apple-touch-icon.png">
 {schema}</head>
@@ -443,10 +444,14 @@ def head(root, title, description, extra="", schema=""):
 '''
 
 
+# THE MARK (Fahad 2026-10-06): images/az-mark.svg, a vector redrawn from the
+# shop's own channel-letter sign (photo, perspective-corrected, equal strokes),
+# in the lit sign's colours. The earlier AI Logo.png render was WRONG (split Z,
+# misplaced A) and is retired. Source + build script: ../04 - Brand/.
 def brand(root):
     home = root or "./"
     return (f'<a class="brand" href="{home}" aria-label="AZ Printing &amp; Signs, home">'
-            f'<img src="{root}images/client/mark-240.png" alt="" width="253" height="240">'
+            f'<img src="{root}images/az-mark.svg" alt="" width="47" height="48">'
             f'<span class="brand-word">AZ Printing<br>&amp; Signs</span></a>')
 
 
@@ -576,7 +581,7 @@ def business_schema():
             '"addressLocality":"Brampton","addressRegion":"ON","postalCode":"L6Y 4E6","addressCountry":"CA"},'
             '"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"10:30","closes":"19:00"},'
             '{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"12:00","closes":"16:00"}],'
-            '"areaServed":["Brampton","Mississauga"],"knowsLanguage":["en","pa","ur","hi"]}</script>\n')
+            '"logo":"https://azprintingandsigns.ca/images/az-logo-512.png","areaServed":["Brampton","Mississauga"],"knowsLanguage":["en","pa","ur","hi"]}</script>\n')
 
 
 # ---------------------------------------------------------------------------
