@@ -197,6 +197,7 @@
     set(q ? q[1] : (local && saved && presets.indexOf(saved) > -1 ? saved : presets[0]), false);
   }
   presetSwitch('data-bands', 'How it works', { cream: 'Cream', black: 'Black', grey: 'Grey' }, 'az-bands', 'bands', 'bands-switch', '.process');
+  presetSwitch('data-cards', 'Card size', { now: 'As now', four: '4 across', three: '3 across' }, 'az-cards', 'cards', 'cards-switch', '.catalog');
   presetSwitch('data-promise', 'Colour tiles', { charcoal: 'Charcoal', deepred: 'Deep red', stone: 'Stone' }, 'az-promise', 'promise', 'promise-switch', '.promise');
 
   /* ---------- product group tabs (print2go pass, 2026-10-06) ---------- */

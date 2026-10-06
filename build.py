@@ -369,6 +369,10 @@ BAND_PRESETS = ("white",)  # print2go pass: a plain white feature row under the 
 # Background of the colour-tile band (Fahad 2026-10-06: stone "needs to pop
 # more"). First loads; the rest on a localhost switch until he settles it.
 PROMISE_BGS = ("charcoal", "deepred", "stone")
+# What we do card size (Fahad 2026-10-06: "cards are too small"): the FIRST
+# loads; a localhost-only switch flips them, ?cards=<name> anywhere. Board:
+# 04 - Decision Boards/2026-10-06-what-we-do-card-size.html. Cut to one.
+CARD_PRESETS = ("now", "four", "three")
 SWATCHES = [  # (verb, label, colour, ink); the client's hero line + slogan,
     # in the BRAND PALETTE since 2026-10-06 (AZ Brand Colours.pdf): the hexes on
     # the tiles are the brand's own. Amber takes dark ink (white fails on it).
@@ -423,7 +427,7 @@ def tile_img(p, root, sizes, lazy=True):
 
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
-<html lang="en-CA" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
+<html lang="en-CA" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}" data-cards="{CARD_PRESETS[0]}" data-cards-presets="{" ".join(CARD_PRESETS)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -716,7 +720,7 @@ def catalog_html(root):
         f'<ul class="pcards" role="tabpanel" id="ppanel-{gi}" aria-labelledby="ptab-{gi}"{"" if gi == 0 else " hidden"}>'
         + "".join(
             f'<li class="pcard"><a href="{root}#contact"><span class="pcard-img"><img src="{root}images/client/tile-{sl}-480.jpg" '
-            f'srcset="{root}images/client/tile-{sl}-480.jpg 480w, {root}images/client/tile-{sl}-800.jpg 800w" sizes="(min-width: 1100px) 160px, (min-width: 600px) 24vw, 46vw" '
+            f'srcset="{root}images/client/tile-{sl}-480.jpg 480w, {root}images/client/tile-{sl}-800.jpg 800w" sizes="(min-width: 1100px) 370px, (min-width: 600px) 32vw, 48vw" '
             f'alt="{esc(by_slug(sl)["alt"])}" width="480" height="480" loading="lazy"></span>'
             f'<b>{esc(by_slug(sl)["name"])}</b><span class="pcard-go" aria-hidden="true">{ARROW}</span></a></li>'
             for sl in ss) + '</ul>'
