@@ -163,37 +163,40 @@
     setView(q ? q[1] : (local && saved && names.indexOf(saved) > -1 ? saved : names[0]), false);
   }
 
-  /* ---------- band colour presets: LOCALHOST-ONLY switch ----------
-     html[data-bands] picks the colours of the process and catchphrase bands
-     (build.py BAND_PRESETS; the first is the default). ?bands=<name> anywhere. */
-  (function () {
+  /* ---------- colour presets: LOCALHOST-ONLY switches ----------
+     Each preset group is an attribute on <html> (build.py writes the first
+     value as the default and the full list beside it). On localhost a small
+     switch per group flips it and remembers the pick; ?<query>=<name> works
+     anywhere for captures. Visitors on the real domain only ever get the first. */
+  function presetSwitch(attr, label, names, key, query, cls) {
     var root = document.documentElement;
-    var presets = (root.getAttribute('data-band-presets') || '').split(' ').filter(Boolean);
+    var presets = (root.getAttribute(attr + '-presets') || '').split(' ').filter(Boolean);
     if (!presets.length) return;
     var local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-    var NAME = { blush: 'Blush', plum: 'Plum', grey: 'Grey' };
     var bar = null;
     function set(n, remember) {
       if (presets.indexOf(n) < 0) return;
-      root.setAttribute('data-bands', n);
+      root.setAttribute(attr, n);
       if (bar) bar.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-p') === n ? 'true' : 'false'); });
-      if (remember) { try { localStorage.setItem('az-bands', n); } catch (e) {} }
+      if (remember) { try { localStorage.setItem(key, n); } catch (e) {} }
     }
     if (local && presets.length > 1) {
       bar = document.createElement('div');
-      bar.className = 'layout-switch bands-switch';
+      bar.className = 'layout-switch ' + cls;
       bar.setAttribute('role', 'group');
-      bar.setAttribute('aria-label', 'Band colours (only on localhost)');
-      bar.innerHTML = '<span>How it works</span>' + presets.map(function (p) {
-        return '<button type="button" data-p="' + p + '">' + (NAME[p] || p) + '</button>';
+      bar.setAttribute('aria-label', label + ' colours (only on localhost)');
+      bar.innerHTML = '<span>' + label + '</span>' + presets.map(function (p) {
+        return '<button type="button" data-p="' + p + '">' + (names[p] || p) + '</button>';
       }).join('');
       bar.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) set(b.getAttribute('data-p'), true); });
       document.body.appendChild(bar);
     }
-    var q = /[?&]bands=([a-z-]+)/.exec(location.search), saved = null;
-    try { saved = localStorage.getItem('az-bands'); } catch (e) {}
+    var q = new RegExp('[?&]' + query + '=([a-z-]+)').exec(location.search), saved = null;
+    try { saved = localStorage.getItem(key); } catch (e) {}
     set(q ? q[1] : (local && saved && presets.indexOf(saved) > -1 ? saved : presets[0]), false);
-  })();
+  }
+  presetSwitch('data-bands', 'How it works', { blush: 'Blush', plum: 'Plum', grey: 'Grey' }, 'az-bands', 'bands', 'bands-switch');
+  presetSwitch('data-promise', 'Colour tiles', { charcoal: 'Charcoal', lilac: 'Lilac', sand: 'Sand' }, 'az-promise', 'promise', 'promise-switch');
 
   /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
   var vfPin = /[?&]vf=(\d+)/.exec(location.search);

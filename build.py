@@ -365,6 +365,9 @@ STEP_ICON = {
 # the Claude Design canvas "We Commit Banner Concepts"), which carry their own
 # colours, so the presets now colour band 1 (How it works) only.
 BAND_PRESETS = ("blush", "plum", "grey")
+# Background of band 2, the colour tiles (Fahad 2026-10-06: "a different
+# coloured background for this"). First loads; the rest on a localhost switch.
+PROMISE_BGS = ("charcoal", "lilac", "sand")
 SWATCHES = [  # (verb, label, colour); the client's hero line + slogan
     ("print", "PRINT", "#6A2C87"),
     ("design", "DESIGN", "#9F257D"),
@@ -417,7 +420,7 @@ def tile_img(p, root, sizes, lazy=True):
 
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
-<html lang="en-CA" data-bands="{BAND_PRESETS[0]}" data-band-presets="{" ".join(BAND_PRESETS)}">
+<html lang="en-CA" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -757,8 +760,8 @@ def promise_html():
     # Premium restyle (Fahad 2026-10-06, a paint-palette pin as inspiration):
     # rounded ink blocks, the name in italic serif, the code spaced out below.
     tiles = "".join(
-        f'<li class="sw" style="background:{c}"><span class="sw-name">We {v.capitalize()}</span>'
-        f'<span class="sw-hex">{c.lstrip("#")}</span></li>'
+        f'<li class="sw" style="background:{c}"><span class="sw-hex">{c}</span>'
+        f'<span class="sw-name">We {v.capitalize()}</span></li>'
         for v, lab, c in SWATCHES)
     return f'''<section class="band promise" aria-labelledby="promise-h">
   <div class="wrap">
