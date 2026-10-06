@@ -219,6 +219,36 @@
   });
   if (ptabs.length) pselect(0, false);
 
+  /* ---------- types window (Fahad 2026-10-06): a product card opens its
+     <dialog> of types. The card's href (#contact) is the no-JS fallback.
+     [data-close] closes; a click on the backdrop closes; Esc is native.
+     Lenis is restarted BEFORE a close-and-go link reaches its anchor handler,
+     or a stopped Lenis would swallow the scroll to #contact. ---------- */
+  function openTypes(slug) {
+    var d = document.getElementById('types-' + slug);
+    if (!d || typeof d.showModal !== 'function') return false;
+    d.showModal();
+    html.classList.add('dlg-open'); lenis('stop');
+    var b = d.querySelector('.tdlg-body'); if (b) b.scrollTop = 0;
+    return true;
+  }
+  function shut(d) { html.classList.remove('dlg-open'); lenis('start'); if (d.open) d.close(); }
+  [].forEach.call(document.querySelectorAll('[data-product]'), function (a) {
+    a.addEventListener('click', function (e) { if (openTypes(a.getAttribute('data-product'))) e.preventDefault(); });
+  });
+  [].forEach.call(document.querySelectorAll('dialog.tdlg'), function (d) {
+    d.addEventListener('close', function () { html.classList.remove('dlg-open'); lenis('start'); });
+    d.addEventListener('click', function (e) { if (e.target === d || e.target.closest('[data-close]')) shut(d); });
+  });
+  // Esc is native for a modal <dialog>; this covers engines and embeds where
+  // the built-in close does not fire. shut() is a no-op on a closed dialog.
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    [].forEach.call(document.querySelectorAll('dialog.tdlg[open]'), function (d) { e.preventDefault(); shut(d); });
+  });
+  var tq = /[?&]types=([a-z-]+)/.exec(location.search);
+  if (tq) openTypes(tq[1]);
+
   /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
   var vfPin = /[?&]vf=(\d+)/.exec(location.search);
   var vfEl = vfPin && document.querySelectorAll('.menu > a, .menu > .menu-dd')[+vfPin[1]];

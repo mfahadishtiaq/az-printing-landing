@@ -710,7 +710,7 @@ def catalog_html(root):
     panels = "".join(
         f'<ul class="pcards" role="tabpanel" id="ppanel-{gi}" aria-labelledby="ptab-{gi}"{"" if gi == 0 else " hidden"}>'
         + "".join(
-            f'<li class="pcard"><a href="{root}#contact"><span class="pcard-img"><img src="{root}images/client/tile-{sl}-480.jpg" '
+            f'<li class="pcard"><a href="{root}#contact" data-product="{sl}" aria-haspopup="dialog"><span class="pcard-img"><img src="{root}images/client/tile-{sl}-480.jpg" '
             f'srcset="{root}images/client/tile-{sl}-480.jpg 480w, {root}images/client/tile-{sl}-800.jpg 800w" sizes="(min-width: 1100px) 270px, (min-width: 900px) 24vw, (min-width: 600px) 32vw, 48vw" '
             f'alt="{esc(by_slug(sl)["alt"])}" width="480" height="480" loading="lazy"></span>'
             f'<b>{esc(by_slug(sl)["name"])}</b><span class="pcard-go" aria-hidden="true">{ARROW}</span></a></li>'
@@ -723,6 +723,46 @@ def catalog_html(root):
 
 
 ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+
+
+# THE TYPES WINDOW (Fahad 2026-10-06: "if you click into a service tile it
+# opens up in an enlarge window, displaying all the different types ... text
+# no photos"). One native <dialog> per product, in the page HTML (the type
+# lists are indexable text now the product pages are gone). Words are the old
+# product page's, unchanged. js/site.js opens them; ?types=<slug> opens one at
+# load for captures.
+def types_dialogs(root):
+    group_of = {s: t for t, _, ss in GROUPS for s in ss}
+    out = []
+    for p in PRODUCTS:
+        sl, name = p["slug"], p["name"]
+        count = sum(len(items) for _, items in p["sets"])
+        sets = "".join(
+            (f'<h4 class="tdlg-set">{esc(stitle)}</h4>' if stitle else "")
+            + '<dl class="tdlg-types">'
+            + "".join(f'<div class="tdlg-ty"><dt>{esc(n)}</dt><dd>{esc(x)}</dd></div>' for n, x, _ in items)
+            + '</dl>'
+            for stitle, items in p["sets"])
+        ask = wa_link(f"Hello, I would like a price for {name.lower()}.")
+        out.append(f'''<dialog class="tdlg" id="types-{sl}" aria-labelledby="types-{sl}-h">
+  <div class="tdlg-head">
+    <p class="tdlg-group">{esc(group_of[sl])}</p>
+    <h2 id="types-{sl}-h">{esc(name)}</h2>
+    <p class="tdlg-intro">{esc(p["intro"])}</p>
+    <button class="tdlg-x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="tdlg-body" data-lenis-prevent>
+    <h3 class="tdlg-h">Types of {esc(name.lower())}</h3>
+    <p class="tdlg-note">{count} options, each explained. Not sure which you need? Tell us what it is for and we will suggest one.</p>
+    {sets}
+  </div>
+  <div class="tdlg-foot">
+    <a class="btn" href="{ask}"><span class="tdlg-long">Get a price on </span>WhatsApp</a>
+    <a class="btn btn-line" href="{root}#contact" data-close>Send a message</a>
+    <a class="tdlg-call" href="tel:{SITE["phone_tel"]}">Or call {SITE["phone_display"]}</a>
+  </div>
+</dialog>''')
+    return "\n".join(out)
 
 
 def process_html():
@@ -812,11 +852,12 @@ def home():
   <div class="wrap">
     <div class="catalog-head">
       <h2 id="products-h">What we do</h2>
-      <p>Fourteen products and services. Choose one to ask us for a quote.</p>
+      <p>Fourteen products and services. Choose one to see its types, sizes and finishes, each explained in plain words.</p>
     </div>
     {catalog_html(root)}
   </div>
 </section>
+{types_dialogs(root)}
 
 <section class="welcome" id="about" aria-labelledby="welcome-h">
   <div class="wrap welcome-in">
@@ -922,6 +963,11 @@ def verify():
     if sorted(BENTO_AREAS) != sorted(slugs):
         fail("BENTO_AREAS must place every product exactly once")
     for path, h in outputs():
+        if path == "index.html":
+            dlg = set(re.findall(r'<dialog class="tdlg" id="types-([a-z-]+)"', h))
+            wired = set(re.findall(r'data-product="([a-z-]+)"', h))
+            if dlg != {p["slug"] for p in PRODUCTS} or not wired <= dlg:
+                fail("every product needs one types window, and every card must open one")
         if re.search(r'href="[^"]*products/', h):
             fail(f"{path}: links to a product page; this site is one landing page")
         text = re.sub(r"<[^>]+>", " ", h)
