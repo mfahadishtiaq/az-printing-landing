@@ -755,9 +755,9 @@ def promise_html():
     we deliver (concept 6a, Fahad 2026-10-06). The buttons and the languages
     line were removed on his ask the same night: the tiles stand alone."""
     tiles = "".join(
-        f'<li class="sw"><span class="sw-ink" style="background:{c}"><span class="sw-n">{i:02d}</span>'
+        f'<li class="sw"><span class="sw-ink" style="background:{c}"><span class="sw-top"><span class="sw-n">{i:02d}</span><span class="sw-hex">{c}</span></span>'
         f'<span class="sw-word"><span>we</span><b>{v}</b></span></span>'
-        f'<span class="sw-label"><b>{lab}</b><i>{c}</i></span></li>'
+        f'<span class="sw-label"><b>{lab}</b></span></li>'
         for i, (v, lab, c) in enumerate(SWATCHES, 1))
     return f'''<section class="band promise" aria-labelledby="promise-h">
   <div class="wrap">

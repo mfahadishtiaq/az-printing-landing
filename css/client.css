@@ -850,3 +850,7 @@ html[data-bands="plum"] .step { box-shadow: none; border: 1px solid rgba(255, 25
 .layout-switch::-webkit-scrollbar { display: none; }
 .layout-switch button, .layout-switch span { flex: none; }
 .layout-switch button { white-space: nowrap; }
+/* the colour code sits inside the colour box, top right (Fahad 2026-10-06) */
+.sw-top { display: flex; justify-content: space-between; align-items: baseline; }
+.sw-hex { font: 400 .72rem/1 "Space Mono", ui-monospace, Menlo, monospace; letter-spacing: .04em; opacity: .8; }
+@media (min-width: 1000px) { .sw-hex { font-size: .82rem; } }
