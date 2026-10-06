@@ -196,7 +196,6 @@
     set(q ? q[1] : (local && saved && presets.indexOf(saved) > -1 ? saved : presets[0]), false);
   }
   presetSwitch('data-bands', 'How it works', { blush: 'Blush', plum: 'Plum', grey: 'Grey' }, 'az-bands', 'bands', 'bands-switch');
-  presetSwitch('data-promise', 'Colour tiles', { charcoal: 'Charcoal', lilac: 'Lilac', sand: 'Sand' }, 'az-promise', 'promise', 'promise-switch');
 
   /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
   var vfPin = /[?&]vf=(\d+)/.exec(location.search);

@@ -827,12 +827,10 @@ html[data-bands="plum"] .step { box-shadow: none; border: 1px solid rgba(255, 25
    strip, the name in italic serif (Cormorant Garamond, this band only), the
    colour code in small spaced capitals under it. */
 /* 2026-10-06, later: names CENTRED and bigger, the code top-left with its #,
-   and the band on its own background (PROMISE_BGS: charcoal default, lilac,
-   sand; html[data-promise]). Name size follows the tile's width (cqw) so "We
+   and the band on its own background: LILAC, Fahad's pick over charcoal and
+   sand the same night. Name size follows the tile's width (cqw) so "We
    Deliver" fits on one line from a phone to a wide screen. */
-.promise { --b-bg: radial-gradient(1100px 420px at 50% 0%, rgba(159, 37, 125, .28), transparent 72%), #231b21; --sw-eyebrow: #cdbcc8; --sw-edge: rgba(255, 255, 255, .12); padding: clamp(2.8rem, 5.5vw, 4.8rem) 0; }
-html[data-promise="lilac"] .promise { --b-bg: #ebe3f1; --sw-eyebrow: #5e4f68; --sw-edge: rgba(255, 255, 255, 0); }
-html[data-promise="sand"] .promise { --b-bg: #ebe1d4; --sw-eyebrow: #66574a; --sw-edge: rgba(255, 255, 255, 0); }
+.promise { --b-bg: #ebe3f1; --sw-eyebrow: #5e4f68; --sw-edge: rgba(255, 255, 255, 0); padding: clamp(2.8rem, 5.5vw, 4.8rem) 0; }
 .sw-head { margin-bottom: clamp(1.2rem, 2.2vw, 1.7rem); }
 .sw-eyebrow { margin: 0; font: 800 .75rem/1.2 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--sw-eyebrow); }
 .swatches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
@@ -845,8 +843,6 @@ html[data-promise="sand"] .promise { --b-bg: #ebe1d4; --sw-eyebrow: #66574a; --s
 /* the localhost colour switch sits above the layout switch */
 .layout-switch.bands-switch { bottom: 64px; }
 @media (max-width: 759px) { .layout-switch.bands-switch { bottom: calc(3.6rem + 60px); } }
-.layout-switch.promise-switch { bottom: 114px; }
-@media (max-width: 759px) { .layout-switch.promise-switch { bottom: calc(3.6rem + 110px); } }
 .layout-switch { max-width: calc(100vw - 28px); overflow-x: auto; scrollbar-width: none; }
 .layout-switch::-webkit-scrollbar { display: none; }
 .layout-switch button, .layout-switch span { flex: none; }
