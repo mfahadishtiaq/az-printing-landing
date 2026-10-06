@@ -719,16 +719,13 @@ def home():
   <p class="hero-quality"{style_vars("quality")}>Premium quality</p>
 </section>
 
-<section class="welcome" id="about" aria-labelledby="welcome-h">
-  <div class="wrap welcome-in">
-    <div class="welcome-text">
-      <h2 id="welcome-h">Welcome to Brampton<br>AZ Printing &amp; Signs</h2>
-      <p>AZ PRINTING &amp; SIGNS is your one-stop destination for professional printing, signage, graphic design, and branding services in Brampton.</p>
-      <p>Conveniently located at 499 Ray Lawson Blvd, we offer digital printing, Xerox promotional printing, photocopying (Photo Stat), scanning, spiral binding, and custom signage, including window graphics.</p>
-      <p>Our qualified designer also provides logo design, brand identity, complete rebranding, and marketing design services to help businesses build a professional and consistent image.</p>
-      <p>From everyday printing to complete branding solutions, AZ PRINTING &amp; SIGNS is here to bring your ideas to life with quality, creativity, and reliable service.<br><a class="contact-link" href="#contact">Contact us</a> today to learn more about how we can help you.</p>
+<section class="catalog" id="products" aria-labelledby="products-h">
+  <div class="wrap">
+    <div class="catalog-head">
+      <h2 id="products-h">What we do</h2>
+      <p>Fourteen products and services. Choose one to see its types, sizes and finishes, each explained in plain words.</p>
     </div>
-    <figure class="welcome-photo"><img src="images/client/storefront-1200.jpg" srcset="images/client/storefront-800.jpg 800w, images/client/storefront-1200.jpg 1200w" sizes="(min-width: 760px) 44vw, 92vw" alt="The AZ Printing &amp; Signs storefront at 499 Ray Lawson Blvd, Brampton: the sign, the phone number and the window listings" width="1200" height="800" loading="lazy"></figure>
+    {catalog_html(root)}
   </div>
 </section>
 
@@ -742,13 +739,16 @@ def home():
   </div>
 </section>
 
-<section class="catalog" id="products" aria-labelledby="products-h">
-  <div class="wrap">
-    <div class="catalog-head">
-      <h2 id="products-h">What we do</h2>
-      <p>Fourteen products and services. Choose one to see its types, sizes and finishes, each explained in plain words.</p>
+<section class="welcome" id="about" aria-labelledby="welcome-h">
+  <div class="wrap welcome-in">
+    <div class="welcome-text">
+      <h2 id="welcome-h">Welcome to Brampton<br>AZ Printing &amp; Signs</h2>
+      <p>AZ PRINTING &amp; SIGNS is your one-stop destination for professional printing, signage, graphic design, and branding services in Brampton.</p>
+      <p>Conveniently located at 499 Ray Lawson Blvd, we offer digital printing, Xerox promotional printing, photocopying (Photo Stat), scanning, spiral binding, and custom signage, including window graphics.</p>
+      <p>Our qualified designer also provides logo design, brand identity, complete rebranding, and marketing design services to help businesses build a professional and consistent image.</p>
+      <p>From everyday printing to complete branding solutions, AZ PRINTING &amp; SIGNS is here to bring your ideas to life with quality, creativity, and reliable service.<br><a class="contact-link" href="#contact">Contact us</a> today to learn more about how we can help you.</p>
     </div>
-    {catalog_html(root)}
+    <figure class="welcome-photo"><img src="images/client/storefront-1200.jpg" srcset="images/client/storefront-800.jpg 800w, images/client/storefront-1200.jpg 1200w" sizes="(min-width: 760px) 44vw, 92vw" alt="The AZ Printing &amp; Signs storefront at 499 Ray Lawson Blvd, Brampton: the sign, the phone number and the window listings" width="1200" height="800" loading="lazy"></figure>
   </div>
 </section>
 
@@ -756,6 +756,16 @@ def home():
   <div class="wrap">
     <div class="catalog-head"><h2 id="doors-h">Printing for events and businesses</h2></div>
     <div class="doors-in">{doors_html(root)}</div>
+  </div>
+</section>
+
+<section class="slogan slogan-alt" aria-labelledby="design-h">
+  <div class="wrap slogan-in">
+    <h2 id="design-h"><span class="line">we design</span><span class="line">we build brands</span></h2>
+    <div class="slogan-side">
+      <p>Logo design, brand identity, complete rebranding and marketing design, from our qualified designer.</p>
+      <p class="slogan-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="slogan-call" href="{SITE["whatsapp"]}">WhatsApp us</a></p>
+    </div>
   </div>
 </section>
 

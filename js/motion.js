@@ -120,11 +120,14 @@
       scrollTrigger: { trigger: '.welcome-photo', start: 'top bottom', end: 'bottom top', scrub: true }
     });
   }
-  var sloganLines = gsap.utils.toArray('.slogan .line');
-  sloganLines.forEach(function (line, i) {
-    gsap.fromTo(line, { xPercent: i ? 2.5 : -2.5 }, {
-      xPercent: i ? -2.5 : 2.5, ease: 'none',
-      scrollTrigger: { trigger: '.slogan', start: 'top bottom', end: 'bottom top', scrub: true }
+  // two banners now (2026-10-06): each one's lines drift against its OWN
+  // section; a bare '.slogan' trigger would tie both to the first banner
+  gsap.utils.toArray('.slogan').forEach(function (sec) {
+    gsap.utils.toArray(sec.querySelectorAll('.line')).forEach(function (line, i) {
+      gsap.fromTo(line, { xPercent: i ? 2.5 : -2.5 }, {
+        xPercent: i ? -2.5 : 2.5, ease: 'none',
+        scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true }
+      });
     });
   });
 

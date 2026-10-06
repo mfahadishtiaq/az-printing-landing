@@ -719,3 +719,12 @@ html.sheet-open .head { z-index: 80; }
 .menu a:hover .vf-l span, .menu a:focus-visible .vf-l span, .menu a[aria-current="page"] .vf-l span,
 .menu-dd:hover .vf-l span, .menu-dd:focus-visible .vf-l span, .menu-dd[aria-expanded="true"] .vf-l span, .menu-dd[data-current] .vf-l span, .menu .vf-on .vf-l span { font-variation-settings: 'wght' 700; }
 @media (prefers-reduced-motion: reduce) { .vf-l span { transition: none; } }
+
+/* ---------- second banner (2026-10-06) ----------
+   Fahad: "another banner similar to we commit, we deliver". Same component,
+   mirrored: the gradient runs pink to purple and the glow sits on the left,
+   so the two read as a pair rather than a repeat. Words are the client's own
+   hero line ("We design · We build brands") and their designer sentence. */
+.slogan-alt { background: linear-gradient(100deg, #c52074 0%, #9f257d 55%, #6a2c87 100%); }
+.slogan-alt::before { right: auto; left: -18vw; top: auto; bottom: -40vw; }
+.slogan-alt h2 { font-size: clamp(2.2rem, 5vw, 4.8rem); }
