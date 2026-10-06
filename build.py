@@ -516,24 +516,19 @@ def header(root, current=""):
 
 
 def footer(root):
-    links = "".join(f'<li>{esc(p["name"])}</li>' for p in PRODUCTS)
     return f'''
 </main>
 
 <footer class="foot">
   <div class="wrap foot-in">
-    <div>
+    <div class="foot-brand">
       {brand(root)}
-      <div class="foot-text">
-        <p>AZ Printing &amp; Signs is Canada’s choice for high-quality digital printing and commercial printing services, delivering superior print pieces to clients nationwide.</p>
-        <p><a href="{SITE["maps"]}">{esc(SITE["address"])}</a></p>
-        <p><a href="tel:{SITE["phone_tel"]}">{SITE["phone_display"]}</a> · <a href="{SITE["whatsapp"]}">WhatsApp</a></p>
-        <p>{esc(SITE["hours"])}</p>
-      </div>
+      <p class="foot-line">AZ Printing &amp; Signs is Canada’s choice for high-quality digital printing and commercial printing services, delivering superior print pieces to clients nationwide.</p>
     </div>
-    <div class="foot-nav">
-      <h2 class="foot-h">Products</h2>
-      <ul>{links}</ul>
+    <div class="foot-contact">
+      <p><a href="{SITE["maps"]}">{esc(SITE["address"])}</a></p>
+      <p><a href="tel:{SITE["phone_tel"]}">{SITE["phone_display"]}</a> · <a href="{SITE["whatsapp"]}">WhatsApp</a></p>
+      <p>{esc(SITE["hours"])}</p>
     </div>
     <!-- Facebook and Instagram icons sit top right here in the mockup. They go in once the owner's pages exist (brief: "owner WILL create"); a dead social link is worse than none. -->
   </div>

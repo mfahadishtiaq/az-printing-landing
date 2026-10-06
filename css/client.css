@@ -958,3 +958,23 @@ html[data-promise="stone"] .promise { --b-bg: #e9e1d6; --sw-eyebrow: #5f5346; --
 
 @media (prefers-reduced-motion: reduce) { .pcard-img img, .icard-img img, .dcard, .dcard-go svg, .icard-go svg { transition: none; } .dcard:hover { transform: none; } }
 @media (max-width: 599px) { .ptabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; gap: 1.4rem; margin-left: calc(-1 * var(--gutter)); margin-right: calc(-1 * var(--gutter)); padding: 0 var(--gutter); scrollbar-width: none; } .ptabs::-webkit-scrollbar { display: none; } .ptab { flex: none; } }
+
+/* SLIM FOOTER (Fahad 2026-10-06: "fix the fat footer"; it was 529px tall at
+   1024 wide). The 14-name product list is gone (one-page site: What we do
+   already shows them, and they are not links). Logo + the client's own line
+   left, contact right from 900px; phones keep 44px tap targets via .foot a. */
+.foot { padding: clamp(2rem, 3vw, 2.75rem) 0 1.25rem; }
+.foot-in { gap: 1.25rem; }
+.foot-line { margin: .9rem 0 0; max-width: 38rem; font-size: .92rem; line-height: 1.55; }
+.foot-contact p { margin: 0; font-size: .95rem; line-height: 1.5; }
+.foot-base { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+@media (max-width: 899px) { .foot-contact a { padding: .75em 0; } }  /* >= 44px tap targets */
+.foot a.brand { display: inline-flex; padding: 0; }  /* the lockup as in the header (mark beside the name); the tap-target padding is for text links */
+@media (min-width: 900px) {
+  .foot-in { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 3rem; }
+  .foot-brand { display: flex; align-items: center; gap: 2.5rem; }
+  .foot-brand .brand { flex: none; }
+  .foot-line { margin: 0; max-width: 34rem; }
+  .foot-contact { text-align: right; }
+  .foot-contact a { padding: .15em 0; }
+}
