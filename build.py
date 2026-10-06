@@ -634,28 +634,51 @@ def first_sentence(text):
     return text.split(". ")[0].rstrip(".") + "."
 
 
+# "What we do" LAYOUTS (Fahad 2026-10-06: picked C "shelves" and D "bento" off
+# the board `2026-10-06-what-we-do-layouts.html`, "keep a switch on the local
+# host so that I can change them"). Both are built into the page; the FIRST is
+# what loads, and js/site.js shows a switch ONLY on localhost when more than one
+# is listed. BEFORE GO-LIVE cut this to the one he keeps, so the live page ships
+# one copy of the catalogue, not two.
+CATALOG_LAYOUTS = ("shelves", "bento")
+# Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
+BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
+               "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
+               "round-stickers": "st", "door-hangers": "dh", "letterhead": "lh", "photocopy": "pc",
+               "document-scan": "ds", "spiral-binding": "sp"}
+CHEV = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>'
+
+
+def c3d_card(root, slug, gtitle, cls="", style="", sizes="(min-width: 900px) 24vw, 62vw", w=800):
+    """One 3D tilting photo card (js/site.js tilts every .c3d)."""
+    p = by_slug(slug)
+    return (f'<li class="c3d{(" " + cls) if cls else ""}"{style}><a href="{root}products/{slug}/">'
+            f'<span class="c3d-in">'
+            f'<span class="c3d-img"><img src="{root}images/client/tile-{slug}-800.jpg" srcset="{root}images/client/tile-{slug}-480.jpg 480w, {root}images/client/tile-{slug}-800.jpg 800w" sizes="{sizes}" alt="{esc(p["alt"])}" width="800" height="800" loading="lazy"></span>'
+            f'<span class="c3d-chip">{esc(gtitle)}</span>'
+            f'<span class="c3d-txt"><strong>{esc(p["name"])}</strong><span>{esc(SHORT[slug])}</span></span>'
+            f'<span class="c3d-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'
+            f'<span class="c3d-glare" aria-hidden="true"></span>'
+            f'</span></a></li>')
+
+
 def catalog_html(root):
-    """Home: filter tabs over one grid of tall photo cards that tilt in 3D
-    toward the pointer (js/site.js). Every card carries its group, so the
-    'All' view stays organised; tabs narrow it."""
-    tabs = ['<button class="tab" type="button" role="tab" aria-selected="true" data-filter="all">All <span>14</span></button>']
-    cards = []
-    for gi, (title, lede, slugs) in enumerate(GROUPS):
-        key = f"g{gi}"
-        tabs.append(f'<button class="tab" type="button" role="tab" aria-selected="false" data-filter="{key}">{esc(title)} <span>{len(slugs)}</span></button>')
-        for slug in slugs:
-            p = by_slug(slug)
-            cards.append(
-                f'<li class="c3d" data-group="{key}"><a href="{root}products/{slug}/">'
-                f'<span class="c3d-in">'
-                f'<span class="c3d-img"><img src="{root}images/client/tile-{slug}-800.jpg" srcset="{root}images/client/tile-{slug}-480.jpg 480w, {root}images/client/tile-{slug}-800.jpg 800w" sizes="(min-width: 1000px) 23vw, (min-width: 600px) 46vw, 46vw" alt="{esc(p["alt"])}" width="800" height="800" loading="lazy"></span>'
-                f'<span class="c3d-chip">{esc(title)}</span>'
-                f'<span class="c3d-txt"><strong>{esc(p["name"])}</strong><span>{esc(SHORT[slug])}</span></span>'
-                f'<span class="c3d-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'
-                f'<span class="c3d-glare" aria-hidden="true"></span>'
-                f'</span></a></li>')
-    return (f'<div class="tabs" role="tablist" aria-label="Filter products">{"".join(tabs)}</div>'
-            f'<ul class="c3d-grid">{"".join(cards)}</ul>')
+    """Home "What we do": every layout in CATALOG_LAYOUTS, the first visible."""
+    gt = {s: t for t, _, ss in GROUPS for s in ss}
+    views = {}
+    views["shelves"] = "".join(
+        f'<div class="shelf"><div class="shelf-h"><h3>{esc(t)} <span>{len(ss)}</span></h3>'
+        f'<span class="shelf-arrows"><button type="button" data-dir="-1" aria-label="Scroll {esc(t)} back">{CHEV}</button>'
+        f'<button type="button" data-dir="1" aria-label="Scroll {esc(t)} forward">{CHEV}</button></span></div>'
+        f'<ul class="shelf-row">{"".join(c3d_card(root, sl, t, sizes="(min-width: 900px) 280px, 62vw") for sl in ss)}</ul></div>'
+        for t, _, ss in GROUPS)
+    views["bento"] = '<ul class="bento">' + "".join(
+        c3d_card(root, sl, gt[sl], cls=f"a-{a}", style=f' style="grid-area:{a}"',
+                 sizes="(min-width: 900px) 46vw, 92vw" if a == "bc" else "(min-width: 900px) 24vw, 46vw")
+        for sl, a in BENTO_AREAS.items()) + '</ul>'
+    return "".join(
+        f'<div class="cat-view cat-{v}" data-view="{v}"{"" if i == 0 else " hidden"}>{views[v]}</div>'
+        for i, v in enumerate(CATALOG_LAYOUTS))
 
 
 def tiles_html(root):
@@ -719,7 +742,7 @@ def home():
   <p class="hero-quality"{style_vars("quality")}>Premium quality</p>
 </section>
 
-<section class="catalog" id="products" aria-labelledby="products-h">
+<section class="catalog" id="products" aria-labelledby="products-h" data-layouts="{" ".join(CATALOG_LAYOUTS)}">
   <div class="wrap">
     <div class="catalog-head">
       <h2 id="products-h">What we do</h2>
@@ -942,6 +965,8 @@ def verify():
                         fail(f"{p['slug']} / {n}: unknown source tag {src}")
                 if not x.endswith(".") or len(x) > 160:
                     fail(f"{p['slug']} / {n}: explanation must be a sentence under 160 chars")
+    if sorted(BENTO_AREAS) != sorted(slugs):
+        fail("BENTO_AREAS must place every product exactly once")
     for path, h in outputs():
         text = re.sub(r"<[^>]+>", " ", h)
         for b in BANNED:

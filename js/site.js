@@ -101,6 +101,68 @@
 
   /* ?door=<n> / ?ind=<n> pin a door or an industry tile open so a capture
      can show the widened state (the pane and headless cannot hover) */
+  /* ---------- "What we do" layouts + the LOCALHOST-ONLY switch ----------
+     Fahad picked two layouts (2026-10-06) and flips between them while he
+     decides. The switch never renders on the real domain; there the first
+     layout in build.py's CATALOG_LAYOUTS shows. ?layout=<name> works anywhere
+     (captures). */
+  var cat = document.querySelector('.catalog[data-layouts]');
+  if (cat) {
+    var views = [].slice.call(cat.querySelectorAll('.cat-view'));
+    var names = views.map(function (v) { return v.getAttribute('data-view'); });
+    var local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+    var LABEL = { shelves: 'Shelves (C)', bento: 'Bento (D)' };
+    var sw = null;
+
+    var fitShelves = function () {
+      cat.querySelectorAll('.shelf').forEach(function (sh) {
+        var row = sh.querySelector('.shelf-row'), ar = sh.querySelector('.shelf-arrows');
+        if (!row || !ar) return;
+        var max = row.scrollWidth - row.clientWidth;
+        if (max > 4) ar.removeAttribute('data-fits'); else ar.setAttribute('data-fits', '');
+        ar.querySelector('[data-dir="-1"]').disabled = row.scrollLeft < 4;
+        ar.querySelector('[data-dir="1"]').disabled = row.scrollLeft > max - 4;
+      });
+    };
+    var setView = function (n, remember) {
+      if (names.indexOf(n) < 0) return;
+      views.forEach(function (v) { v.hidden = v.getAttribute('data-view') !== n; });
+      if (sw) sw.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-view') === n ? 'true' : 'false'); });
+      if (remember) { try { localStorage.setItem('az-catalog-layout', n); } catch (e) {} }
+      fitShelves();
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    };
+
+    cat.querySelectorAll('.shelf').forEach(function (sh) {
+      var row = sh.querySelector('.shelf-row');
+      sh.querySelectorAll('.shelf-arrows button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          row.scrollBy({ left: +b.getAttribute('data-dir') * row.clientWidth * 0.8, behavior: 'smooth' });
+        });
+      });
+      row.addEventListener('scroll', fitShelves, { passive: true });
+    });
+    window.addEventListener('resize', fitShelves);
+
+    if (local && names.length > 1) {
+      sw = document.createElement('div');
+      sw.className = 'layout-switch';
+      sw.setAttribute('role', 'group');
+      sw.setAttribute('aria-label', 'What we do layout (only on localhost)');
+      sw.innerHTML = '<span>What we do</span>' + names.map(function (n) {
+        return '<button type="button" data-view="' + n + '">' + (LABEL[n] || n) + '</button>';
+      }).join('');
+      sw.addEventListener('click', function (e) {
+        var b = e.target.closest('button');
+        if (b) setView(b.getAttribute('data-view'), true);
+      });
+      document.body.appendChild(sw);
+    }
+    var q = /[?&]layout=([a-z]+)/.exec(location.search), saved = null;
+    try { saved = localStorage.getItem('az-catalog-layout'); } catch (e) {}
+    setView(q ? q[1] : (local && saved && names.indexOf(saved) > -1 ? saved : names[0]), false);
+  }
+
   /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
   var vfPin = /[?&]vf=(\d+)/.exec(location.search);
   var vfEl = vfPin && document.querySelectorAll('.menu > a, .menu > .menu-dd')[+vfPin[1]];

@@ -728,3 +728,47 @@ html.sheet-open .head { z-index: 80; }
 .slogan-alt { background: linear-gradient(100deg, #c52074 0%, #9f257d 55%, #6a2c87 100%); }
 .slogan-alt::before { right: auto; left: -18vw; top: auto; bottom: -40vw; }
 .slogan-alt h2 { font-size: clamp(2.2rem, 5vw, 4.8rem); }
+
+/* ---------- "What we do": shelves (C) and bento (D), 2026-10-06 ----------
+   Fahad picked both off the layouts board and flips between them with a
+   localhost-only switch (js/site.js). Both reuse the .c3d tilting cards. */
+.cat-view[hidden] { display: none; }
+.shelf + .shelf { margin-top: clamp(1.6rem, 3vw, 2.6rem); }
+.shelf-h { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: .9rem; }
+.shelf-h h3 { font: 900 clamp(1.3rem, 1.9vw, 1.75rem)/1.15 var(--display); color: var(--ink); margin: 0; }
+.shelf-h h3 span { font: 800 .75rem/1 var(--sans); color: var(--magenta); background: #f4ecf2; border-radius: 999px; padding: .3rem .55rem; vertical-align: middle; margin-left: .25rem; }
+.shelf-arrows { display: none; gap: .5rem; }
+@media (hover: hover) and (pointer: fine) { .shelf-arrows { display: flex; } }
+.shelf-arrows[data-fits] { visibility: hidden; }
+.shelf-arrows button { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #e2dce0; background: #fff; cursor: pointer; display: grid; place-items: center; transition: background-color .2s ease, border-color .2s ease; }
+.shelf-arrows button svg { width: 18px; height: 18px; fill: none; stroke: var(--magenta); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.shelf-arrows button[data-dir="1"] svg { transform: rotate(180deg); }
+.shelf-arrows button:hover:not(:disabled) { background: var(--magenta); border-color: var(--magenta); }
+.shelf-arrows button:hover:not(:disabled) svg { stroke: #fff; }
+.shelf-arrows button:disabled { opacity: .35; cursor: default; }
+/* The row bleeds to the screen edge on phones so a half card says "swipe".
+   Vertical padding keeps the cards' shadows from being cut by the scroller. */
+.shelf-row { list-style: none; margin: 0 calc(-1 * var(--gutter)); padding: .4rem var(--gutter) 1.4rem; display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: 1rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding: 0 var(--gutter); scrollbar-width: none; perspective: 1400px; }
+.shelf-row::-webkit-scrollbar { display: none; }
+.shelf-row .c3d { scroll-snap-align: start; }
+@media (min-width: 600px) { .shelf-row { grid-auto-columns: 38%; } }
+@media (min-width: 900px) { .shelf-row { grid-auto-columns: 280px; gap: 1.4rem; } }
+
+.bento { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; gap: .8rem; perspective: 1400px;
+  grid-template-areas: "bc bc" "bc bc" "fl br" "gc po" "ls rb" "ls rb" "sb sb" "st dh" "lh pc" "ds sp"; }
+.bento .c3d, .bento .c3d a { height: 100%; }
+.bento .c3d-in { aspect-ratio: auto; height: 100%; }
+@media (min-width: 600px) { .bento { grid-auto-rows: 200px; gap: 1rem; } }
+@media (min-width: 900px) {
+  .bento { grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(190px, 15.5vw, 250px); gap: 1.4rem;
+    grid-template-areas: "bc bc fl br" "bc bc gc po" "ls rb sb sb" "ls rb st dh" "lh pc ds sp"; }
+  .bento .a-bc .c3d-txt strong { font-size: clamp(1.6rem, 2.4vw, 2.3rem); }
+  .bento .a-bc .c3d-txt span { font-size: 1rem; }
+}
+
+/* the localhost-only layout switch */
+.layout-switch { position: fixed; left: 14px; bottom: 14px; z-index: 90; display: flex; align-items: center; gap: 4px; padding: 5px; background: #111; color: #fff; border-radius: 999px; font: 700 12px/1 var(--sans); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+.layout-switch span { padding: 0 6px 0 10px; color: #bbb; }
+.layout-switch button { font: inherit; border: 0; border-radius: 999px; padding: 9px 12px; background: transparent; color: #fff; cursor: pointer; }
+.layout-switch button[aria-pressed="true"] { background: var(--magenta); }
+@media (max-width: 759px) { .layout-switch { bottom: calc(3.6rem + 10px); } }
