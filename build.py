@@ -752,7 +752,8 @@ def process_html():
 
 def promise_html():
     """Band 2: four printed swatch tiles, we print / we design / we commit /
-    we deliver (concept 6a, Fahad 2026-10-06)."""
+    we deliver (concept 6a, Fahad 2026-10-06). The buttons and the languages
+    line were removed on his ask the same night: the tiles stand alone."""
     tiles = "".join(
         f'<li class="sw"><span class="sw-ink" style="background:{c}"><span class="sw-n">{i:02d}</span>'
         f'<span class="sw-word"><span>we</span><b>{v}</b></span></span>'
@@ -763,10 +764,8 @@ def promise_html():
     <h2 id="promise-h" class="sr-only">We print, we design, we commit, we deliver</h2>
     <div class="sw-head">
       <p class="sw-eyebrow">Our promise, in our colours</p>
-      <p class="band-ctas"><a class="btn" href="#contact">Get a quote</a><a class="btn-out" href="{SITE["whatsapp"]}">WhatsApp us</a><a class="btn-out" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
     </div>
     <ul class="swatches">{tiles}</ul>
-    <p class="sw-foot">Walk in, call or WhatsApp. English, Urdu, Hindi and Punjabi spoken at the counter.</p>
   </div>
 </section>
 '''
