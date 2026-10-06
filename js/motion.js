@@ -61,6 +61,7 @@
 
   /* 1. smooth scroll, one clock */
   var lenis = new Lenis({ lerp: 0.1, smoothWheel: true, anchors: true });
+  window.__lenis = lenis;  // js/site.js stops it while the phone menu is open
   lenis.on('scroll', function (e) { ScrollTrigger.update(); headerState(e.scroll); });
   gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
   gsap.ticker.lagSmoothing(0);
@@ -72,13 +73,16 @@
   var list = gsap.utils.toArray('.hero-list li, .hero-ctas');  // the two buttons enter as ONE block, never offset
   var eyebrow = document.querySelector('.hero-eyebrow');
   html.classList.remove('pre');
-  var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  var hasHero = !!document.querySelector('.hero');
+  var tl = gsap.timeline({ defaults: { ease: 'power3.out' }, paused: !hasHero });
+  if (hasHero) {
   if (eyebrow) tl.from(eyebrow, { y: 14, opacity: 0, duration: 0.6 }, 0);
   tl.from(words, { y: 40, opacity: 0, duration: 0.8, stagger: 0.06 }, 0.1)
     .from(list, { y: 18, opacity: 0, duration: 0.6, stagger: 0.08 }, 0.4)
     .from(items, { y: 70, scale: 0.94, opacity: 0, duration: 1, stagger: 0.09 }, 0.15)
     .from('.hero-quality', { opacity: 0, duration: 0.6 }, 1.2)
     .add(afterEntrance);
+  }  // product pages have no hero: nothing to enter, no GSAP target warnings
 
   function afterEntrance() {
     // The products stay STILL after they arrive (Fahad, 2026-10-05 night): no

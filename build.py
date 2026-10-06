@@ -278,6 +278,25 @@ PRODUCTS = [
      ]},
 ]
 
+# One line per product for the mega menu and the catalogue cards. Each is a
+# summary of that product's own type list below, never a new claim.
+SHORT = {
+    "business-cards": "Matte, glossy, foil and more",
+    "flyers": "Every size, one or both sides",
+    "brochures": "Bi-fold, tri-fold, booklets, menus",
+    "greeting-cards": "Holiday, thank-you, invitations",
+    "posters": "Small sizes to large format",
+    "door-hangers": "Reach every home on a street",
+    "letterhead": "Letterheads, envelopes, NCR forms",
+    "lawn-signs": "Lawn, real estate and A-frame signs",
+    "rollup-banner": "Roll-up, vinyl banners and flags",
+    "store-branding": "Storefront signs and window graphics",
+    "round-stickers": "Stickers and product labels",
+    "photocopy": "Black and white or colour",
+    "document-scan": "Scan to PDF, email or USB",
+    "spiral-binding": "Coil, comb and wire binding",
+}
+
 # The home page shows the catalogue in three groups (Fahad 2026-10-05: the
 # flat grid of fourteen "looks far too cluttered"). Names are the trade's.
 GROUPS = [
@@ -353,25 +372,68 @@ def brand(root):
 
 
 def header(root, current=""):
-    def nav(href, label, key):
-        cur = ' aria-current="page"' if key == current else ""
-        return f'<a href="{href}"{cur}>{label}</a>'
+    """Studio nav pattern (ZEF, 2026-09): lockup, a Products mega menu with
+    thumbnails, Call + Get a quote on the right, a burger sheet on phones.
+    Above it a utility strip that scrolls away; the main bar is sticky."""
+    def cur(key):
+        return ' aria-current="page"' if key == current else ""
+    cols = []
+    for title, lede, slugs in GROUPS:
+        items = "".join(
+            f'<a href="{root}products/{sl}/"><span class="mm-thumb"><img src="{root}images/client/tile-{sl}-480.jpg" alt="" width="480" height="480" loading="lazy"></span>'
+            f'<span class="mm-txt"><b>{esc(by_slug(sl)["name"])}</b><i>{esc(SHORT[sl])}</i></span></a>' for sl in slugs)
+        cols.append(f'<div class="mm-col"><p class="mm-h">{esc(title)}</p>{items}</div>')
+    sheet_groups = "".join(
+        f'<details class="sh-group"><summary>{esc(title)}</summary><div>'
+        + "".join(f'<a href="{root}products/{sl}/">{esc(by_slug(sl)["name"])}</a>' for sl in slugs)
+        + '</div></details>' for title, lede, slugs in GROUPS)
     return f'''<a class="skip" href="#main">Skip to content</a>
 
-<header class="head">
+<div class="util" role="complementary" aria-label="Shop details">
+  <div class="wrap util-in">
+    <p class="util-l"><a href="{SITE["maps"]}">499 Ray Lawson Blvd, Unit 24, Brampton</a><span>{esc(SITE["hours"])}</span></p>
+    <p class="util-r"><span>English · Urdu · Hindi · Punjabi</span><a href="{SITE["whatsapp"]}">WhatsApp {SITE["phone_display"]}</a></p>
+  </div>
+</div>
+
+<header class="head" id="site-nav">
   <div class="wrap head-in">
     {brand(root)}
-    <nav class="nav" aria-label="Site">
-      {nav(root + "products/", "Products", "products")}
-      {nav(root + "#about", "About", "about")}
-      {nav(root + "#contact", "Contact", "contact")}
+    <nav class="menu" aria-label="Main">
+      <button class="menu-dd" type="button" aria-expanded="false" aria-controls="mega"{' data-current="1"' if current == "products" else ""}>Products <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <a href="{root}#about"{cur("about")}>About</a>
+      <a href="{root}#contact"{cur("contact")}>Contact</a>
     </nav>
-    <div class="head-contact">
-      <a class="wa" href="{SITE["whatsapp"]}">WhatsApp {SITE["phone_display"]}</a>
-      <a class="btn" href="tel:{SITE["phone_tel"]}"><span class="call-long">Call {SITE["phone_display"]}</span><span class="call-short">Call us</span></a>
+    <div class="head-cta">
+      <a class="btn-ghost" href="tel:{SITE["phone_tel"]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>{SITE["phone_display"]}</span></a>
+      <a class="btn" href="{root}#contact">Get a quote</a>
+      <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="l1" d="M4 12H20"/><path class="l2" d="M4 12H20"/><path class="l3" d="M4 12H20"/></svg></button>
+    </div>
+  </div>
+  <div class="mega" id="mega" hidden>
+    <div class="wrap mega-in">
+      {"".join(cols)}
+      <div class="mm-side">
+        <p class="mm-side-h">Not sure what you need?</p>
+        <p>Send us your idea or your file and we will suggest the right product and finish.</p>
+        <a class="btn" href="{SITE["whatsapp"]}">WhatsApp us</a>
+        <a class="mm-all" href="{root}products/">See all 14 products</a>
+      </div>
     </div>
   </div>
 </header>
+
+<div class="sheet" id="sheet" hidden>
+  <nav class="sheet-in" aria-label="Menu">
+    <p class="sheet-h">Products</p>
+    {sheet_groups}
+    <a class="sheet-link" href="{root}products/">All products</a>
+    <a class="sheet-link" href="{root}#about">About</a>
+    <a class="sheet-link" href="{root}#contact">Contact</a>
+    <div class="sheet-cta"><a class="btn" href="{root}#contact">Get a quote</a><a class="btn-ghost dark" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></div>
+    <p class="sheet-meta">{esc(SITE["address"])}<br>{esc(SITE["hours"])}</p>
+  </nav>
+</div>
 
 <main id="main">
 '''
@@ -411,6 +473,7 @@ def footer(root):
 <script src="{root}js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="{root}js/vendor/lenis.min.js" defer></script>
 <script src="{root}js/motion.js" defer></script>
+<script src="{root}js/site.js" defer></script>
 </body>
 </html>
 '''
@@ -521,20 +584,27 @@ def first_sentence(text):
 
 
 def catalog_html(root):
-    """Home: three titled groups of cards, each card a picture, the name, one
-    plain sentence and the link to its types."""
-    out = []
-    for title, lede, slugs in GROUPS:
-        cards = []
+    """Home: filter tabs over one grid of tall photo cards that tilt in 3D
+    toward the pointer (js/site.js). Every card carries its group, so the
+    'All' view stays organised; tabs narrow it."""
+    tabs = ['<button class="tab" type="button" role="tab" aria-selected="true" data-filter="all">All <span>14</span></button>']
+    cards = []
+    for gi, (title, lede, slugs) in enumerate(GROUPS):
+        key = f"g{gi}"
+        tabs.append(f'<button class="tab" type="button" role="tab" aria-selected="false" data-filter="{key}">{esc(title)} <span>{len(slugs)}</span></button>')
         for slug in slugs:
             p = by_slug(slug)
-            cards.append(f'<li class="card" data-reveal><a href="{root}products/{slug}/">'
-                         f'<span class="card-img">{tile_img(p, root, "(min-width: 1000px) 22vw, (min-width: 600px) 46vw, 92vw")}</span>'
-                         f'<span class="card-body"><strong>{esc(p["name"])}</strong><span>{esc(first_sentence(p["intro"]))}</span>'
-                         f'<em>See the types</em></span></a></li>')
-        out.append(f'<div class="group"><div class="group-head"><h3>{esc(title)}</h3><p>{esc(lede)}</p></div>'
-                   f'<ul class="cards">{"".join(cards)}</ul></div>')
-    return "\n    ".join(out)
+            cards.append(
+                f'<li class="c3d" data-group="{key}" data-reveal><a href="{root}products/{slug}/">'
+                f'<span class="c3d-in">'
+                f'<span class="c3d-img"><img src="{root}images/client/tile-{slug}-800.jpg" srcset="{root}images/client/tile-{slug}-480.jpg 480w, {root}images/client/tile-{slug}-800.jpg 800w" sizes="(min-width: 1000px) 23vw, (min-width: 600px) 46vw, 46vw" alt="{esc(p["alt"])}" width="800" height="800" loading="lazy"></span>'
+                f'<span class="c3d-chip">{esc(title)}</span>'
+                f'<span class="c3d-txt"><strong>{esc(p["name"])}</strong><span>{esc(SHORT[slug])}</span></span>'
+                f'<span class="c3d-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'
+                f'<span class="c3d-glare" aria-hidden="true"></span>'
+                f'</span></a></li>')
+    return (f'<div class="tabs" role="tablist" aria-label="Filter products">{"".join(tabs)}</div>'
+            f'<ul class="c3d-grid">{"".join(cards)}</ul>')
 
 
 def tiles_html(root):
