@@ -640,7 +640,7 @@ def first_sentence(text):
 # what loads, and js/site.js shows a switch ONLY on localhost when more than one
 # is listed. BEFORE GO-LIVE cut this to the one he keeps, so the live page ships
 # one copy of the catalogue, not two.
-CATALOG_LAYOUTS = ("shelves", "bento")
+CATALOG_LAYOUTS = ("shelves", "bento", "circles")  # circles = round-2 board option B, added 2026-10-06
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
 BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
                "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
@@ -676,6 +676,11 @@ def catalog_html(root):
         c3d_card(root, sl, gt[sl], cls=f"a-{a}", style=f' style="grid-area:{a}"',
                  sizes="(min-width: 900px) 46vw, 92vw" if a == "bc" else "(min-width: 900px) 24vw, 46vw")
         for sl, a in BENTO_AREAS.items()) + '</ul>'
+    views["circles"] = '<ul class="circles">' + "".join(
+        f'<li class="cir"><a href="{root}products/{sl}/"><span class="cir-i"><img src="{root}images/client/tile-{sl}-480.jpg" '
+        f'srcset="{root}images/client/tile-{sl}-480.jpg 480w, {root}images/client/tile-{sl}-800.jpg 800w" sizes="(min-width: 1000px) 12vw, 30vw" '
+        f'alt="" width="480" height="480" loading="lazy"></span><b>{esc(by_slug(sl)["name"])}</b></a></li>'
+        for _, _, ss in GROUPS for sl in ss) + '</ul>'
     return "".join(
         f'<div class="cat-view cat-{v}" data-view="{v}"{"" if i == 0 else " hidden"}>{views[v]}</div>'
         for i, v in enumerate(CATALOG_LAYOUTS))

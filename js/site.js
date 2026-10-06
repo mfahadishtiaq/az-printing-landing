@@ -111,7 +111,7 @@
     var views = [].slice.call(cat.querySelectorAll('.cat-view'));
     var names = views.map(function (v) { return v.getAttribute('data-view'); });
     var local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-    var LABEL = { shelves: 'Shelves (C)', bento: 'Bento (D)' };
+    var LABEL = { shelves: 'Shelves', bento: 'Bento', circles: 'Circles' };
     var sw = null;
 
     var fitShelves = function () {

@@ -772,3 +772,17 @@ html.sheet-open .head { z-index: 80; }
 .layout-switch button { font: inherit; border: 0; border-radius: 999px; padding: 9px 12px; background: transparent; color: #fff; cursor: pointer; }
 .layout-switch button[aria-pressed="true"] { background: var(--magenta); }
 @media (max-width: 759px) { .layout-switch { bottom: calc(3.6rem + 10px); } }
+
+/* "What we do" third layout: circles (round-2 board option B, 2026-10-06).
+   The photo carries the product; the ring on hover/focus is the focus cue. */
+.circles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem .9rem; }
+@media (min-width: 600px) { .circles { grid-template-columns: repeat(5, 1fr); gap: 1.8rem 1rem; } }
+@media (min-width: 1000px) { .circles { grid-template-columns: repeat(7, 1fr); gap: 2.2rem 1.3rem; } }
+.cir a { display: flex; flex-direction: column; align-items: center; text-align: center; gap: .75rem; text-decoration: none; color: var(--ink); outline: none; }
+.cir-i { display: block; width: 100%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 3px #fff, 0 0 0 3px transparent; transition: box-shadow .25s ease, transform .3s cubic-bezier(.22, 1, .36, 1); }
+.cir a:hover .cir-i, .cir a:focus-visible .cir-i { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--magenta); transform: translateY(-3px); }
+.cir-i img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cir b { font: 800 .82rem/1.25 var(--sans); }
+.cir a:hover b { color: var(--magenta); }
+@media (min-width: 600px) { .cir b { font-size: .95rem; } }
+@media (prefers-reduced-motion: reduce) { .cir-i { transition: none; } .cir a:hover .cir-i { transform: none; } }
