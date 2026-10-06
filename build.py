@@ -395,7 +395,7 @@ def head(root, title, description, extra="", schema=""):
 <script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Montserrat:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@900&family=Montserrat:wght@400..900&display=swap">
 {extra}<link rel="stylesheet" href="{root}css/client.css">
 <link rel="icon" href="{root}images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="{root}images/apple-touch-icon.png">
@@ -409,6 +409,17 @@ def brand(root):
     return (f'<a class="brand" href="{home}" aria-label="AZ Printing &amp; Signs, home">'
             f'<img src="{root}images/client/mark-240.png" alt="" width="253" height="240">'
             f'<span class="brand-word">AZ Printing<br>&amp; Signs</span></a>')
+
+
+def vf(label):
+    """Variable-font hover (Fahad 2026-10-06, from a React "VariableFontHover"
+    nav he pasted, rebuilt in CSS): each letter runs 'wght' 400 -> 700 with a
+    30ms stagger outward from the centre. A hidden bold copy sits in the same
+    grid cell so the word never changes width and the nav never shifts."""
+    mid = (len(label) - 1) / 2
+    letters = "".join(f'<span style="--d:{abs(i - mid):.1f}">{esc(ch)}</span>' for i, ch in enumerate(label))
+    return (f'<span class="vf" aria-hidden="true"><span class="vf-ghost">{esc(label)}</span>'
+            f'<span class="vf-l">{letters}</span></span>')
 
 
 def header(root, current=""):
@@ -440,9 +451,9 @@ def header(root, current=""):
   <div class="wrap head-in">
     {brand(root)}
     <nav class="menu" aria-label="Main">
-      <button class="menu-dd" type="button" aria-expanded="false" aria-controls="mega"{' data-current="1"' if current == "products" else ""}>Products <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      <a href="{root}#about"{cur("about")}>About</a>
-      <a href="{root}#contact"{cur("contact")}>Contact</a>
+      <button class="menu-dd" type="button" aria-expanded="false" aria-controls="mega" aria-label="Products"{' data-current="1"' if current == "products" else ""}>{vf("Products")} <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <a href="{root}#about" aria-label="About"{cur("about")}>{vf("About")}</a>
+      <a href="{root}#contact" aria-label="Contact"{cur("contact")}>{vf("Contact")}</a>
     </nav>
     <div class="head-cta">
       <a class="btn-ghost" href="tel:{SITE["phone_tel"]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>{SITE["phone_display"]}</span></a>

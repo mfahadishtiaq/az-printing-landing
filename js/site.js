@@ -102,6 +102,11 @@
 
   /* ?door=<n> / ?ind=<n> pin a door or an industry tile open so a capture
      can show the widened state (the pane and headless cannot hover) */
+  /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
+  var vfPin = /[?&]vf=(\d+)/.exec(location.search);
+  var vfEl = vfPin && document.querySelectorAll('.menu > a, .menu > .menu-dd')[+vfPin[1]];
+  if (vfEl) vfEl.classList.add('vf-on');
+
   [['door', '.door'], ['ind', '.ind-tile']].forEach(function (k) {
     var m = new RegExp('[?&]' + k[0] + '=(\\d+)').exec(location.search);
     var el = m && document.querySelectorAll(k[1])[+m[1]];
