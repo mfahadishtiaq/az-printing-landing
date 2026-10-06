@@ -364,12 +364,14 @@ STEP_ICON = {
 # 2026-10-06 later: band 2 is now the swatch tiles (Fahad picked concept 6a on
 # the Claude Design canvas "We Commit Banner Concepts"), which carry their own
 # colours, so the presets now colour band 1 (How it works) only.
-BAND_PRESETS = ("blush", "plum", "grey")
-SWATCHES = [  # (verb, label, colour); the client's hero line + slogan
-    ("print", "PRINT", "#6A2C87"),
-    ("design", "DESIGN", "#9F257D"),
-    ("commit", "COMMIT", "#C52074"),
-    ("deliver", "DELIVER", "#1B0A18"),
+BAND_PRESETS = ("cream", "black", "grey")  # brand pass 2026-10-06 (was blush / plum / grey)
+SWATCHES = [  # (verb, label, colour, ink); the client's hero line + slogan,
+    # in the BRAND PALETTE since 2026-10-06 (AZ Brand Colours.pdf): the hexes on
+    # the tiles are the brand's own. Amber takes dark ink (white fails on it).
+    ("print", "PRINT", "#A01D20", "#ffffff"),
+    ("design", "DESIGN", "#FFA347", "#1a1a1a"),
+    ("commit", "COMMIT", "#B37B33", "#ffffff"),
+    ("deliver", "DELIVER", "#000000", "#ffffff"),
 ]
 
 # Facts on the home page, outside the product types, that are not yet the
@@ -427,7 +429,7 @@ def head(root, title, description, extra="", schema=""):
 <meta property="og:locale" content="en_CA">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
-<meta name="theme-color" content="#9f257d">
+<meta name="theme-color" content="#a01d20">
 <script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -757,9 +759,9 @@ def promise_html():
     # Premium restyle (Fahad 2026-10-06, a paint-palette pin as inspiration):
     # rounded ink blocks, the name in italic serif, the code spaced out below.
     tiles = "".join(
-        f'<li class="sw" style="background:{c}"><span class="sw-hex">{c}</span>'
+        f'<li class="sw" style="background:{c};color:{ink}"><span class="sw-hex">{c}</span>'
         f'<span class="sw-name">We {v.capitalize()}</span></li>'
-        for v, lab, c in SWATCHES)
+        for v, lab, c, ink in SWATCHES)
     return f'''<section class="band promise" aria-labelledby="promise-h">
   <div class="wrap">
     <h2 id="promise-h" class="sr-only">We print, we design, we commit, we deliver</h2>

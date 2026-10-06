@@ -168,7 +168,8 @@
      value as the default and the full list beside it). On localhost a small
      switch per group flips it and remembers the pick; ?<query>=<name> works
      anywhere for captures. Visitors on the real domain only ever get the first. */
-  function presetSwitch(attr, label, names, key, query, cls) {
+  function presetSwitch(attr, label, names, key, query, cls, target) {
+    if (target && !document.querySelector(target)) return;  // no band on this page
     var root = document.documentElement;
     var presets = (root.getAttribute(attr + '-presets') || '').split(' ').filter(Boolean);
     if (!presets.length) return;
@@ -195,7 +196,7 @@
     try { saved = localStorage.getItem(key); } catch (e) {}
     set(q ? q[1] : (local && saved && presets.indexOf(saved) > -1 ? saved : presets[0]), false);
   }
-  presetSwitch('data-bands', 'How it works', { blush: 'Blush', plum: 'Plum', grey: 'Grey' }, 'az-bands', 'bands', 'bands-switch');
+  presetSwitch('data-bands', 'How it works', { cream: 'Cream', black: 'Black', grey: 'Grey' }, 'az-bands', 'bands', 'bands-switch', '.process');
 
   /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
   var vfPin = /[?&]vf=(\d+)/.exec(location.search);
