@@ -163,6 +163,38 @@
     setView(q ? q[1] : (local && saved && names.indexOf(saved) > -1 ? saved : names[0]), false);
   }
 
+  /* ---------- band colour presets: LOCALHOST-ONLY switch ----------
+     html[data-bands] picks the colours of the process and catchphrase bands
+     (build.py BAND_PRESETS; the first is the default). ?bands=<name> anywhere. */
+  (function () {
+    var root = document.documentElement;
+    var presets = (root.getAttribute('data-band-presets') || '').split(' ').filter(Boolean);
+    if (!presets.length) return;
+    var local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+    var NAME = { 'blush-magenta': 'Blush + Magenta', 'plum-magenta': 'Plum + Magenta', 'blush-plum': 'Blush + Plum', 'grey-magenta': 'Grey + Magenta' };
+    var bar = null;
+    function set(n, remember) {
+      if (presets.indexOf(n) < 0) return;
+      root.setAttribute('data-bands', n);
+      if (bar) bar.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-p') === n ? 'true' : 'false'); });
+      if (remember) { try { localStorage.setItem('az-bands', n); } catch (e) {} }
+    }
+    if (local && presets.length > 1) {
+      bar = document.createElement('div');
+      bar.className = 'layout-switch bands-switch';
+      bar.setAttribute('role', 'group');
+      bar.setAttribute('aria-label', 'Band colours (only on localhost)');
+      bar.innerHTML = '<span>Bands</span>' + presets.map(function (p) {
+        return '<button type="button" data-p="' + p + '">' + (NAME[p] || p) + '</button>';
+      }).join('');
+      bar.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) set(b.getAttribute('data-p'), true); });
+      document.body.appendChild(bar);
+    }
+    var q = /[?&]bands=([a-z-]+)/.exec(location.search), saved = null;
+    try { saved = localStorage.getItem('az-bands'); } catch (e) {}
+    set(q ? q[1] : (local && saved && presets.indexOf(saved) > -1 ? saved : presets[0]), false);
+  })();
+
   /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
   var vfPin = /[?&]vf=(\d+)/.exec(location.search);
   var vfEl = vfPin && document.querySelectorAll('.menu > a, .menu > .menu-dd')[+vfPin[1]];

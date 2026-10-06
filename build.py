@@ -338,9 +338,36 @@ INDUSTRIES = [
      "Banner up Friday, programs ready Sunday.", "rollup-banner"),
 ]
 
+# The two coloured bands between the white sections (Fahad 2026-10-06: "a gap
+# between page headings and the banners ... with a different colour, show
+# process in one and a catchphrase in another"). Band 1 = HOW IT WORKS, band 2 =
+# the client's catchphrase. Words: owner-confirmed facts only; step 3 is on the
+# owner list (PAGE_FACTS). BAND_PRESETS are colour pairings; the FIRST loads,
+# and js/site.js offers the rest on a localhost-only switch. Before go-live, cut
+# to the one he keeps.
+STEPS = [
+    ("chat", "Tell us what you need",
+     "Walk in, call or WhatsApp with your idea or your file, how many you need and when."),
+    ("pen", "We design it",
+     "Our designer sets up the artwork, or we work from the file you send."),
+    ("check", "You approve it",
+     "You see the design before anything is printed."),
+    ("bag", "Pick up or delivery",
+     "Collect it at the counter on Ray Lawson Blvd, or ask about delivery in Brampton and Mississauga."),
+]
+STEP_ICON = {
+    "chat": '<path d="M8 10h32v22H20l-8 7v-7H8z"/><path d="M15 18h18M15 24h12"/>',
+    "pen": '<path d="M30 8l10 10-20 20H10V28z"/><path d="M26 12l10 10"/>',
+    "check": '<rect x="9" y="7" width="30" height="34" rx="3"/><path d="M17 25l5 5 10-11"/>',
+    "bag": '<path d="M10 16h28l-2 24H12z"/><path d="M18 16v-3a6 6 0 0 1 12 0v3"/>',
+}
+BAND_PRESETS = ("blush-magenta", "plum-magenta", "blush-plum", "grey-magenta")
+
 # Facts on the home page, outside the product types, that are not yet the
 # owner's word. They print on --confirm under the types.
 PAGE_FACTS = [
+    ("How it works", "Customers see and approve the design before anything is printed",
+     "brief follow-up item 3, never answered by the owner"),
     ("For your event", "Customers can visit the shop to compare materials and samples in person",
      "shop-build copy approved 2026-09-09, no owner source"),
     ("Doors and industries", "The seven photos are stock samples (one shows a made-up 'Briova' office, "
@@ -381,7 +408,7 @@ def tile_img(p, root, sizes, lazy=True):
 
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
-<html lang="en-CA">
+<html lang="en-CA" data-bands="{BAND_PRESETS[0]}" data-band-presets="{" ".join(BAND_PRESETS)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -698,6 +725,33 @@ def tiles_html(root):
 ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 
 
+def process_html():
+    steps = "".join(
+        f'<li class="step"><span class="step-top"><span class="step-n">{i:02d}</span>'
+        f'<svg class="step-ic" viewBox="0 0 48 48" aria-hidden="true">{STEP_ICON[ic]}</svg></span>'
+        f'<h3>{esc(t)}</h3><p>{esc(d)}</p></li>'
+        for i, (ic, t, d) in enumerate(STEPS, 1))
+    return f'''<section class="band process" aria-labelledby="process-h">
+  <div class="wrap">
+    <div class="process-head"><h2 id="process-h">How it works</h2><p>Four steps from your idea to the finished job.</p></div>
+    <ol class="steps">{steps}</ol>
+    <p class="band-ctas"><a class="btn" href="{SITE["whatsapp"]}">WhatsApp us</a><a class="band-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
+  </div>
+</section>
+'''
+
+
+def promise_html():
+    return f'''<section class="band promise" aria-labelledby="promise-h">
+  <div class="wrap promise-in">
+    <h2 id="promise-h"><span>we commit</span><span>we deliver</span></h2>
+    <p>Walk in, call or WhatsApp. English, Urdu, Hindi and Punjabi spoken at the counter.</p>
+    <p class="band-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="band-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
+  </div>
+</section>
+'''
+
+
 def doors_html(root):
     """Two wide photo doors that widen on hover (the shop build's accordion)."""
     out = []
@@ -757,16 +811,7 @@ def home():
   </div>
 </section>
 
-<section class="slogan" aria-labelledby="slogan-h">
-  <div class="wrap slogan-in">
-    <h2 id="slogan-h"><span class="line">we commit</span><span class="line">we deliver</span></h2>
-    <div class="slogan-side">
-      <p>Walk in, call or WhatsApp. English, Urdu, Hindi and Punjabi spoken at the counter.</p>
-      <p class="slogan-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="slogan-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
-    </div>
-  </div>
-</section>
-
+{process_html()}
 <section class="welcome" id="about" aria-labelledby="welcome-h">
   <div class="wrap welcome-in">
     <div class="welcome-text">
@@ -787,16 +832,7 @@ def home():
   </div>
 </section>
 
-<section class="slogan slogan-alt" aria-labelledby="design-h">
-  <div class="wrap slogan-in">
-    <h2 id="design-h"><span class="line">we design</span><span class="line">we build brands</span></h2>
-    <div class="slogan-side">
-      <p>Logo design, brand identity, complete rebranding and marketing design, from our qualified designer.</p>
-      <p class="slogan-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="slogan-call" href="{SITE["whatsapp"]}">WhatsApp us</a></p>
-    </div>
-  </div>
-</section>
-
+{promise_html()}
 <section class="inds" aria-labelledby="inds-h">
   <div class="wrap">
     <div class="catalog-head"><h2 id="inds-h">Industries we serve</h2></div>
