@@ -837,7 +837,10 @@ html[data-bands="black"] .step-ic { box-shadow: none; border: 1px solid rgba(255
    sand), then WARM STONE #e9e1d6 in the brand-colour pass the same night, when
    the tiles became red / amber / bronze / black and lilac was the last purple. Name size follows the tile's width (cqw) so "We
    Deliver" fits on one line from a phone to a wide screen. */
-.promise { --b-bg: #e9e1d6; --sw-eyebrow: #5f5346; --sw-edge: rgba(255, 255, 255, 0); padding: clamp(2.8rem, 5.5vw, 4.8rem) 0; }
+/* Backgrounds: html[data-promise] = charcoal (default) / deepred / stone. On the
+   dark grounds a faint light edge keeps the black (and, on deep red, the red)
+   tile from melting into the band. */
+.promise { --b-bg: radial-gradient(1100px 460px at 50% -10%, rgba(255, 163, 71, .16), transparent 70%), #15110f; --sw-eyebrow: #d9c7b4; --sw-edge: rgba(255, 255, 255, .14); padding: clamp(2.8rem, 5.5vw, 4.8rem) 0; }
 .sw-head { margin-bottom: clamp(1.2rem, 2.2vw, 1.7rem); }
 .sw-eyebrow { margin: 0; font: 800 .75rem/1.2 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--sw-eyebrow); }
 .swatches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
@@ -847,9 +850,14 @@ html[data-bands="black"] .step-ic { box-shadow: none; border: 1px solid rgba(255
 @media (min-width: 600px) { .swatches { gap: 1rem; } .sw { border-radius: 26px; } .sw-hex { left: 1.4rem; top: 1.3rem; font-size: .74rem; } }
 @media (min-width: 1000px) { .swatches { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; } .sw { border-radius: 30px; } .sw-hex { left: 1.7rem; top: 1.6rem; font-size: .8rem; } }
 
+html[data-promise="deepred"] .promise { --b-bg: radial-gradient(1100px 460px at 50% -10%, rgba(255, 163, 71, .18), transparent 70%), linear-gradient(135deg, #8c161a 0%, #5c0d10 100%); --sw-eyebrow: #f4d2bf; --sw-edge: rgba(255, 255, 255, .2); }
+html[data-promise="stone"] .promise { --b-bg: #e9e1d6; --sw-eyebrow: #5f5346; --sw-edge: rgba(255, 255, 255, 0); }
+
 /* the localhost colour switch sits above the layout switch */
 .layout-switch.bands-switch { bottom: 64px; }
 @media (max-width: 759px) { .layout-switch.bands-switch { bottom: calc(3.6rem + 60px); } }
+.layout-switch.promise-switch { bottom: 114px; }
+@media (max-width: 759px) { .layout-switch.promise-switch { bottom: calc(3.6rem + 110px); } }
 .layout-switch { max-width: calc(100vw - 28px); overflow-x: auto; scrollbar-width: none; }
 .layout-switch::-webkit-scrollbar { display: none; }
 .layout-switch button, .layout-switch span { flex: none; }

@@ -197,6 +197,7 @@
     set(q ? q[1] : (local && saved && presets.indexOf(saved) > -1 ? saved : presets[0]), false);
   }
   presetSwitch('data-bands', 'How it works', { cream: 'Cream', black: 'Black', grey: 'Grey' }, 'az-bands', 'bands', 'bands-switch', '.process');
+  presetSwitch('data-promise', 'Colour tiles', { charcoal: 'Charcoal', deepred: 'Deep red', stone: 'Stone' }, 'az-promise', 'promise', 'promise-switch', '.promise');
 
   /* ?vf=<n> holds nav item n in its variable-font hover state for captures */
   var vfPin = /[?&]vf=(\d+)/.exec(location.search);

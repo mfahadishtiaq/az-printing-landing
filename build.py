@@ -363,6 +363,9 @@ STEP_ICON = {
 # the Claude Design canvas "We Commit Banner Concepts"), which carry their own
 # colours, so the presets now colour band 1 (How it works) only.
 BAND_PRESETS = ("cream", "black", "grey")  # brand pass 2026-10-06 (was blush / plum / grey)
+# Background of the colour-tile band (Fahad 2026-10-06: stone "needs to pop
+# more"). First loads; the rest on a localhost switch until he settles it.
+PROMISE_BGS = ("charcoal", "deepred", "stone")
 SWATCHES = [  # (verb, label, colour, ink); the client's hero line + slogan,
     # in the BRAND PALETTE since 2026-10-06 (AZ Brand Colours.pdf): the hexes on
     # the tiles are the brand's own. Amber takes dark ink (white fails on it).
@@ -417,7 +420,7 @@ def tile_img(p, root, sizes, lazy=True):
 
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
-<html lang="en-CA" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}">
+<html lang="en-CA" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
