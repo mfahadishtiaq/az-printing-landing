@@ -345,15 +345,13 @@ INDUSTRIES = [
 # owner list (PAGE_FACTS). BAND_PRESETS are colour pairings; the FIRST loads,
 # and js/site.js offers the rest on a localhost-only switch. Before go-live, cut
 # to the one he keeps.
+# Made COMPACT 2026-10-06 (Fahad: "make that smaller, just logos with small
+# copy"): icon + title + a few words; no cards, numbers, intro or buttons.
 STEPS = [
-    ("chat", "Tell us what you need",
-     "Walk in, call or WhatsApp with your idea or your file, how many you need and when."),
-    ("pen", "We design it",
-     "Our designer sets up the artwork, or we work from the file you send."),
-    ("check", "You approve it",
-     "You see the design before anything is printed."),
-    ("bag", "Pick up or delivery",
-     "Collect it at the counter on Ray Lawson Blvd, or ask about delivery in Brampton and Mississauga."),
+    ("chat", "Tell us what you need", "Walk in, call or WhatsApp."),
+    ("pen", "We design it", "Or send us your file."),
+    ("check", "You approve it", "Before anything is printed."),
+    ("bag", "Pick up or delivery", "Brampton and Mississauga."),
 ]
 STEP_ICON = {
     "chat": '<path d="M8 10h32v22H20l-8 7v-7H8z"/><path d="M15 18h18M15 24h12"/>',
@@ -738,15 +736,13 @@ ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-
 
 def process_html():
     steps = "".join(
-        f'<li class="step"><span class="step-top"><span class="step-n">{i:02d}</span>'
-        f'<svg class="step-ic" viewBox="0 0 48 48" aria-hidden="true">{STEP_ICON[ic]}</svg></span>'
+        f'<li class="step"><span class="step-ic"><svg viewBox="0 0 48 48" aria-hidden="true">{STEP_ICON[ic]}</svg></span>'
         f'<h3>{esc(t)}</h3><p>{esc(d)}</p></li>'
-        for i, (ic, t, d) in enumerate(STEPS, 1))
+        for ic, t, d in STEPS)
     return f'''<section class="band process" aria-labelledby="process-h">
   <div class="wrap">
-    <div class="process-head"><h2 id="process-h">How it works</h2><p>Four steps from your idea to the finished job.</p></div>
+    <h2 id="process-h">How it works</h2>
     <ol class="steps">{steps}</ol>
-    <p class="band-ctas"><a class="btn" href="{SITE["whatsapp"]}">WhatsApp us</a><a class="band-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
   </div>
 </section>
 '''

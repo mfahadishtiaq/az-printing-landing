@@ -810,24 +810,21 @@ html[data-bands="grey"] .process { --b-bg: #e6e6e3; --b-card: #fff; }
 .band-call { font-weight: 700; color: var(--b-fg); text-decoration: none; display: inline-block; padding: .5em 0; border-bottom: 2px solid currentColor; border-bottom-color: color-mix(in srgb, currentColor 45%, transparent); }
 .band-call:hover { border-bottom-color: currentColor; }
 
-/* band 1: how it works */
-.process { padding: clamp(3rem, 6vw, 6rem) 0; }
-.process-head { max-width: 42rem; margin-bottom: clamp(1.8rem, 3.5vw, 3rem); }
-.process-head h2 { font: 900 clamp(1.8rem, 3.1vw, 3.4rem)/1.1 var(--display); color: var(--b-fg); margin: 0 0 .5rem; }
-.process-head p { font-size: clamp(1.0625rem, 1.15vw, 1.25rem); color: var(--b-muted); margin: 0; }
-.steps { list-style: none; margin: 0 0 clamp(1.8rem, 3vw, 2.6rem); padding: 0; display: grid; gap: 1rem; counter-reset: none; }
-.step { background: var(--b-card); color: var(--b-card-fg); border-radius: 16px; padding: 1.4rem 1.3rem 1.5rem; box-shadow: 0 10px 24px rgba(18, 12, 10, .06); position: relative; }
-.step-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-.step-n { font: 900 2.2rem/1 var(--display); color: var(--b-accent); }
-.step-ic { width: 40px; height: 40px; fill: none; stroke: var(--b-accent); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.step h3 { font: 800 1.15rem/1.25 var(--sans); color: var(--b-card-fg); margin: 0 0 .4rem; }
-.step p { margin: 0; font-size: .98rem; line-height: 1.55; color: var(--b-muted); }
-html[data-bands="black"] .step { box-shadow: none; border: 1px solid rgba(255, 255, 255, .1); }
-@media (min-width: 640px) { .steps { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1000px) {
-  .steps { grid-template-columns: repeat(4, 1fr); gap: 1.4rem; }
-  /* a dashed line joins the cards, step to step */
-  .step:not(:last-child)::after { content: ""; position: absolute; top: 2.5rem; right: -1.4rem; width: 1.4rem; border-top: 2px dashed var(--b-line); }
+/* band 1: how it works, COMPACT (Fahad 2026-10-06: "make that smaller, just
+   logos with small copy"). Centred: heading, then four icon steps in a row
+   joined by a dashed line on desktop, two by two on phones. */
+.process { padding: clamp(2.2rem, 4.5vw, 3.6rem) 0; text-align: center; }
+.process h2 { font: 900 clamp(1.5rem, 2.2vw, 2.1rem)/1.1 var(--display); color: var(--b-fg); margin: 0 0 clamp(1.4rem, 2.6vw, 2.2rem); }
+.steps { list-style: none; margin: 0 auto; padding: 0; max-width: 1080px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6rem 1rem; }
+.step { position: relative; display: flex; flex-direction: column; align-items: center; gap: .35rem; }
+.step-ic { width: 64px; height: 64px; border-radius: 50%; background: var(--b-card); display: grid; place-items: center; margin-bottom: .5rem; box-shadow: 0 8px 20px rgba(18, 12, 10, .07); position: relative; z-index: 1; }
+.step-ic svg { width: 30px; height: 30px; fill: none; stroke: var(--b-accent); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.step h3 { font: 800 1rem/1.25 var(--sans); color: var(--b-fg); margin: 0; }
+.step p { margin: 0; font-size: .9rem; line-height: 1.45; color: var(--b-muted); }
+html[data-bands="black"] .step-ic { box-shadow: none; border: 1px solid rgba(255, 255, 255, .12); }
+@media (min-width: 760px) {
+  .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .step:not(:last-child)::after { content: ""; position: absolute; top: 32px; left: calc(50% + 44px); right: calc(-50% + 44px); border-top: 2px dashed var(--b-line); }
 }
 
 /* band 2: four colour tiles, we print / we design / we commit / we deliver
