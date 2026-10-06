@@ -308,6 +308,46 @@ GROUPS = [
      ["photocopy", "document-scan", "spiral-binding"]),
 ]
 
+# Two home sections carried over from the shop build (`05 - Site` home, Fahad
+# 2026-10-06: "add two sections from the original site"): "For your event /
+# For your business" and "Industries we serve". The words are that build's
+# approved copy, unchanged (an industry's line is the first sentence of its
+# approved intro). The photos are the same files, stock samples, restored from
+# tag pre-client-design-2026-10-05 into images/tiles/. This site has no events,
+# industries or business-accounts page, so the doors ask for a quote and each
+# industry opens the product it orders most (the last field; a cheap swap).
+DOORS = [
+    ("door-event", "The day you're planning", "For your event",
+     "Choose invitations, welcome signs and banners for weddings, birthdays and community events. "
+     "Visit the shop to compare materials and samples in person.",
+     "Ask about event printing"),
+    ("door-business", "The name you're building", "For your business",
+     "Order business cards, flyers, apparel and signs from the same counter as your business grows.",
+     "Ask about business printing"),
+]
+INDUSTRIES = [
+    ("ind-real-estate", "Real estate",
+     "The listing goes live Thursday and the sign has to be on the lawn first.", "lawn-signs"),
+    ("ind-restaurants", "Restaurants",
+     "A menu gets handled more than anything else we print.", "brochures"),
+    ("ind-offices", "Professional services",
+     "The folder that leaves the meeting, the letterhead under the agreement.", "letterhead"),
+    ("ind-construction", "Construction & trades",
+     "The site sign, the truck door, the invoice book.", "store-branding"),
+    ("ind-community", "Community & religious organizations",
+     "Banner up Friday, programs ready Sunday.", "rollup-banner"),
+]
+
+# Facts on the home page, outside the product types, that are not yet the
+# owner's word. They print on --confirm under the types.
+PAGE_FACTS = [
+    ("For your event", "Customers can visit the shop to compare materials and samples in person",
+     "shop-build copy approved 2026-09-09, no owner source"),
+    ("Doors and industries", "The seven photos are stock samples (one shows a made-up 'Briova' office, "
+     "one a made-up wedding sign); swap for the shop's own work when he has it",
+     "restored from the shop build 2026-10-06"),
+]
+
 BANNED = ["—", "AZ Printing and Signs", "416-731-9229", "(416)", "AZ PRINT &", "Eamil",
           "printed at our", "printed here", "made or finished", "in-house"]
 
@@ -616,6 +656,38 @@ def tiles_html(root):
     return "\n      ".join(out)
 
 
+ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+
+
+def doors_html(root):
+    """Two wide photo doors that widen on hover (the shop build's accordion)."""
+    out = []
+    for img, kicker, head_, body, cta in DOORS:
+        out.append(
+            f'<a class="door" href="#contact" data-reveal>'
+            f'<img class="door-bg" src="{root}images/tiles/{img}-900.jpg" srcset="{root}images/tiles/{img}-900.jpg 900w, {root}images/tiles/{img}.jpg 1600w" '
+            f'sizes="(min-width: 900px) 62vw, 92vw" alt="" width="1600" height="1000" loading="lazy">'
+            f'<span class="door-body"><small>{esc(kicker)}</small><h3>{esc(head_)}</h3>'
+            f'<span class="door-p">{esc(body)}</span>'
+            f'<span class="door-go">{esc(cta)}<span class="door-arrow">{ARROW}</span></span></span></a>')
+    return "".join(out)
+
+
+def industries_html(root):
+    """Five trades as tall tiles; on desktop the hovered one widens and shows
+    its line and the product it opens."""
+    out = []
+    for img, name, line, slug in INDUSTRIES:
+        out.append(
+            f'<a class="ind-tile" href="{root}products/{slug}/" data-reveal>'
+            f'<img src="{root}images/tiles/{img}-560.jpg" srcset="{root}images/tiles/{img}-560.jpg 560w, {root}images/tiles/{img}.jpg 900w" '
+            f'sizes="(min-width: 1024px) 34vw, 50vw" alt="" width="900" height="1200" loading="lazy">'
+            f'<span class="ind-cap"><span class="ind-name">{esc(name)}</span>'
+            f'<span class="ind-more"><span class="ind-line">{esc(line)}'
+            f'<span class="ind-go">{esc(by_slug(slug)["name"])}{ARROW}</span></span></span></span></a>')
+    return "".join(out)
+
+
 def home():
     root = ""
     title = "AZ Printing & Signs | Printing, signs and design in Brampton"
@@ -666,6 +738,20 @@ def home():
       <p>Fourteen products and services. Choose one to see its types, sizes and finishes, each explained in plain words.</p>
     </div>
     {catalog_html(root)}
+  </div>
+</section>
+
+<section class="doors" aria-labelledby="doors-h">
+  <div class="wrap">
+    <h2 id="doors-h" class="sr-only">For your event or for your business</h2>
+    <div class="doors-in">{doors_html(root)}</div>
+  </div>
+</section>
+
+<section class="inds" aria-labelledby="inds-h">
+  <div class="wrap">
+    <div class="catalog-head" data-reveal><h2 id="inds-h">Industries we serve</h2></div>
+    <div class="ind-row">{industries_html(root)}</div>
   </div>
 </section>
 
@@ -871,6 +957,10 @@ def confirm_list():
             why = "; ".join(SOURCES[s] for s in src.split("+"))
             out.append(f"- [ ] **{n}** ({why})")
         out.append("")
+    out.append("## Home page")
+    for where, fact, why in PAGE_FACTS:
+        out.append(f"- [ ] **{where}:** {fact} ({why})")
+    out.append("")
     return "\n".join(out)
 
 

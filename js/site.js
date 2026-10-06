@@ -100,6 +100,14 @@
     pi.style.setProperty('--gx', '80%'); pi.style.setProperty('--gy', '15%');
   }
 
+  /* ?door=<n> / ?ind=<n> pin a door or an industry tile open so a capture
+     can show the widened state (the pane and headless cannot hover) */
+  [['door', '.door'], ['ind', '.ind-tile']].forEach(function (k) {
+    var m = new RegExp('[?&]' + k[0] + '=(\\d+)').exec(location.search);
+    var el = m && document.querySelectorAll(k[1])[+m[1]];
+    if (el) el.classList.add('is-open');
+  });
+
   /* ---------- 3D tilt + glare ---------- */
   if (finePointer && !reduce) {
     cards.forEach(function (c) {
