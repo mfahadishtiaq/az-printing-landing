@@ -646,7 +646,7 @@ def catalog_html(root):
         for slug in slugs:
             p = by_slug(slug)
             cards.append(
-                f'<li class="c3d" data-group="{key}" data-reveal><a href="{root}products/{slug}/">'
+                f'<li class="c3d" data-group="{key}"><a href="{root}products/{slug}/">'
                 f'<span class="c3d-in">'
                 f'<span class="c3d-img"><img src="{root}images/client/tile-{slug}-800.jpg" srcset="{root}images/client/tile-{slug}-480.jpg 480w, {root}images/client/tile-{slug}-800.jpg 800w" sizes="(min-width: 1000px) 23vw, (min-width: 600px) 46vw, 46vw" alt="{esc(p["alt"])}" width="800" height="800" loading="lazy"></span>'
                 f'<span class="c3d-chip">{esc(title)}</span>'
@@ -661,7 +661,7 @@ def catalog_html(root):
 def tiles_html(root):
     out = []
     for p in PRODUCTS:
-        out.append(f'<li class="tile" data-reveal><a href="{root}products/{p["slug"]}/"><h3>{esc(p["name"])}</h3>'
+        out.append(f'<li class="tile"><a href="{root}products/{p["slug"]}/"><h3>{esc(p["name"])}</h3>'
                    f'{tile_img(p, root, "(min-width: 760px) 30vw, 46vw")}'
                    f'<span class="tile-more">See the types</span></a></li>')
     return "\n      ".join(out)
@@ -675,7 +675,7 @@ def doors_html(root):
     out = []
     for img, kicker, head_, body, cta in DOORS:
         out.append(
-            f'<a class="door" href="#contact" data-reveal>'
+            f'<a class="door" href="#contact">'
             f'<img class="door-bg" src="{root}images/tiles/{img}-900.jpg" srcset="{root}images/tiles/{img}-900.jpg 900w, {root}images/tiles/{img}.jpg 1600w" '
             f'sizes="(min-width: 900px) 62vw, 92vw" alt="" width="1600" height="1000" loading="lazy">'
             f'<span class="door-body"><small>{esc(kicker)}</small><h3>{esc(head_)}</h3>'
@@ -690,7 +690,7 @@ def industries_html(root):
     out = []
     for img, name, line, slug in INDUSTRIES:
         out.append(
-            f'<a class="ind-tile" href="{root}products/{slug}/" data-reveal>'
+            f'<a class="ind-tile" href="{root}products/{slug}/">'
             f'<img src="{root}images/tiles/{img}-560.jpg" srcset="{root}images/tiles/{img}-560.jpg 560w, {root}images/tiles/{img}.jpg 900w" '
             f'sizes="(min-width: 1024px) 34vw, 50vw" alt="" width="900" height="1200" loading="lazy">'
             f'<span class="ind-cap"><span class="ind-name">{esc(name)}</span>'
@@ -722,20 +722,20 @@ def home():
 <section class="welcome" id="about" aria-labelledby="welcome-h">
   <div class="wrap welcome-in">
     <div class="welcome-text">
-      <h2 id="welcome-h" data-reveal>Welcome to Brampton<br>AZ Printing &amp; Signs</h2>
-      <p data-reveal>AZ PRINTING &amp; SIGNS is your one-stop destination for professional printing, signage, graphic design, and branding services in Brampton.</p>
-      <p data-reveal>Conveniently located at 499 Ray Lawson Blvd, we offer digital printing, Xerox promotional printing, photocopying (Photo Stat), scanning, spiral binding, and custom signage, including window graphics.</p>
-      <p data-reveal>Our qualified designer also provides logo design, brand identity, complete rebranding, and marketing design services to help businesses build a professional and consistent image.</p>
-      <p data-reveal>From everyday printing to complete branding solutions, AZ PRINTING &amp; SIGNS is here to bring your ideas to life with quality, creativity, and reliable service.<br><a class="contact-link" href="#contact">Contact us</a> today to learn more about how we can help you.</p>
+      <h2 id="welcome-h">Welcome to Brampton<br>AZ Printing &amp; Signs</h2>
+      <p>AZ PRINTING &amp; SIGNS is your one-stop destination for professional printing, signage, graphic design, and branding services in Brampton.</p>
+      <p>Conveniently located at 499 Ray Lawson Blvd, we offer digital printing, Xerox promotional printing, photocopying (Photo Stat), scanning, spiral binding, and custom signage, including window graphics.</p>
+      <p>Our qualified designer also provides logo design, brand identity, complete rebranding, and marketing design services to help businesses build a professional and consistent image.</p>
+      <p>From everyday printing to complete branding solutions, AZ PRINTING &amp; SIGNS is here to bring your ideas to life with quality, creativity, and reliable service.<br><a class="contact-link" href="#contact">Contact us</a> today to learn more about how we can help you.</p>
     </div>
-    <figure class="welcome-photo" data-reveal><img src="images/client/storefront-1200.jpg" srcset="images/client/storefront-800.jpg 800w, images/client/storefront-1200.jpg 1200w" sizes="(min-width: 760px) 44vw, 92vw" alt="The AZ Printing &amp; Signs storefront at 499 Ray Lawson Blvd, Brampton: the sign, the phone number and the window listings" width="1200" height="800" loading="lazy"></figure>
+    <figure class="welcome-photo"><img src="images/client/storefront-1200.jpg" srcset="images/client/storefront-800.jpg 800w, images/client/storefront-1200.jpg 1200w" sizes="(min-width: 760px) 44vw, 92vw" alt="The AZ Printing &amp; Signs storefront at 499 Ray Lawson Blvd, Brampton: the sign, the phone number and the window listings" width="1200" height="800" loading="lazy"></figure>
   </div>
 </section>
 
 <section class="slogan" aria-labelledby="slogan-h">
   <div class="wrap slogan-in">
-    <h2 id="slogan-h"><span class="line" data-reveal>we commit</span><span class="line" data-reveal>we deliver</span></h2>
-    <div class="slogan-side" data-reveal>
+    <h2 id="slogan-h"><span class="line">we commit</span><span class="line">we deliver</span></h2>
+    <div class="slogan-side">
       <p>Walk in, call or WhatsApp. English, Urdu, Hindi and Punjabi spoken at the counter.</p>
       <p class="slogan-ctas"><a class="btn btn-white" href="#contact">Get a quote</a><a class="slogan-call" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></p>
     </div>
@@ -744,7 +744,7 @@ def home():
 
 <section class="catalog" id="products" aria-labelledby="products-h">
   <div class="wrap">
-    <div class="catalog-head" data-reveal>
+    <div class="catalog-head">
       <h2 id="products-h">What we do</h2>
       <p>Fourteen products and services. Choose one to see its types, sizes and finishes, each explained in plain words.</p>
     </div>
@@ -754,14 +754,14 @@ def home():
 
 <section class="doors" aria-labelledby="doors-h">
   <div class="wrap">
-    <div class="catalog-head" data-reveal><h2 id="doors-h">Printing for events and businesses</h2></div>
+    <div class="catalog-head"><h2 id="doors-h">Printing for events and businesses</h2></div>
     <div class="doors-in">{doors_html(root)}</div>
   </div>
 </section>
 
 <section class="inds" aria-labelledby="inds-h">
   <div class="wrap">
-    <div class="catalog-head" data-reveal><h2 id="inds-h">Industries we serve</h2></div>
+    <div class="catalog-head"><h2 id="inds-h">Industries we serve</h2></div>
     <div class="ind-row">{industries_html(root)}</div>
   </div>
 </section>
@@ -774,9 +774,9 @@ def home():
 def contact_html():
     return f'''<section class="contact" id="contact" aria-labelledby="contact-h">
   <div class="wrap">
-    <h2 id="contact-h" data-reveal>Send us a message</h2>
+    <h2 id="contact-h">Send us a message</h2>
     <div class="contact-in">
-      <form class="contact-form" data-reveal action="https://formsubmit.co/{SITE["email"]}" method="POST">
+      <form class="contact-form" action="https://formsubmit.co/{SITE["email"]}" method="POST">
         <input type="hidden" name="_subject" value="Website message from azprintingandsigns.ca">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="true">
@@ -797,7 +797,7 @@ def contact_html():
         </div>
         <p class="form-sent" id="form-sent" role="status">Thank you. Your message has been sent and we will get back to you soon.</p>
       </form>
-      <figure class="map" data-reveal><iframe title="Map showing AZ Printing &amp; Signs at 499 Ray Lawson Blvd, Brampton" src="{esc(SITE["map_embed"])}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></figure>
+      <figure class="map"><iframe title="Map showing AZ Printing &amp; Signs at 499 Ray Lawson Blvd, Brampton" src="{esc(SITE["map_embed"])}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></figure>
     </div>
   </div>
 </section>'''

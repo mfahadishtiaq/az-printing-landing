@@ -81,7 +81,6 @@
         var show = f === 'all' || c.getAttribute('data-group') === f;
         if (show) {
           c.hidden = false;
-          c.classList.add('is-in');
           c.style.setProperty('--d', (i++ * 45) + 'ms');
           c.classList.remove('c3d-enter'); void c.offsetWidth; c.classList.add('c3d-enter');
         } else {

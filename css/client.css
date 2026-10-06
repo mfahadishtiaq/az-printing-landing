@@ -270,9 +270,8 @@ html.pre .hero-item, html.pre .hero h1 .w, html.pre .hero-list li, html.pre .her
 }
 
 /* reveals: the house entrance (ZEF), one item at a time via motion.js */
-html.motion [data-reveal] { opacity: 0; transform: translateY(70px) scale(.96); filter: blur(6px); }
-html.motion [data-reveal].is-in { opacity: 1; transform: none; filter: none; transition: opacity 1.15s ease-out, filter 1.15s ease-out, transform 1.3s cubic-bezier(.22, 1, .36, 1); }
-html.motion-done [data-reveal] { opacity: 1; transform: none; filter: none; }
+/* Scroll reveals (blur + fade + rise) REMOVED 2026-10-06, Fahad: "remove this
+   shading effect". Sections are simply there when you scroll to them. */
 .welcome-photo { overflow: hidden; }
 html.motion .welcome-photo img { height: 112%; object-fit: cover; }
 .slogan .line { display: block; }
@@ -697,9 +696,6 @@ html.sheet-open .head { z-index: 80; }
   .ind-tile:hover .ind-more, .ind-tile:focus-visible .ind-more, .ind-tile.is-open .ind-more { grid-template-rows: 1fr; }
   .ind-tile:hover .ind-line, .ind-tile:focus-visible .ind-line, .ind-tile.is-open .ind-line { opacity: 1; padding-top: .6rem; }
 }
-/* The house reveal sets its own transition on .is-in; keep the accordion's
-   flex transition alive alongside it or the widening snaps. */
-html.motion .door[data-reveal].is-in, html.motion .ind-tile[data-reveal].is-in { transition: opacity 1.15s ease-out, filter 1.15s ease-out, transform 1.3s cubic-bezier(.22, 1, .36, 1), flex .55s cubic-bezier(.3, .8, .3, 1); }
 @media (prefers-reduced-motion: reduce) {
   .door, .ind-tile, .door-bg, .ind-tile img { transition: none !important; }
   .door:hover, .door:focus-visible, .ind-tile:hover, .ind-tile:focus-visible { flex: 1; }

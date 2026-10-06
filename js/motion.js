@@ -8,9 +8,7 @@
       (rendered from the client's PSD), so they rise in one after another and
       then stay still; the background ribbon drifts instead (CSS). One loud
       moment, at the top, nowhere else.
-   3. Reveals below the fold, ONE ITEM AT A TIME: each item fires on its own
-      visibility, through a queue with a minimum gap, so a row reads as a
-      sequence and never as one event (Fahad's ruling, 2026-09-03).
+   3. (Scroll reveals removed 2026-10-06 on Fahad's ruling: no blur-and-fade.)
 
    Off switches: prefers-reduced-motion, `?motion=off`, or GSAP failing to
    load. Each leaves the page in its final, fully visible state. */
@@ -130,20 +128,8 @@
     });
   });
 
-  /* 3. reveals, one by one */
-  var GAP = 260, last = 0;
-  function schedule(el) {
-    var now = performance.now();
-    var at = Math.max(now, last + GAP);
-    last = at;
-    setTimeout(function () { el.classList.add('is-in'); }, at - now);
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { io.unobserve(e.target); schedule(e.target); }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -18% 0px' });
-  document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
+  /* 3. scroll reveals: REMOVED 2026-10-06 (Fahad: "remove this shading
+     effect"). Nothing below the hero animates in; it is just there. */
 
   /* the form's thank-you line, when FormSubmit sends the visitor back */
   if (location.search.indexOf('sent=1') > -1) {
