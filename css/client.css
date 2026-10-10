@@ -1236,3 +1236,33 @@ html.sheet-open .wa-fab { display: none; }
    How it works now sits between two white sections, so it takes a rule above
    as well as below to read as its own band. */
 .process { border-top: 1px solid var(--line); }
+
+
+/* =====================================================================
+   HOW IT WORKS background presets (picker board 2026-10-10).
+   html[data-how]; HOW_PRESETS[0] ships; "white" is the page as it was.
+   ===================================================================== */
+html[data-how]:not([data-how="white"]) .process { border-top: 0; border-bottom: 0; }
+html[data-how="grey"] .process { --b-bg: #f1efec; }
+html[data-how="cream"] .process { --b-bg: #fdf1e2; --b-line: rgba(160, 29, 32, .3); }
+html[data-how="cream"] .process .step-ic { border-color: #f0d9bd; }
+html[data-how="black"] .process { --b-bg: #0a0a0a; --b-fg: #fff; --b-muted: rgba(255,255,255,.8); --b-accent: #FF8F2E; --b-line: rgba(255,143,46,.45); }
+html[data-how="black"] .process .step-ic { background: #1a1716; border-color: rgba(255,255,255,.16); }
+html[data-how="red"] .process { --b-bg: #A01D20; --b-fg: #fff; --b-muted: rgba(255,255,255,.9); --b-accent: #A01D20; --b-line: rgba(255,255,255,.5); }
+html[data-how="red"] .process .step-ic { background: #fff; border-color: #fff; }
+html[data-how="orange"] .process { --b-bg: #FF8F2E; --b-fg: #14100c; --b-muted: #2a1c0c; --b-accent: #A01D20; --b-line: rgba(20,16,12,.4); }
+html[data-how="orange"] .process .step-ic { background: #fff; border-color: #fff; }
+
+/* INDUSTRIES WE SERVE background presets (same board). html[data-inds];
+   INDS_PRESETS[0] ships. A coloured band needs its own top padding (the
+   white version tucks under the section above with none). */
+html[data-inds]:not([data-inds="white"]) .inds { padding-top: clamp(3rem, 6vw, 5.5rem); background: var(--i-bg); }
+html[data-inds]:not([data-inds="white"]) .inds h2, html[data-inds]:not([data-inds="white"]) .inds .icard { color: var(--i-fg); }
+html[data-inds]:not([data-inds="white"]) .inds .icard-go { color: var(--i-link); }
+html[data-inds="grey"] .inds { --i-bg: #f1efec; --i-fg: var(--ink); --i-link: var(--red); }
+html[data-inds="cream"] .inds { --i-bg: #fdf1e2; --i-fg: var(--ink); --i-link: var(--red); }
+html[data-inds="black"] .inds { --i-bg: #0a0a0a; --i-fg: #fff; --i-link: #FF8F2E; }
+html[data-inds="red"] .inds { --i-bg: #A01D20; --i-fg: #fff; --i-link: #fff; }
+html[data-inds="orange"] .inds { --i-bg: #FF8F2E; --i-fg: #14100c; --i-link: #14100c; }
+/* the print2go block pins .process h2 to --ink; a coloured band needs its own heading colour */
+html[data-how]:not([data-how="white"]) .process h2 { color: var(--b-fg); }

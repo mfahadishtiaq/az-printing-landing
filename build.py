@@ -423,7 +423,7 @@ def tile_img(p, root, sizes, lazy=True):
 
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
-<html lang="en-CA" data-nav="{NAV_PRESETS[0]}" data-nav-presets="{" ".join(NAV_PRESETS)}" data-util="{UTIL_PRESETS[0]}" data-util-presets="{" ".join(UTIL_PRESETS)}" data-type="{TYPE_PRESETS[0]}" data-type-presets="{" ".join(TYPE_PRESETS)}" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
+<html lang="en-CA" data-nav="{NAV_PRESETS[0]}" data-nav-presets="{" ".join(NAV_PRESETS)}" data-util="{UTIL_PRESETS[0]}" data-util-presets="{" ".join(UTIL_PRESETS)}" data-type="{TYPE_PRESETS[0]}" data-type-presets="{" ".join(TYPE_PRESETS)}" data-how="{HOW_PRESETS[0]}" data-inds="{INDS_PRESETS[0]}" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -434,7 +434,7 @@ def head(root, title, description, extra="", schema=""):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
 <meta name="theme-color" content="#a01d20">
-<script>var _n=/[?&]nav=([a-z]+)/.exec(location.search);if(_n)document.documentElement.setAttribute('data-nav',_n[1]);var _u=/[?&]util=([a-z]+)/.exec(location.search);if(_u)document.documentElement.setAttribute('data-util',_u[1]);var _t=/[?&]type=([a-z]+)/.exec(location.search);if(_t)document.documentElement.setAttribute('data-type',_t[1]);if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
+<script>var _n=/[?&]nav=([a-z]+)/.exec(location.search);if(_n)document.documentElement.setAttribute('data-nav',_n[1]);var _u=/[?&]util=([a-z]+)/.exec(location.search);if(_u)document.documentElement.setAttribute('data-util',_u[1]);var _t=/[?&]type=([a-z]+)/.exec(location.search);if(_t)document.documentElement.setAttribute('data-type',_t[1]);var _h=/[?&]how=([a-z]+)/.exec(location.search);if(_h)document.documentElement.setAttribute('data-how',_h[1]);var _i=/[?&]inds=([a-z]+)/.exec(location.search);if(_i&&!/^\d+$/.test(_i[1]))document.documentElement.setAttribute('data-inds',_i[1]);if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&family=Russo+One&display=swap">
@@ -675,6 +675,9 @@ NAV_PRESETS = ("dark", "now", "rows", "left")  # Fahad picked C (dark, the shop 
 UTIL_PRESETS = ("red", "now", "orange", "line")  # the strip itself was REMOVED later on 2026-10-10 ("remove the header completely"); attribute kept, nothing renders
 # TYPE presets (board 2026-10-10, Fahad: "the font is different in the nav bar, logo and copy"): weights/case of the header.
 TYPE_PRESETS = ("now", "even", "caps", "line")
+# HOW IT WORKS background (board 2026-10-10, Fahad: "change the background colour for how it works"); first ships, ?how=<name> previews.
+HOW_PRESETS = ("white", "grey", "cream", "black", "red", "orange")
+INDS_PRESETS = ("white", "grey", "cream", "black", "red", "orange")  # same set for "Industries we serve"; ?inds=<name>
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
 BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
                "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
