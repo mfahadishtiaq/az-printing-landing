@@ -676,8 +676,8 @@ UTIL_PRESETS = ("red", "now", "orange", "line")  # the strip itself was REMOVED 
 # TYPE presets (board 2026-10-10, Fahad: "the font is different in the nav bar, logo and copy"): weights/case of the header.
 TYPE_PRESETS = ("now", "even", "caps", "line")
 # HOW IT WORKS background (board 2026-10-10, Fahad: "change the background colour for how it works"); first ships, ?how=<name> previews.
-HOW_PRESETS = ("white", "grey", "cream", "black", "red", "orange")
-INDS_PRESETS = ("white", "grey", "cream", "black", "red", "orange")  # same set for "Industries we serve"; ?inds=<name>
+HOW_PRESETS = ("grey", "white", "cream", "black", "red", "orange")  # Fahad 2026-10-10: "let's go with grey"
+INDS_PRESETS = ("grey", "white", "cream", "black", "red", "orange")  # same set for "Industries we serve"; ?inds=<name>
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
 BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
                "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
