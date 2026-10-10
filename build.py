@@ -858,7 +858,6 @@ def home():
   <p class="hero-quality"{style_vars("quality")}>Premium quality</p>
 </section>
 
-{process_html()}
 <section class="catalog" id="products" aria-labelledby="products-h" data-layouts="{" ".join(CATALOG_LAYOUTS)}">
   <div class="wrap">
     <div class="catalog-head">
@@ -868,6 +867,8 @@ def home():
   </div>
 </section>
 {types_dialogs(root)}
+
+{process_html()}
 
 <section class="welcome" id="about" aria-labelledby="welcome-h">
   <div class="wrap welcome-in">

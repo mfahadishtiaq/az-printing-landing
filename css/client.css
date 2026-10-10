@@ -1231,3 +1231,8 @@ html.sheet-open .wa-fab { display: none; }
 /* the hero's "Premium quality" label sat exactly where the floating button lands
    when the hero fills the window (1440x900): keep it clear of the button */
 @media (min-width: 900px) { .hero-quality { right: max(var(--qr, 2.4%), 96px); } }
+
+/* ORDER 2026-10-10 (Fahad): hero, What we do, How it works, then the rest.
+   How it works now sits between two white sections, so it takes a rule above
+   as well as below to read as its own band. */
+.process { border-top: 1px solid var(--line); }
