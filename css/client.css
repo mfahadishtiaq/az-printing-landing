@@ -1089,3 +1089,32 @@ html[data-nav="dark"] .sheet-cta .btn-ghost.dark { color: #fff; border-color: rg
   html[data-nav="left"] .head-cta { grid-column: 3; }
   html[data-nav="left"] .head-wa { display: inline-flex; }
 }
+
+
+/* =====================================================================
+   TOP STRIP PRESETS (picker board 2026-10-10, Fahad: "fix the very top
+   banner"). html[data-util] picks one; UTIL_PRESETS[0] ships. The dark nav
+   (html[data-nav="dark"]) is assumed under all of them.
+   ===================================================================== */
+.util .ui { display: none; width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; margin-right: 6px; }
+
+/* B. red: the brand red band, white text, a clear step down to the black nav */
+html[data-util="red"] .util { background: var(--red); color: rgba(255,255,255,.92); border-bottom: 0; font-size: .86rem; }
+html[data-util="red"] .util-in { min-height: 42px; }
+html[data-util="red"] .util a { color: #fff; }
+html[data-util="red"] .util .ui { display: inline-block; }
+html[data-util="red"] .util-r a { background: rgba(0,0,0,.22); padding: .3rem .7rem; border-radius: 999px; }
+
+/* C. orange: the Z's orange, black text, the warm stripe over the black nav */
+html[data-util="orange"] .util { background: #FF8F2E; color: #1a1109; border-bottom: 0; font-size: .86rem; font-weight: 600; }
+html[data-util="orange"] .util-in { min-height: 42px; }
+html[data-util="orange"] .util a { color: #0a0a0a; }
+html[data-util="orange"] .util .ui { display: inline-block; }
+html[data-util="orange"] .util-r a { background: #0a0a0a; color: #fff; padding: .3rem .7rem; border-radius: 999px; }
+
+/* D. line: stays dark but reads as its own row: brighter text, icons, an orange
+   rule between the strip and the nav, WhatsApp in orange */
+html[data-util="line"] .util { background: #151313; color: rgba(255,255,255,.9); border-bottom: 2px solid #FF8F2E; font-size: .86rem; }
+html[data-util="line"] .util-in { min-height: 42px; }
+html[data-util="line"] .util .ui { display: inline-block; color: #FF8F2E; }
+html[data-util="line"] .util-r a { color: #FF8F2E; }
