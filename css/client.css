@@ -1174,3 +1174,12 @@ html[data-type="line"] .menu a { font-weight: 600; font-size: 1rem; }
 html[data-type="line"] .vf-l span { font-weight: 600; font-variation-settings: 'wght' 600; }
 html[data-type="line"] .vf-ghost { font-weight: 800; font-variation-settings: 'wght' 800; }
 html[data-type="line"] .menu a:hover .vf-l span, html[data-type="line"] .menu a:focus-visible .vf-l span, html[data-type="line"] .menu a[aria-current="page"] .vf-l span { font-variation-settings: 'wght' 800; }
+
+/* WORDMARK FONT = RUSSO ONE (Fahad picked it off 04 - Decision Boards/
+   2026-10-10-sign-font.html as the closest Google face to the shop sign's
+   squared wide lettering, 2026-10-10). Wordmark only; everything else stays
+   Montserrat. Russo One has one weight (400) and runs wide, so the size
+   drops a step. */
+.brand-word { font-family: 'Russo One', 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; letter-spacing: .03em; }
+.head .brand-word { font-size: 1.02rem; }
+@media (min-width: 900px) and (max-width: 1199px) { .head .brand-word { font-size: .9rem; } }

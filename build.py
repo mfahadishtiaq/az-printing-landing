@@ -437,7 +437,7 @@ def head(root, title, description, extra="", schema=""):
 <script>var _n=/[?&]nav=([a-z]+)/.exec(location.search);if(_n)document.documentElement.setAttribute('data-nav',_n[1]);var _u=/[?&]util=([a-z]+)/.exec(location.search);if(_u)document.documentElement.setAttribute('data-util',_u[1]);var _t=/[?&]type=([a-z]+)/.exec(location.search);if(_t)document.documentElement.setAttribute('data-type',_t[1]);if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&family=Russo+One&display=swap">
 {extra}<link rel="stylesheet" href="{root}css/client.css">
 <link rel="icon" href="{root}images/az-mark.svg" type="image/svg+xml">
 <link rel="icon" href="{root}images/favicon-32.png" sizes="32x32">
