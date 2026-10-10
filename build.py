@@ -863,7 +863,6 @@ def home():
   <div class="wrap">
     <div class="catalog-head">
       <h2 id="products-h">What we do</h2>
-      <p>Fourteen products and services. Choose one to see its types, sizes and finishes, each explained in plain words.</p>
     </div>
     {catalog_html(root)}
   </div>
