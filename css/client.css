@@ -1124,3 +1124,16 @@ html[data-util="line"] .util-r a { color: #FF8F2E; }
 .util-c { justify-self: center; text-align: center; }
 .util-r { justify-self: end; }
 @media (max-width: 1099px) { .util-in { grid-template-columns: auto 1fr auto; } .util-c { justify-self: center; } }
+
+/* 900 to 1199px: five links plus two buttons were squeezing the lockup to three
+   lines and the quote button to two (seen in the Claude pane 2026-10-10) */
+.brand-word { white-space: nowrap; }
+.head-cta .btn { white-space: nowrap; }
+@media (min-width: 900px) and (max-width: 1199px) {
+  .head-in { gap: 1rem; }
+  .menu { gap: 0; }
+  .menu a { padding: .7rem .6rem; font-size: .92rem; }
+  .head .brand img { width: 44px; }
+  .head .brand-word { font-size: 1rem; }
+  .head-cta .btn { padding: .8rem 1rem; }
+}
