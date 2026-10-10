@@ -423,7 +423,7 @@ def tile_img(p, root, sizes, lazy=True):
 
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
-<html lang="en-CA" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
+<html lang="en-CA" data-nav="{NAV_PRESETS[0]}" data-nav-presets="{" ".join(NAV_PRESETS)}" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -434,7 +434,7 @@ def head(root, title, description, extra="", schema=""):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
 <meta name="theme-color" content="#a01d20">
-<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
+<script>var _n=/[?&]nav=([a-z]+)/.exec(location.search);if(_n)document.documentElement.setAttribute('data-nav',_n[1]);if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Merriweather:wght@900&family=Montserrat:wght@400..900&display=swap">
@@ -464,7 +464,8 @@ def vf(label):
     30ms stagger outward from the centre. A hidden bold copy sits in the same
     grid cell so the word never changes width and the nav never shifts."""
     mid = (len(label) - 1) / 2
-    letters = "".join(f'<span style="--d:{abs(i - mid):.1f}">{esc(ch)}</span>' for i, ch in enumerate(label))
+    # a space inside an inline-flex row collapses to nothing ("Howitworks"); keep it as nbsp
+    letters = "".join(f'<span style="--d:{abs(i - mid):.1f}">{"&nbsp;" if ch == " " else esc(ch)}</span>' for i, ch in enumerate(label))
     return (f'<span class="vf" aria-hidden="true"><span class="vf-ghost">{esc(label)}</span>'
             f'<span class="vf-l">{letters}</span></span>')
 
@@ -490,10 +491,15 @@ def header(root, current=""):
     {brand(root)}
     <nav class="menu" aria-label="Main">
       <a href="{root}#products" aria-label="Products">{vf("Products")}</a>
+      <a href="{root}#how" aria-label="How it works" data-extra>{vf("How it works")}</a>
       <a href="{root}#about" aria-label="About"{cur("about")}>{vf("About")}</a>
+      <a href="{root}#industries" aria-label="Industries" data-extra>{vf("Industries")}</a>
       <a href="{root}#contact" aria-label="Contact"{cur("contact")}>{vf("Contact")}</a>
+      <a class="menu-cta" href="{root}#contact" data-extra>Get a quote</a>
     </nav>
     <div class="head-cta">
+      <span class="head-hours" data-extra>{esc(SITE["hours"])}</span>
+      <a class="btn-ghost head-wa" href="{SITE["whatsapp"]}" data-extra><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/><path d="M9 8.5c.2-.6.6-.6 1-.6s.5.3.7.8l.5 1.2c.1.3 0 .6-.2.8l-.5.5c.6 1.2 1.6 2.2 2.8 2.8l.5-.5c.2-.2.5-.3.8-.2l1.2.5c.5.2.8.3.8.7s0 .8-.6 1a3 3 0 0 1-2 .5A8 8 0 0 1 8.5 10a3 3 0 0 1 .5-1.5Z"/></svg><span>WhatsApp</span></a>
       <a class="btn-ghost" href="tel:{SITE["phone_tel"]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>{SITE["phone_display"]}</span></a>
       <a class="btn" href="{root}#contact">Get a quote</a>
       <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="l1" d="M4 12H20"/><path class="l2" d="M4 12H20"/><path class="l3" d="M4 12H20"/></svg></button>
@@ -504,7 +510,9 @@ def header(root, current=""):
 <div class="sheet" id="sheet" hidden>
   <nav class="sheet-in" aria-label="Menu">
     <a class="sheet-link" href="{root}#products">Products</a>
+    <a class="sheet-link" href="{root}#how" data-extra>How it works</a>
     <a class="sheet-link" href="{root}#about">About</a>
+    <a class="sheet-link" href="{root}#industries" data-extra>Industries</a>
     <a class="sheet-link" href="{root}#contact">Contact</a>
     <div class="sheet-cta"><a class="btn" href="{root}#contact">Get a quote</a><a class="btn-ghost dark" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></div>
     <p class="sheet-meta">{esc(SITE["address"])}<br>{esc(SITE["hours"])}</p>
@@ -664,6 +672,9 @@ def first_sentence(text):
 # print2go.com): one layout, "tabs" = group tabs over a single row of light
 # product cards. shelves / bento / circles stay defined below but are off.
 CATALOG_LAYOUTS = ("tabs",)
+# NAV BAR presets (board 2026-10-10, Fahad: "fix the nav bar"). The first is what
+# ships; ?nav=<name> shows another for captures and the picker board.
+NAV_PRESETS = ("now", "rows", "dark", "left")
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
 BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
                "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
@@ -770,7 +781,7 @@ def process_html():
         f'<li class="step"><span class="step-ic"><svg viewBox="0 0 48 48" aria-hidden="true">{STEP_ICON[ic]}</svg></span>'
         f'<h3>{esc(t)}</h3><p>{esc(d)}</p></li>'
         for ic, t, d in STEPS)
-    return f'''<section class="band process" aria-labelledby="process-h">
+    return f'''<section class="band process" id="how" aria-labelledby="process-h">
   <div class="wrap">
     <h2 id="process-h">How it works</h2>
     <ol class="steps">{steps}</ol>
@@ -879,7 +890,7 @@ def home():
   </div>
 </section>
 
-<section class="inds" aria-labelledby="inds-h">
+<section class="inds" id="industries" aria-labelledby="inds-h">
   <div class="wrap">
     <div class="catalog-head"><h2 id="inds-h">Industries we serve</h2></div>
     <div class="icards">{industries_html(root)}</div>

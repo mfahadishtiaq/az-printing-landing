@@ -1023,3 +1023,69 @@ dialog.tdlg::backdrop { background: rgba(18, 12, 10, .55); backdrop-filter: blur
 }
 @keyframes tdlg-in { from { opacity: 0; transform: translateY(16px) scale(.98); } }
 @keyframes tdlg-fade { from { opacity: 0; } }
+
+
+/* =====================================================================
+   NAV BAR PRESETS (picker board 2026-10-10, Fahad: "fix the nav bar").
+   html[data-nav] picks one; build.py's NAV_PRESETS[0] ships. ?nav=<name>
+   previews another. Phone header is the same in all (burger + bottom bar),
+   only "dark" tints it. The extra links (How it works, Industries, the
+   WhatsApp button, hours, the pill) carry data-extra and are hidden in "now".
+   ===================================================================== */
+html[data-nav="now"] [data-extra] { display: none !important; }
+.menu .menu-cta, .head-wa, .head-hours { display: none; }  /* .menu a outranks a lone .menu-cta */
+.menu .menu-cta { background: var(--accent); color: #fff; border-radius: 999px; padding: .75rem 1.3rem; }
+.menu .menu-cta::after { display: none; }
+.menu .menu-cta:hover { background: var(--red-deep); color: #fff; }
+.head-hours { font: 500 .86rem/1.3 var(--sans); color: var(--muted); margin-right: .4rem; white-space: nowrap; }
+
+/* B. rows: print2go's two-row header. Row 1 the brand and the contact ways,
+   row 2 a full-width link row ending in a pill. The top strip goes. */
+@media (min-width: 900px) {
+  html[data-nav="rows"] .util { display: none; }
+  html[data-nav="rows"] .head-in { grid-template-columns: auto 1fr; grid-template-areas: "brand cta" "menu menu"; min-height: 0; padding-top: 16px; padding-bottom: 0; row-gap: 0; }
+  html[data-nav="rows"] .brand { grid-area: brand; }
+  html[data-nav="rows"] .head .brand img { width: 62px; }
+  html[data-nav="rows"] .head .brand-word { font-size: 1.35rem; }
+  html[data-nav="rows"] .head-cta { grid-area: cta; }
+  html[data-nav="rows"] .head-cta .btn { display: none; }
+  html[data-nav="rows"] .head-wa { display: inline-flex; }
+  html[data-nav="rows"] .head-hours { display: inline; }
+  html[data-nav="rows"] .menu { grid-area: menu; position: relative; justify-self: stretch; justify-content: flex-start; align-items: center; gap: .2rem; margin-top: 14px; padding: 6px 0; }
+  html[data-nav="rows"] .menu::before { content: ""; position: absolute; top: 0; left: 50%; width: 100vw; transform: translateX(-50%); border-top: 1px solid var(--line); }
+  html[data-nav="rows"] .menu a { padding: .85rem 1.1rem; font-size: 1rem; }
+  html[data-nav="rows"] .menu a:first-child { padding-left: 0; }
+  html[data-nav="rows"] .menu a::after { left: 1.1rem; right: 1.1rem; bottom: .45rem; }
+  html[data-nav="rows"] .menu a:first-child::after { left: 0; }
+  html[data-nav="rows"] .menu .menu-cta { display: inline-flex; margin-left: auto; }
+}
+
+/* C. dark: the shop sign. Black bar, white wordmark and links, amber hover,
+   the sign's red on the button. */
+html[data-nav="dark"] { --nav-bg: #0a0a0a; }
+html[data-nav="dark"] .util { background: #000; color: rgba(255,255,255,.78); border-bottom-color: #222; }
+html[data-nav="dark"] .util a { color: #fff; }
+html[data-nav="dark"] .head { background: var(--nav-bg); border-bottom-color: #222; }
+html[data-nav="dark"] .head.is-scrolled { background: rgba(10,10,10,.94); }
+html[data-nav="dark"] .head .brand-word { color: #fff; }
+html[data-nav="dark"] .menu a { color: #fff; }
+html[data-nav="dark"] .menu a:hover, html[data-nav="dark"] .menu a:focus-visible { background: rgba(255,255,255,.08); color: var(--amber); }
+html[data-nav="dark"] .menu a::after { background: var(--amber); }
+html[data-nav="dark"] .head .btn-ghost { border-color: rgba(255,255,255,.28); color: #fff; }
+html[data-nav="dark"] .head .btn-ghost svg { stroke: var(--amber); }
+html[data-nav="dark"] .head .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+html[data-nav="dark"] .head .btn { background: #e0202a; }
+html[data-nav="dark"] .burger { background: var(--nav-bg); border-color: rgba(255,255,255,.28); }
+html[data-nav="dark"] .burger svg { stroke: #fff; }
+html[data-nav="dark"] .sheet-in { background: #141212; }
+html[data-nav="dark"] .sheet-link, html[data-nav="dark"] .sheet-meta { color: #fff; border-color: #2a2626; }
+html[data-nav="dark"] .sheet-cta .btn-ghost.dark { color: #fff; border-color: rgba(255,255,255,.28); }
+
+/* D. left: one row, links beside the logo behind a divider, contact on the right. */
+@media (min-width: 900px) {
+  html[data-nav="left"] .head-in { grid-template-columns: auto auto 1fr; gap: 1rem; }
+  html[data-nav="left"] .menu { justify-self: start; margin-left: .8rem; padding-left: 1.6rem; border-left: 1px solid var(--line); gap: .1rem; }
+  html[data-nav="left"] .menu a { padding: .7rem .85rem; }
+  html[data-nav="left"] .head-cta { grid-column: 3; }
+  html[data-nav="left"] .head-wa { display: inline-flex; }
+}
