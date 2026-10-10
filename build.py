@@ -455,7 +455,7 @@ def brand(root):
     home = root or "./"
     return (f'<a class="brand" href="{home}" aria-label="AZ Printing &amp; Signs, home">'
             f'<img src="{root}images/az-mark.svg" alt="" width="47" height="48">'
-            f'<span class="brand-word">AZ Printing<br>&amp; Signs</span></a>')
+            f'<span class="brand-word">Printing<br>&amp; Signs</span></a>')
 
 
 def vf(label):
