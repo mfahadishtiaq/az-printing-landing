@@ -197,6 +197,9 @@
     set(q ? q[1] : (local && saved && presets.indexOf(saved) > -1 ? saved : presets[0]), false);
   }
   presetSwitch('data-bands', 'How it works', { cream: 'Cream', black: 'Black', grey: 'Grey' }, 'az-bands', 'bands', 'bands-switch', '.process');
+  var BG = { white: 'White', grey: 'Grey', cream: 'Cream', black: 'Black', red: 'Red', orange: 'Orange' };
+  presetSwitch('data-how', 'How it works', BG, 'az-how', 'how', 'how-switch', '.process');
+  presetSwitch('data-inds', 'Industries', BG, 'az-inds', 'inds', 'inds-switch', '.inds');
   presetSwitch('data-promise', 'Colour tiles', { charcoal: 'Charcoal', deepred: 'Deep red', stone: 'Stone' }, 'az-promise', 'promise', 'promise-switch', '.promise');
 
   /* ---------- product group tabs (print2go pass, 2026-10-06) ---------- */

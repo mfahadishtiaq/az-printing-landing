@@ -1266,3 +1266,8 @@ html[data-inds="red"] .inds { --i-bg: #A01D20; --i-fg: #fff; --i-link: #fff; }
 html[data-inds="orange"] .inds { --i-bg: #FF8F2E; --i-fg: #14100c; --i-link: #14100c; }
 /* the print2go block pins .process h2 to --ink; a coloured band needs its own heading colour */
 html[data-how]:not([data-how="white"]) .process h2 { color: var(--b-fg); }
+
+/* localhost-only colour switches for the two section backgrounds (2026-10-10) */
+.layout-switch.how-switch { bottom: 14px; }
+.layout-switch.inds-switch { bottom: 64px; }
+@media (max-width: 759px) { .layout-switch.how-switch { bottom: calc(3.6rem + 10px); } .layout-switch.inds-switch { bottom: calc(3.6rem + 60px); } }

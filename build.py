@@ -423,7 +423,7 @@ def tile_img(p, root, sizes, lazy=True):
 
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
-<html lang="en-CA" data-nav="{NAV_PRESETS[0]}" data-nav-presets="{" ".join(NAV_PRESETS)}" data-util="{UTIL_PRESETS[0]}" data-util-presets="{" ".join(UTIL_PRESETS)}" data-type="{TYPE_PRESETS[0]}" data-type-presets="{" ".join(TYPE_PRESETS)}" data-how="{HOW_PRESETS[0]}" data-inds="{INDS_PRESETS[0]}" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
+<html lang="en-CA" data-nav="{NAV_PRESETS[0]}" data-nav-presets="{" ".join(NAV_PRESETS)}" data-util="{UTIL_PRESETS[0]}" data-util-presets="{" ".join(UTIL_PRESETS)}" data-type="{TYPE_PRESETS[0]}" data-type-presets="{" ".join(TYPE_PRESETS)}" data-how="{HOW_PRESETS[0]}" data-how-presets="{" ".join(HOW_PRESETS)}" data-inds="{INDS_PRESETS[0]}" data-inds-presets="{" ".join(INDS_PRESETS)}" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
