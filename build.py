@@ -674,7 +674,7 @@ def first_sentence(text):
 CATALOG_LAYOUTS = ("tabs",)
 # NAV BAR presets (board 2026-10-10, Fahad: "fix the nav bar"). The first is what
 # ships; ?nav=<name> shows another for captures and the picker board.
-NAV_PRESETS = ("now", "rows", "dark", "left")
+NAV_PRESETS = ("dark", "now", "rows", "left")  # Fahad picked C (dark, the shop sign) 2026-10-10
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
 BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
                "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
