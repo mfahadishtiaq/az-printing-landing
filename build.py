@@ -677,7 +677,7 @@ CATALOG_LAYOUTS = ("tabs",)
 # ships; ?nav=<name> shows another for captures and the picker board.
 NAV_PRESETS = ("dark", "now", "rows", "left")  # Fahad picked C (dark, the shop sign) 2026-10-10
 # TOP STRIP presets (board 2026-10-10, Fahad: "fix the very top banner"); first ships, ?util=<name> previews.
-UTIL_PRESETS = ("now", "red", "orange", "line")
+UTIL_PRESETS = ("red", "now", "orange", "line")  # Fahad picked B (brand red band) 2026-10-10
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
 BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
                "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
