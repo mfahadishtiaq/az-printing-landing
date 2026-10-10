@@ -479,14 +479,6 @@ def header(root, current=""):
         return ' aria-current="page"' if key == current else ""
     return f'''<a class="skip" href="#main">Skip to content</a>
 
-<div class="util" role="complementary" aria-label="Shop details">
-  <div class="wrap util-in">
-    <p class="util-l"><a href="{SITE["maps"]}"><svg class="ui" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>499 Ray Lawson Blvd, Unit 24, Brampton</a></p>
-    <p class="util-c"><span><svg class="ui" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>{esc(SITE["hours"])}</span></p>
-    <p class="util-r"><a href="{SITE["whatsapp"]}"><svg class="ui" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/><path d="M9 8.5c.2-.6.6-.6 1-.6s.5.3.7.8l.5 1.2c.1.3 0 .6-.2.8l-.5.5c.6 1.2 1.6 2.2 2.8 2.8l.5-.5c.2-.2.5-.3.8-.2l1.2.5c.5.2.8.3.8.7s0 .8-.6 1a3 3 0 0 1-2 .5A8 8 0 0 1 8.5 10a3 3 0 0 1 .5-1.5Z"/></svg>WhatsApp {SITE["phone_display"]}</a></p>
-  </div>
-</div>
-
 <header class="head" id="site-nav">
   <div class="wrap head-in">
     {brand(root)}
@@ -495,6 +487,7 @@ def header(root, current=""):
       <a href="{root}#how" aria-label="How it works" data-extra>{vf("How it works")}</a>
       <a href="{root}#about" aria-label="About"{cur("about")}>{vf("About")}</a>
       <a href="{root}#industries" aria-label="Industries" data-extra>{vf("Industries")}</a>
+      <a href="{root}#location" aria-label="Location">{vf("Location")}</a>
       <a href="{root}#contact" aria-label="Contact"{cur("contact")}>{vf("Contact")}</a>
       <a class="menu-cta" href="{root}#contact" data-extra>Get a quote</a>
     </nav>
@@ -514,6 +507,7 @@ def header(root, current=""):
     <a class="sheet-link" href="{root}#how" data-extra>How it works</a>
     <a class="sheet-link" href="{root}#about">About</a>
     <a class="sheet-link" href="{root}#industries" data-extra>Industries</a>
+    <a class="sheet-link" href="{root}#location">Location</a>
     <a class="sheet-link" href="{root}#contact">Contact</a>
     <div class="sheet-cta"><a class="btn" href="{root}#contact">Get a quote</a><a class="btn-ghost dark" href="tel:{SITE["phone_tel"]}">Call {SITE["phone_display"]}</a></div>
     <p class="sheet-meta">{esc(SITE["address"])}<br>{esc(SITE["hours"])}</p>
@@ -534,19 +528,22 @@ def footer(root):
       {brand(root)}
       <p class="foot-line">AZ Printing &amp; Signs is Canada’s choice for high-quality digital printing and commercial printing services, delivering superior print pieces to clients nationwide.</p>
     </div>
+    <div class="foot-hours">
+      <p class="foot-h">Store hours</p>
+      {"".join(f"<p>{esc(h)}</p>" for h in SITE["hours"].split(" · "))}
+    </div>
     <div class="foot-contact">
       <p><a href="{SITE["maps"]}">{esc(SITE["address"])}</a></p>
       <p><a href="tel:{SITE["phone_tel"]}">{SITE["phone_display"]}</a> · <a href="{SITE["whatsapp"]}">WhatsApp</a></p>
-      <p>{esc(SITE["hours"])}</p>
     </div>
     <!-- Facebook and Instagram icons sit top right here in the mockup. They go in once the owner's pages exist (brief: "owner WILL create"); a dead social link is worse than none. -->
   </div>
   <div class="wrap foot-base"><p>© 2026 AZ Printing &amp; Signs · Brampton, Ontario</p></div>
 </footer>
 
+<a class="wa-fab" href="{SITE["whatsapp"]}" aria-label="Message us on WhatsApp" title="Message us on WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4a12 12 0 0 0-10.3 18.1L4 28l6.1-1.6A12 12 0 1 0 16 4Zm0 2.2a9.8 9.8 0 1 1-5 18.2l-.4-.2-3.5.9.9-3.4-.2-.4A9.8 9.8 0 0 1 16 6.2Zm-3.9 4.5c-.2 0-.6.1-.9.4-.3.4-1.2 1.200-1.2 2.900s1.200 3.300 1.400 3.600c.2.200 2.400 3.700 5.900 5.100 2.900 1.100 3.500.900 4.100.800.600-.100 2-.800 2.300-1.600.300-.800.300-1.500.200-1.600-.100-.200-.300-.200-.700-.400l-2.300-1.100c-.300-.100-.600-.200-.800.200l-1.100 1.400c-.200.200-.400.300-.700.100-.400-.200-1.500-.600-2.800-1.800-1.100-.900-1.700-2.100-1.900-2.400-.200-.400 0-.500.100-.700l.500-.600c.200-.200.200-.400.400-.600.100-.200 0-.500 0-.700l-1.100-2.500c-.200-.600-.500-.500-.700-.500h-.7Z"/></svg></a>
 <div class="phone-bar" aria-label="Contact options">
   <a href="tel:{SITE["phone_tel"]}">Call</a>
-  <a href="{SITE["whatsapp"]}">WhatsApp</a>
   <a class="pb-main" href="{root}#contact">Message</a>
 </div>
 <script src="{root}js/vendor/gsap.min.js" defer></script>
@@ -677,7 +674,7 @@ CATALOG_LAYOUTS = ("tabs",)
 # ships; ?nav=<name> shows another for captures and the picker board.
 NAV_PRESETS = ("dark", "now", "rows", "left")  # Fahad picked C (dark, the shop sign) 2026-10-10
 # TOP STRIP presets (board 2026-10-10, Fahad: "fix the very top banner"); first ships, ?util=<name> previews.
-UTIL_PRESETS = ("red", "now", "orange", "line")  # Fahad picked B (brand red band) 2026-10-10
+UTIL_PRESETS = ("red", "now", "orange", "line")  # the strip itself was REMOVED later on 2026-10-10 ("remove the header completely"); attribute kept, nothing renders
 # TYPE presets (board 2026-10-10, Fahad: "the font is different in the nav bar, logo and copy"): weights/case of the header.
 TYPE_PRESETS = ("now", "even", "caps", "line")
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
@@ -933,7 +930,7 @@ def contact_html():
         </div>
         <p class="form-sent" id="form-sent" role="status">Thank you. Your message has been sent and we will get back to you soon.</p>
       </form>
-      <figure class="map"><iframe title="Map showing AZ Printing &amp; Signs at 499 Ray Lawson Blvd, Brampton" src="{esc(SITE["map_embed"])}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></figure>
+      <figure class="map" id="location"><iframe title="Map showing AZ Printing &amp; Signs at 499 Ray Lawson Blvd, Brampton" src="{esc(SITE["map_embed"])}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe><figcaption class="map-cap"><span class="map-h">Find us</span><span class="map-addr">{esc(SITE["address"])}</span><a class="map-dir" href="{SITE["maps"]}">Get directions</a></figcaption></figure>
     </div>
   </div>
 </section>'''

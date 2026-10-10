@@ -1191,3 +1191,43 @@ html[data-type="line"] .menu a:hover .vf-l span, html[data-type="line"] .menu a:
    shadow and the dimming of the others stay. Overrides the .hero-lift rules
    above and motion.js's --rx/--ry tilt. */
 .hero-lift, .hero-item:hover .hero-lift, .hero-item:focus-visible .hero-lift, .hero-item.is-hover .hero-lift { transform: none !important; }
+
+
+/* =====================================================================
+   2026-10-10 (Fahad): the top strip is GONE; hours live in the footer,
+   Location is a nav tab to the map, WhatsApp is a floating button.
+   ===================================================================== */
+/* Location: the map, its address and a directions link */
+#location { scroll-margin-top: 104px; }
+.map-cap { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem 1rem; margin-top: .9rem; font-size: .95rem; color: var(--ink); }
+.map-h { flex-basis: 100%; font-weight: 700; font-size: 1.05rem; }
+.map-addr { color: #3d383a; }
+.map-addr { flex-basis: 100%; }
+/* left-aligned on its own line: right-aligned it sat under the floating WhatsApp button */
+.map-dir { font-weight: 700; color: var(--red); text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 1px; }
+.map-dir:hover { color: var(--red-deep); }
+
+/* footer: store hours as their own block */
+.foot-hours p { margin: 0; font-size: .95rem; line-height: 1.5; }
+.foot-hours .foot-h { font-weight: 700; color: var(--ink); margin-bottom: .2rem; }
+@media (min-width: 900px) {
+  .foot-in { grid-template-columns: minmax(0, 1fr) auto auto; gap: 2.5rem; }
+  .foot-line { max-width: 26rem; }
+  .foot-hours { white-space: nowrap; }
+}
+
+/* WhatsApp: one floating button, bottom right. Green is WhatsApp's own colour,
+   darkened to #1DA851 so the white glyph clears 3:1. Sits above the phone bar. */
+.wa-fab { position: fixed; right: 20px; bottom: 20px; z-index: 55; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: #1DA851; box-shadow: 0 6px 20px rgba(0,0,0,.28); transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease; }
+.wa-fab svg { width: 32px; height: 32px; fill: #fff; }
+.wa-fab:hover { background: #178f45; transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,.32); }
+.wa-fab:focus-visible { outline: 3px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 6px #178f45; }
+@media (max-width: 759px) { .wa-fab { right: 14px; bottom: calc(3.6rem + 12px); width: 54px; height: 54px; } .phone-bar { grid-template-columns: 1fr 1fr; } }
+html.sheet-open .wa-fab { display: none; }
+@media (prefers-reduced-motion: reduce) { .wa-fab { transition: none; } .wa-fab:hover { transform: none; } }
+
+/* six links now: a touch tighter between 900 and 1199px */
+@media (min-width: 900px) and (max-width: 1199px) { .menu a { padding: .7rem .45rem; font-size: .88rem; } }
+/* the hero's "Premium quality" label sat exactly where the floating button lands
+   when the hero fills the window (1440x900): keep it clear of the button */
+@media (min-width: 900px) { .hero-quality { right: max(var(--qr, 2.4%), 96px); } }
