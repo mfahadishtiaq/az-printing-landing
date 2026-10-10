@@ -1281,4 +1281,8 @@ html[data-how]:not([data-how="white"]) .process h2 { color: var(--b-fg); }
    above, so the drift (about 7% of the frame) never reaches an edge. */
 .welcome-photo { position: relative; aspect-ratio: 3 / 2; border-radius: 16px; overflow: hidden; }
 .welcome-photo img { display: block; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; border-radius: 0; }
-html.motion .welcome-photo img { position: absolute; left: 0; top: -8%; height: 116%; }
+/* no zoom: the frame is a little shorter than the photo (300:172) and the photo
+   keeps its full width at 3:2, so nothing is trimmed off the sides of the sign;
+   the spare 8% above and below is ceiling and pavement, and is what the drift uses */
+html.motion .welcome-photo { aspect-ratio: 300 / 172; }
+html.motion .welcome-photo img { position: absolute; left: 0; top: -8.1%; height: auto; aspect-ratio: 3 / 2; }
