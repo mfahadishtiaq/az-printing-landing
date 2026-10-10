@@ -30,7 +30,7 @@
   --field: #8a8a8a;        /* form field borders */
   --foot: #000;
   --foot-text: #e8e8e8;
-  --display: 'Merriweather', Georgia, 'Times New Roman', serif;
+  --display: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;  /* Fahad 2026-10-10: sans serif instead of serif, incl. the logo (was Merriweather) */
   --sans: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --gutter: 16px;
   --wrap: 1480px;
@@ -1137,3 +1137,8 @@ html[data-util="line"] .util-r a { color: #FF8F2E; }
   .head .brand-word { font-size: 1rem; }
   .head-cta .btn { padding: .8rem 1rem; }
 }
+
+/* SANS DISPLAY (Fahad 2026-10-10): Montserrat 900 runs wider than Merriweather
+   did, so the hero and the wordmark pull their tracking in a touch */
+.hero h1 { letter-spacing: -.012em; }
+.brand-word { letter-spacing: -.005em; font-weight: 800; }
