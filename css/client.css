@@ -1118,3 +1118,9 @@ html[data-util="line"] .util { background: #151313; color: rgba(255,255,255,.9);
 html[data-util="line"] .util-in { min-height: 42px; }
 html[data-util="line"] .util .ui { display: inline-block; color: #FF8F2E; }
 html[data-util="line"] .util-r a { color: #FF8F2E; }
+
+/* hours centred (Fahad 2026-10-10): address left, hours middle, WhatsApp right */
+.util-in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.util-c { justify-self: center; text-align: center; }
+.util-r { justify-self: end; }
+@media (max-width: 1099px) { .util-in { grid-template-columns: auto 1fr auto; } .util-c { justify-self: center; } }
