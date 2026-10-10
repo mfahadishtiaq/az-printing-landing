@@ -1271,3 +1271,14 @@ html[data-how]:not([data-how="white"]) .process h2 { color: var(--b-fg); }
 .layout-switch.how-switch { bottom: 14px; }
 .layout-switch.inds-switch { bottom: 64px; }
 @media (max-width: 759px) { .layout-switch.how-switch { bottom: calc(3.6rem + 10px); } .layout-switch.inds-switch { bottom: calc(3.6rem + 60px); } }
+
+/* ABOUT PHOTO ALWAYS FILLS ITS FRAME (Fahad 2026-10-10: "does not fully fit
+   the tile on the mobile version"). motion.js drifts the photo -6% to +6% of
+   its own height on scroll, and the old `height: 112%` meant to cover that
+   never applied (a percentage of an auto-height figure is auto), so the photo
+   slid out of its frame and showed a gap. The FRAME now owns the 3:2 shape,
+   the radius and the clip; with motion on the photo is 116% tall, starting 8%
+   above, so the drift (about 7% of the frame) never reaches an edge. */
+.welcome-photo { position: relative; aspect-ratio: 3 / 2; border-radius: 16px; overflow: hidden; }
+.welcome-photo img { display: block; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; border-radius: 0; }
+html.motion .welcome-photo img { position: absolute; left: 0; top: -8%; height: 116%; }
