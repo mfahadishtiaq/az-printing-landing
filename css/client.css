@@ -1181,5 +1181,7 @@ html[data-type="line"] .menu a:hover .vf-l span, html[data-type="line"] .menu a:
    Montserrat. Russo One has one weight (400) and runs wide, so the size
    drops a step. */
 .brand-word { font-family: 'Russo One', 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; letter-spacing: .03em; }
-.head .brand-word { font-size: 1.02rem; }
-@media (min-width: 900px) and (max-width: 1199px) { .head .brand-word { font-size: .9rem; } }
+/* Fahad 2026-10-10: "enlarge": the whole lockup up a step (mark 64px, wordmark 1.3rem) */
+.head .brand img { width: 64px; }
+.head .brand-word { font-size: 1.3rem; }
+@media (min-width: 900px) and (max-width: 1199px) { .head .brand img { width: 50px; } .head .brand-word { font-size: 1.02rem; } }
