@@ -1142,3 +1142,35 @@ html[data-util="line"] .util-r a { color: #FF8F2E; }
    did, so the hero and the wordmark pull their tracking in a touch */
 .hero h1 { letter-spacing: -.012em; }
 .brand-word { letter-spacing: -.005em; font-weight: 800; }
+
+
+/* =====================================================================
+   TYPE PRESETS (picker board 2026-10-10). All Montserrat already; these
+   change WEIGHT and CASE so the wordmark, nav links and copy read as one
+   voice. html[data-type]; TYPE_PRESETS[0] ships.
+   ===================================================================== */
+/* B. even: nav links rest at 600 (hover to 800), wordmark 700, buttons 700.
+   Nothing lighter than 600 in the header. */
+html[data-type="even"] .brand-word { font-weight: 700; letter-spacing: .01em; }
+html[data-type="even"] .menu a { font-weight: 600; }
+html[data-type="even"] .vf-ghost { font-weight: 800; font-variation-settings: 'wght' 800; }
+html[data-type="even"] .vf-l span { font-weight: 600; font-variation-settings: 'wght' 600; }
+html[data-type="even"] .menu a:hover .vf-l span, html[data-type="even"] .menu a:focus-visible .vf-l span, html[data-type="even"] .menu a[aria-current="page"] .vf-l span { font-variation-settings: 'wght' 800; }
+
+/* C. caps: the nav links take the wordmark's uppercase and tracking, 700,
+   smaller; the whole bar reads like the sign's lettering */
+html[data-type="caps"] .brand-word { font-weight: 800; letter-spacing: .04em; }
+html[data-type="caps"] .menu a { text-transform: uppercase; letter-spacing: .08em; font-size: .84rem; font-weight: 700; }
+html[data-type="caps"] .vf-l span { font-weight: 600; font-variation-settings: 'wght' 600; }
+html[data-type="caps"] .vf-ghost { font-weight: 800; font-variation-settings: 'wght' 800; }
+html[data-type="caps"] .menu a:hover .vf-l span, html[data-type="caps"] .menu a:focus-visible .vf-l span, html[data-type="caps"] .menu a[aria-current="page"] .vf-l span { font-variation-settings: 'wght' 800; }
+html[data-type="caps"] .head-cta .btn, html[data-type="caps"] .btn-ghost { text-transform: uppercase; letter-spacing: .06em; font-size: .84rem; }
+
+/* D. line: wordmark on ONE line in title case at 700, same size and weight
+   as the nav links (600 resting, bold on hover); the quietest version */
+html[data-type="line"] .brand-word { font-weight: 700; text-transform: none; letter-spacing: 0; font-size: 1.25rem; line-height: 1; }
+html[data-type="line"] .brand-word br { display: none; }
+html[data-type="line"] .menu a { font-weight: 600; font-size: 1rem; }
+html[data-type="line"] .vf-l span { font-weight: 600; font-variation-settings: 'wght' 600; }
+html[data-type="line"] .vf-ghost { font-weight: 800; font-variation-settings: 'wght' 800; }
+html[data-type="line"] .menu a:hover .vf-l span, html[data-type="line"] .menu a:focus-visible .vf-l span, html[data-type="line"] .menu a[aria-current="page"] .vf-l span { font-variation-settings: 'wght' 800; }

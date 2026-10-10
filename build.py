@@ -423,7 +423,7 @@ def tile_img(p, root, sizes, lazy=True):
 
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
-<html lang="en-CA" data-nav="{NAV_PRESETS[0]}" data-nav-presets="{" ".join(NAV_PRESETS)}" data-util="{UTIL_PRESETS[0]}" data-util-presets="{" ".join(UTIL_PRESETS)}" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
+<html lang="en-CA" data-nav="{NAV_PRESETS[0]}" data-nav-presets="{" ".join(NAV_PRESETS)}" data-util="{UTIL_PRESETS[0]}" data-util-presets="{" ".join(UTIL_PRESETS)}" data-type="{TYPE_PRESETS[0]}" data-type-presets="{" ".join(TYPE_PRESETS)}" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -434,7 +434,7 @@ def head(root, title, description, extra="", schema=""):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
 <meta name="theme-color" content="#a01d20">
-<script>var _n=/[?&]nav=([a-z]+)/.exec(location.search);if(_n)document.documentElement.setAttribute('data-nav',_n[1]);var _u=/[?&]util=([a-z]+)/.exec(location.search);if(_u)document.documentElement.setAttribute('data-util',_u[1]);if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
+<script>var _n=/[?&]nav=([a-z]+)/.exec(location.search);if(_n)document.documentElement.setAttribute('data-nav',_n[1]);var _u=/[?&]util=([a-z]+)/.exec(location.search);if(_u)document.documentElement.setAttribute('data-util',_u[1]);var _t=/[?&]type=([a-z]+)/.exec(location.search);if(_t)document.documentElement.setAttribute('data-type',_t[1]);if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]motion=off\\b/.test(location.search)){{document.documentElement.classList.add('pre');setTimeout(function(){{document.documentElement.classList.remove('pre')}},3000)}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&display=swap">
@@ -678,6 +678,8 @@ CATALOG_LAYOUTS = ("tabs",)
 NAV_PRESETS = ("dark", "now", "rows", "left")  # Fahad picked C (dark, the shop sign) 2026-10-10
 # TOP STRIP presets (board 2026-10-10, Fahad: "fix the very top banner"); first ships, ?util=<name> previews.
 UTIL_PRESETS = ("red", "now", "orange", "line")  # Fahad picked B (brand red band) 2026-10-10
+# TYPE presets (board 2026-10-10, Fahad: "the font is different in the nav bar, logo and copy"): weights/case of the header.
+TYPE_PRESETS = ("now", "even", "caps", "line")
 # Bento placement: big tile, two tall ones, one wide; our pick, a cheap swap.
 BENTO_AREAS = {"business-cards": "bc", "flyers": "fl", "brochures": "br", "greeting-cards": "gc",
                "posters": "po", "lawn-signs": "ls", "rollup-banner": "rb", "store-branding": "sb",
