@@ -484,7 +484,6 @@ def header(root, current=""):
     {brand(root)}
     <nav class="menu" aria-label="Main">
       <a href="{root}#products" aria-label="Products">{vf("Products")}</a>
-      <a href="{root}#how" aria-label="How it works" data-extra>{vf("How it works")}</a>
       <a href="{root}#about" aria-label="About"{cur("about")}>{vf("About")}</a>
       <a href="{root}#industries" aria-label="Industries" data-extra>{vf("Industries")}</a>
       <a href="{root}#location" aria-label="Location">{vf("Location")}</a>
@@ -504,7 +503,6 @@ def header(root, current=""):
 <div class="sheet" id="sheet" hidden>
   <nav class="sheet-in" aria-label="Menu">
     <a class="sheet-link" href="{root}#products">Products</a>
-    <a class="sheet-link" href="{root}#how" data-extra>How it works</a>
     <a class="sheet-link" href="{root}#about">About</a>
     <a class="sheet-link" href="{root}#industries" data-extra>Industries</a>
     <a class="sheet-link" href="{root}#location">Location</a>
