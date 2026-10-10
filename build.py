@@ -421,6 +421,16 @@ def tile_img(p, root, sizes, lazy=True):
 # shared chrome
 # ---------------------------------------------------------------------------
 
+def ver(rel):
+    """Cache-buster (2026-10-10): GitHub Pages serves css/js with max-age=600, so a
+    phone kept the OLD stylesheet for ten minutes after a push and a fix looked
+    unshipped. The file's own content hash goes on the URL; a changed file is a
+    new URL, an unchanged one stays cached."""
+    import hashlib
+    with open(os.path.join(HERE, rel), "rb") as f:
+        return rel + "?v=" + hashlib.sha1(f.read()).hexdigest()[:10]
+
+
 def head(root, title, description, extra="", schema=""):
     return f'''<!doctype html>
 <html lang="en-CA" data-nav="{NAV_PRESETS[0]}" data-nav-presets="{" ".join(NAV_PRESETS)}" data-util="{UTIL_PRESETS[0]}" data-util-presets="{" ".join(UTIL_PRESETS)}" data-type="{TYPE_PRESETS[0]}" data-type-presets="{" ".join(TYPE_PRESETS)}" data-how="{HOW_PRESETS[0]}" data-how-presets="{" ".join(HOW_PRESETS)}" data-inds="{INDS_PRESETS[0]}" data-inds-presets="{" ".join(INDS_PRESETS)}" data-bands="{BAND_PRESETS[0]}" data-bands-presets="{" ".join(BAND_PRESETS)}" data-promise="{PROMISE_BGS[0]}" data-promise-presets="{" ".join(PROMISE_BGS)}">
@@ -438,7 +448,7 @@ def head(root, title, description, extra="", schema=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&family=Russo+One&display=swap">
-{extra}<link rel="stylesheet" href="{root}css/client.css">
+{extra}<link rel="stylesheet" href="{root}{ver("css/client.css")}">
 <link rel="icon" href="{root}images/az-mark.svg" type="image/svg+xml">
 <link rel="icon" href="{root}images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="{root}images/apple-touch-icon.png">
@@ -547,8 +557,8 @@ def footer(root):
 <script src="{root}js/vendor/gsap.min.js" defer></script>
 <script src="{root}js/vendor/ScrollTrigger.min.js" defer></script>
 <script src="{root}js/vendor/lenis.min.js" defer></script>
-<script src="{root}js/motion.js" defer></script>
-<script src="{root}js/site.js" defer></script>
+<script src="{root}{ver("js/motion.js")}" defer></script>
+<script src="{root}{ver("js/site.js")}" defer></script>
 </body>
 </html>
 '''

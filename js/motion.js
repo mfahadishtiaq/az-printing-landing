@@ -19,7 +19,7 @@
     || /[?&]motion=off\b/.test(location.search) || editing;
   if (editing) {
     var es = document.createElement('script');
-    es.src = document.querySelector('script[src$="motion.js"]').src.replace('motion.js', 'edit.js');
+    es.src = document.querySelector('script[src*="motion.js"]').src.replace(/motion\.js.*$/, 'edit.js');
     document.body.appendChild(es);
   }
   var head = document.querySelector('.head');

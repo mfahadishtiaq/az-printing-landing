@@ -1286,3 +1286,7 @@ html[data-how]:not([data-how="white"]) .process h2 { color: var(--b-fg); }
    the spare 8% above and below is ceiling and pavement, and is what the drift uses */
 html.motion .welcome-photo { aspect-ratio: 300 / 172; }
 html.motion .welcome-photo img { position: absolute; left: 0; top: -8.1%; height: auto; aspect-ratio: 3 / 2; }
+
+/* WebKit (iPhone Safari) can drop a rounded clip when the child inside is
+   transformed, which the drifting photo is: give the frame its own layer */
+.welcome-photo { isolation: isolate; transform: translateZ(0); -webkit-mask-image: -webkit-radial-gradient(white, black); }
